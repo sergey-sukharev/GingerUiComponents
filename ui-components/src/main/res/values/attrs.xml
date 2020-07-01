@@ -1,2 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <declare-styleable name="GingerLineItem">
+        <attr name="type" format="enum">
+            <enum name="one_line" value="1"/>
+            <enum name="two_line" value="2"/>
+            <enum name="three_line" value="3"/>
+        </attr>
+        <attr name="imageType" format="enum">
+            <enum name="none" value="0"/>
+            <enum name="icon" value="1"/>
+            <enum name="small" value="2"/>
+            <enum name="middle" value="3"/>
+            <enum name="large" value="4"/>
+        </attr>
+        <attr name="titleTextStyle" format="reference"/>
+        <attr name="subtitleTextStyle" format="reference"/>
+    </declare-styleable>
+</resources>
