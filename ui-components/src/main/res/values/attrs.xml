@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="GingerLineItem">
+
         <attr name="type" format="enum">
             <enum name="one_line" value="1"/>
             <enum name="two_line" value="2"/>
@@ -14,6 +15,7 @@
             <enum name="large" value="4"/>
         </attr>
         <attr name="titleTextStyle" format="reference"/>
+        <attr name="imageSrc" format="reference"/>
         <attr name="subtitleTextStyle" format="reference"/>
     </declare-styleable>
 </resources>

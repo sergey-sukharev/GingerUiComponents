@@ -3,11 +3,17 @@ package dev.ginger.ui.components
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
+import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.res.getDrawableOrThrow
+import androidx.core.content.res.getIntOrThrow
+import androidx.core.content.res.getResourceIdOrThrow
 import androidx.core.graphics.drawable.DrawableCompat
+import androidx.core.view.isVisible
 import dev.ginger.ui.R
 
 
@@ -23,6 +29,23 @@ class GingerLineItem : LinearLayout, View.OnClickListener {
     constructor(context: Context, attributeSet: AttributeSet?) : super(context, attributeSet) {
         val attrs = context.obtainStyledAttributes(attributeSet, R.styleable.GingerLineItem)
 
+        val imageSrc = attrs.getDrawable(R.styleable.GingerLineItem_imageSrc)
+
+        val imageType =  attrs.getInt(R.styleable.GingerLineItem_imageType, 0)
+
+        imageSrc?.let { src ->
+            startIconView = StartIconView(context).apply {
+                type = imageType
+                drawable = src
+            }
+        } ?: kotlin.run {
+            startIconView = StartIconView(context).apply {
+                type = 0
+            }
+        }
+
+
+
         attrs.recycle()
 
         initBaseComponents()
@@ -36,7 +59,11 @@ class GingerLineItem : LinearLayout, View.OnClickListener {
 //        titleView = view.findViewById(R.id.strgrs_label_title)
 //        subtitleView = view.findViewById(R.id.strgrs_label_subtitle)
 //        dividerView = view.findViewById(R.id.divider)
-//        iconStartView = view.findViewById(R.id.iconStart)
+        val iconStartView: ImageView? = view.findViewById(R.id.iconStart)
+        startIconView.apply {
+            if (iconStartView != null)
+                setInImageView(iconStartView)
+        }
 //        iconEndView = view.findViewById(R.id.iconEnd)
     }
 
@@ -54,9 +81,7 @@ class GingerLineItem : LinearLayout, View.OnClickListener {
 
 }
 
-private class StartIconView {
-    var width: Int = 24
-    var height: Int = 24
+private class StartIconView(val context: Context) {
     var type: Int = 0
     var drawable: Drawable? = null
         get() {
@@ -65,6 +90,39 @@ private class StartIconView {
             return field
         }
     var tint: Int? = null
+
+    fun setInImageView(imageView: ImageView) {
+        resizeImageView(imageView)
+        imageView.setImageDrawable(drawable)
+    }
+
+    private fun resizeImageView(imageView: ImageView) {
+        when (type) {
+            0 -> imageView.visibility = View.GONE
+            1 -> {
+                imageView.layoutParams.apply {
+                    height = dpToPx(24)
+                    width = dpToPx(24)
+                }
+            }
+            4 -> {
+                imageView.layoutParams.apply {
+                    height = dpToPx(100)
+                    width = dpToPx(56)
+                }
+            }
+            else -> {
+                imageView.layoutParams.apply {
+                    height = dpToPx(32)
+                    width = dpToPx(32)
+                }
+            }
+        }
+    }
+
+    private fun dpToPx(dp: Int): Int {
+        return Math.round(dp*(context.resources.getDisplayMetrics().xdpi/ DisplayMetrics.DENSITY_DEFAULT));
+    }
 }
 
 private data class TitleView(
