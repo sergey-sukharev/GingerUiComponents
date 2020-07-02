@@ -9,17 +9,23 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.content.res.getDrawableOrThrow
 import androidx.core.content.res.getIntOrThrow
 import androidx.core.content.res.getResourceIdOrThrow
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.view.isVisible
+import androidx.core.view.marginLeft
 import dev.ginger.ui.R
+import dev.ginger.ui.components.utils.dpToPx
+import kotlinx.android.synthetic.main.ginger_base_line_item.view.*
 
 
 class GingerLineItem : LinearLayout, View.OnClickListener {
 
     private lateinit var startIconView: StartIconView
+    private lateinit var contentContainer: LinearLayout
+
 
     constructor(context: Context) : this(context, null)
 
@@ -31,7 +37,7 @@ class GingerLineItem : LinearLayout, View.OnClickListener {
 
         val imageSrc = attrs.getDrawable(R.styleable.GingerLineItem_imageSrc)
 
-        val imageType =  attrs.getInt(R.styleable.GingerLineItem_imageType, 0)
+        val imageType = attrs.getInt(R.styleable.GingerLineItem_imageType, 0)
 
         imageSrc?.let { src ->
             startIconView = StartIconView(context).apply {
@@ -60,6 +66,18 @@ class GingerLineItem : LinearLayout, View.OnClickListener {
 //        subtitleView = view.findViewById(R.id.strgrs_label_subtitle)
 //        dividerView = view.findViewById(R.id.divider)
         val iconStartView: ImageView? = view.findViewById(R.id.iconStart)
+        val contentContainer: LinearLayout? = view.findViewById(R.id.ginger_text_content)
+
+        val constraintSet = ConstraintSet()
+        constraintSet.clone(container)
+        constraintSet.clear(contentContainer!!.id, ConstraintSet.LEFT)
+        constraintSet.connect(
+            contentContainer.id, ConstraintSet.LEFT,
+            iconStartView!!.id, ConstraintSet.RIGHT, getContentMargin(startIconView.type)
+        )
+        constraintSet.applyTo(container)
+
+
         startIconView.apply {
             if (iconStartView != null)
                 setInImageView(iconStartView)
@@ -68,14 +86,13 @@ class GingerLineItem : LinearLayout, View.OnClickListener {
     }
 
     override fun onClick(v: View?) {
-        TODO("Not yet implemented")
+
     }
 
     private fun getContentMargin(imageType: Int): Int {
         return when (imageType) {
-            0 -> 0
-            1 -> 32
-            else -> 16
+            1 -> dpToPx(context, 32)
+            else -> dpToPx(context, 16)
         }
     }
 
@@ -101,28 +118,26 @@ private class StartIconView(val context: Context) {
             0 -> imageView.visibility = View.GONE
             1 -> {
                 imageView.layoutParams.apply {
-                    height = dpToPx(24)
-                    width = dpToPx(24)
+                    height = dpToPx(context, 24)
+                    width = dpToPx(context, 24)
                 }
             }
             4 -> {
                 imageView.layoutParams.apply {
-                    height = dpToPx(100)
-                    width = dpToPx(56)
+                    height = dpToPx(context, 100)
+                    width = dpToPx(context, 56)
                 }
             }
             else -> {
                 imageView.layoutParams.apply {
-                    height = dpToPx(32)
-                    width = dpToPx(32)
+                    height = dpToPx(context, 32)
+                    width = dpToPx(context, 32)
                 }
             }
         }
     }
 
-    private fun dpToPx(dp: Int): Int {
-        return Math.round(dp*(context.resources.getDisplayMetrics().xdpi/ DisplayMetrics.DENSITY_DEFAULT));
-    }
+
 }
 
 private data class TitleView(
