@@ -14,8 +14,18 @@
             <enum name="middle" value="3"/>
             <enum name="large" value="4"/>
         </attr>
+
+
+        <attr name="titleText" format="string"/>
+        <attr name="subtitleText" format="string"/>
+
         <attr name="titleTextStyle" format="reference"/>
-        <attr name="imageSrc" format="reference"/>
         <attr name="subtitleTextStyle" format="reference"/>
+
+        <attr name="startIcon" format="reference"/>
+        <attr name="endIcon" format="reference"/>
+
+        <attr name="startIconTint" format="reference"/>
+        <attr name="endIconTint" format="reference"/>
     </declare-styleable>
 </resources>

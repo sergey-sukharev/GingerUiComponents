@@ -1,24 +1,24 @@
 package dev.ginger.ui.components
 
 import android.content.Context
+import android.content.res.TypedArray
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
-import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
-import androidx.core.content.res.getDrawableOrThrow
 import androidx.core.content.res.getIntOrThrow
 import androidx.core.content.res.getResourceIdOrThrow
+import androidx.core.content.res.getStringOrThrow
 import androidx.core.graphics.drawable.DrawableCompat
-import androidx.core.view.isVisible
-import androidx.core.view.marginLeft
 import dev.ginger.ui.R
 import dev.ginger.ui.components.utils.dpToPx
 import kotlinx.android.synthetic.main.ginger_base_line_item.view.*
+import java.lang.Exception
 
 
 class GingerLineItem : LinearLayout, View.OnClickListener {
@@ -26,6 +26,10 @@ class GingerLineItem : LinearLayout, View.OnClickListener {
     private lateinit var startIconView: StartIconView
     private lateinit var contentContainer: LinearLayout
 
+    private var gingerSubtitle: SubtitleView? = null
+
+    private var subtitleText: String? = null
+    private var subtitleStyle: Int? = null
 
     constructor(context: Context) : this(context, null)
 
@@ -35,9 +39,12 @@ class GingerLineItem : LinearLayout, View.OnClickListener {
     constructor(context: Context, attributeSet: AttributeSet?) : super(context, attributeSet) {
         val attrs = context.obtainStyledAttributes(attributeSet, R.styleable.GingerLineItem)
 
-        val imageSrc = attrs.getDrawable(R.styleable.GingerLineItem_imageSrc)
+        val imageSrc = attrs.getDrawable(R.styleable.GingerLineItem_startIcon)
 
         val imageType = attrs.getInt(R.styleable.GingerLineItem_imageType, 0)
+
+        subtitleStyle = getResourceOrNullAttr(R.styleable.GingerLineItem_subtitleTextStyle, attrs)
+        subtitleText = getStringOrNullAttr(R.styleable.GingerLineItem_subtitleText, attrs)
 
         imageSrc?.let { src ->
             startIconView = StartIconView(context).apply {
@@ -50,11 +57,27 @@ class GingerLineItem : LinearLayout, View.OnClickListener {
             }
         }
 
-
-
         attrs.recycle()
 
         initBaseComponents()
+    }
+
+    protected fun getStringOrNullAttr(attrId: Int, attrs: TypedArray): String? = try {
+        attrs.getStringOrThrow(attrId)
+    } catch (e: Exception) {
+        null
+    }
+
+    protected fun getIntOrNullAttr(attrId: Int, attrs: TypedArray): Int? = try {
+        attrs.getIntOrThrow(attrId)
+    } catch (e: Exception) {
+        null
+    }
+
+    protected fun getResourceOrNullAttr(attrId: Int, attrs: TypedArray): Int? = try {
+        attrs.getResourceIdOrThrow(attrId)
+    } catch (e: Exception) {
+        null
     }
 
     private fun initBaseComponents() {
@@ -62,26 +85,35 @@ class GingerLineItem : LinearLayout, View.OnClickListener {
             .inflate(R.layout.ginger_base_line_item, this)
 
         view?.findViewById<ConstraintLayout>(R.id.container)?.setOnClickListener(this)
-//        titleView = view.findViewById(R.id.strgrs_label_title)
-//        subtitleView = view.findViewById(R.id.strgrs_label_subtitle)
+        val titleView: TextView? = view.findViewById(R.id.ginger_label_title)
+
+        val subtitleView: TextView? = view.findViewById(R.id.ginger_label_subtitle)
+
+        subtitleView?.let { view ->
+            subtitleText?.let {
+                gingerSubtitle = SubtitleView(view, it)
+            } ?: run { view.visibility = View.GONE }
+        }
+
 //        dividerView = view.findViewById(R.id.divider)
         val iconStartView: ImageView? = view.findViewById(R.id.iconStart)
         val contentContainer: LinearLayout? = view.findViewById(R.id.ginger_text_content)
 
         val constraintSet = ConstraintSet()
         constraintSet.clone(container)
-        constraintSet.clear(contentContainer!!.id, ConstraintSet.LEFT)
+//        constraintSet.clear(contentContainer!!.id, ConstraintSet.LEFT)
         constraintSet.connect(
-            contentContainer.id, ConstraintSet.LEFT,
-            iconStartView!!.id, ConstraintSet.RIGHT, getContentMargin(startIconView.type)
+            contentContainer!!.id, ConstraintSet.START,
+            iconStartView!!.id, ConstraintSet.END, getContentMargin(startIconView.type)
         )
         constraintSet.applyTo(container)
-
 
         startIconView.apply {
             if (iconStartView != null)
                 setInImageView(iconStartView)
         }
+
+
 //        iconEndView = view.findViewById(R.id.iconEnd)
     }
 
@@ -142,11 +174,17 @@ private class StartIconView(val context: Context) {
 
 private data class TitleView(
     val text: String,
-    val style: Int
-)
-
-private data class SubtitleView(
-    val text: String,
-    val maxLines: Int = 1,
     val style: Int? = null
 )
+
+private class SubtitleView(
+    val view: TextView,
+    val text: String?,
+    val maxLines: Int = 1,
+    val style: Int? = null
+) {
+    init {
+        view.text = text
+
+    }
+}
