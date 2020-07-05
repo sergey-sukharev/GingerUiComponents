@@ -17,12 +17,13 @@
         android:layout_height="24dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
         android:src="@drawable/ic_ginger"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        tools:visibility="visible" />
 
     <ImageView
         android:id="@+id/iconEnd"
@@ -41,9 +42,11 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
         android:layout_marginEnd="16dp"
-        tools:layout_marginStart="16dp"
-        app:layout_constraintBottom_toTopOf="@+id/divider"
+        tools:layout_marginStart="32dp"
+        app:layout_constraintBottom_toTopOf="@+id/ginger_divider"
         app:layout_constraintEnd_toStartOf="@+id/iconEnd"
         app:layout_constraintStart_toEndOf="@+id/iconStart"
         app:layout_constraintTop_toTopOf="parent">
@@ -54,10 +57,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="sdadas"
             android:textColor="#000"
             android:textSize="16sp"
-            tools:text="title" />
+            tools:text="GingerLabelTitle" />
 
         <TextView
             android:id="@+id/ginger_label_subtitle"
@@ -66,13 +68,14 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:paddingTop="4dp"
-            tools:text="subtitle"
+            android:visibility="gone"
+            tools:text="GingerLabelSubtitle \nfdsfsdf"
             tools:visibility="visible" />
 
     </LinearLayout>
 
     <View
-        android:id="@+id/divider"
+        android:id="@+id/ginger_divider"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -4,29 +4,31 @@ package dev.ginger.ui.components.factory
 import android.graphics.drawable.Drawable
 import android.widget.ImageView
 import androidx.core.graphics.drawable.DrawableCompat
+import dev.ginger.ui.components.utils.dpToPx
 
 abstract class BaseIconHolder(
     val view: ImageView,
     drawableRes: Int?
 ) {
 
-    val sizeDefault = listOf(32, 32)
-    val sizeSmall = listOf(24, 24)
-    val sizeMiddle = listOf(40, 40)
+    val sizeIcon = listOf(24, 24)
+    val sizeSmall = listOf(40, 40)
+    val sizeMiddle = listOf(56, 56)
     val sizeLarge = listOf(100, 56)
 
     var type: Int = 1
-    set(value) {
-        field = value
-        measureSize()
-    }
+        set(value) {
+            field = value
+            drawable ?: run { field = 0 }
+            measureSize()
+        }
 
     var drawable: Drawable? = null
         set(value) {
             field = value
             field?.also { draw ->
                 tint?.let {
-                    DrawableCompat.setTint(draw, it)
+                    DrawableCompat.setTint(view.drawable, view.resources.getColor(it, null))
                 }
             } ?: run {
                 type = 0
@@ -38,7 +40,7 @@ abstract class BaseIconHolder(
         set(value) {
             field = value
             field?.let {
-                DrawableCompat.setTint(view.drawable, it)
+                DrawableCompat.setTint(view.drawable, view.resources.getColor(it, null))
             }
         }
 
@@ -57,6 +59,13 @@ abstract class BaseIconHolder(
     }
 
     abstract fun measureSize()
+
+    protected fun setImageViewSize(width: Int, height: Int) {
+        view.layoutParams.apply {
+            this.width = dpToPx(view.context, width)
+            this.height = dpToPx(view.context, height)
+        }
+    }
 
 }
 

@@ -13,10 +13,7 @@ class ActionIconHolder(
         when(type) {
             0 -> view.visibility = View.GONE
             else -> {
-                view.layoutParams.apply {
-                    height = dpToPx(view.context, 24)
-                    width = dpToPx(view.context, 24)
-                }
+                setImageViewSize(sizeIcon[0], sizeIcon[1])
             }
         }
     }

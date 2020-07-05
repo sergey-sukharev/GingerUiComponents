@@ -14,6 +14,7 @@ import dev.ginger.ui.components.factory.ActionIconHolder
 import dev.ginger.ui.components.factory.GingerLineItemViewFactory
 import dev.ginger.ui.components.factory.ItemContentHolder
 import dev.ginger.ui.components.factory.StartIconHolder
+import dev.ginger.ui.components.utils.dpToPx
 import java.lang.Exception
 
 class GingerLineItem : ConstraintLayout, View.OnClickListener {
@@ -46,7 +47,7 @@ class GingerLineItem : ConstraintLayout, View.OnClickListener {
             getResourceOrNullAttr(attrs, R.styleable.GingerLineItem_actionIcon)
         ).apply {
             tint = getResourceOrNullAttr(attrs, R.styleable.GingerLineItem_startIconTint)
-            type = attrs.getInt(R.styleable.GingerLineItem_imageType, 1)
+            type = 1
         }
 
         val textContentHolder = ItemContentHolder(
@@ -56,6 +57,8 @@ class GingerLineItem : ConstraintLayout, View.OnClickListener {
             setTitleText(getStringOrNullAttr(attrs, R.styleable.GingerLineItem_titleText))
             setSubtitleText(getStringOrNullAttr(attrs, R.styleable.GingerLineItem_subtitleText))
         }
+
+        viewFactory.containerView?.minimumHeight = dpToPx(context, 48)
 
         attrs.recycle()
     }

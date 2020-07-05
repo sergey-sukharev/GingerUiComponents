@@ -23,9 +23,9 @@
         <attr name="subtitleTextStyle" format="reference"/>
 
         <attr name="startIcon" format="reference"/>
-        <attr name="endIcon" format="reference"/>
+        <attr name="actionIcon" format="reference"/>
 
         <attr name="startIconTint" format="reference"/>
-        <attr name="endIconTint" format="reference"/>
+        <attr name="actionIconTint" format="reference"/>
     </declare-styleable>
 </resources>
