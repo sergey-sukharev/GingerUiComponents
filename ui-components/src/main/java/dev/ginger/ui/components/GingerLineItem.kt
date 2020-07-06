@@ -43,10 +43,10 @@ class GingerLineItem : ConstraintLayout, View.OnClickListener {
         }
 
         val actionIconHolder = ActionIconHolder(
-            viewFactory.startIcon!!,
+            viewFactory.endIcon!!,
             getResourceOrNullAttr(attrs, R.styleable.GingerLineItem_actionIcon)
         ).apply {
-            tint = getResourceOrNullAttr(attrs, R.styleable.GingerLineItem_startIconTint)
+            tint = getResourceOrNullAttr(attrs, R.styleable.GingerLineItem_actionIconTint)
             type = 1
         }
 

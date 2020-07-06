@@ -2,7 +2,10 @@ package dev.ginger.ui.components.factory
 
 
 import android.graphics.drawable.Drawable
+import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.graphics.drawable.DrawableCompat
 import dev.ginger.ui.components.utils.dpToPx
 
@@ -46,6 +49,7 @@ abstract class BaseIconHolder(
 
     init {
         this.drawable = getDrawableFromRes(drawableRes)
+        measureSize()
     }
 
     fun setDrawableFromRes(resId: Int?) {
@@ -61,10 +65,12 @@ abstract class BaseIconHolder(
     abstract fun measureSize()
 
     protected fun setImageViewSize(width: Int, height: Int) {
-        view.layoutParams.apply {
+        (view.layoutParams as ConstraintLayout.LayoutParams).apply {
             this.width = dpToPx(view.context, width)
             this.height = dpToPx(view.context, height)
         }
+
+        view.requestLayout()
     }
 
 }
