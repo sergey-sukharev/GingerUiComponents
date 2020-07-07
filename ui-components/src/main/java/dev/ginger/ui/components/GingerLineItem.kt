@@ -10,10 +10,8 @@ import androidx.core.content.res.getIntOrThrow
 import androidx.core.content.res.getResourceIdOrThrow
 import androidx.core.content.res.getStringOrThrow
 import dev.ginger.ui.R
-import dev.ginger.ui.components.factory.ActionIconHolder
 import dev.ginger.ui.components.factory.GingerLineItemViewFactory
-import dev.ginger.ui.components.factory.ItemContentHolder
-import dev.ginger.ui.components.factory.StartIconHolder
+import dev.ginger.ui.components.holders.*
 import dev.ginger.ui.components.utils.dpToPx
 import java.lang.Exception
 
@@ -25,6 +23,7 @@ class GingerLineItem : ConstraintLayout, View.OnClickListener {
 
     private lateinit var startIconHolder: StartIconHolder
     private lateinit var actionIconHolder: ActionIconHolder
+    private lateinit var dividerHolder: DividerHolder
 
 
     constructor(context: Context, attributeSet: AttributeSet?) : super(context, attributeSet) {
@@ -57,6 +56,12 @@ class GingerLineItem : ConstraintLayout, View.OnClickListener {
             setTitleText(getStringOrNullAttr(attrs, R.styleable.GingerLineItem_titleText))
             setSubtitleText(getStringOrNullAttr(attrs, R.styleable.GingerLineItem_subtitleText))
         }
+
+        val dividerHolder = DividerHolder(
+            viewFactory.dividerView!!,
+            DividerType.getByValue(attrs.getInt(R.styleable.GingerLineItem_dividerType, 0)),
+            viewFactory.containerView!!
+        )
 
         viewFactory.containerView?.minimumHeight = dpToPx(context, 48)
 

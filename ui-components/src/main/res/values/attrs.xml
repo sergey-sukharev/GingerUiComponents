@@ -15,6 +15,12 @@
             <enum name="large" value="4"/>
         </attr>
 
+        <attr name="dividerType" format="enum">
+            <enum name="none" value="0"/>
+            <enum name="full_bleed" value="1"/>
+            <enum name="inset" value="2"/>
+            <enum name="middle" value="3"/>
+        </attr>
 
         <attr name="titleText" format="string"/>
         <attr name="subtitleText" format="string"/>

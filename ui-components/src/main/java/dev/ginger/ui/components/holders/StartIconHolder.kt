@@ -1,8 +1,7 @@
-package dev.ginger.ui.components.factory
+package dev.ginger.ui.components.holders
 
 import android.view.View
 import android.widget.ImageView
-import dev.ginger.ui.components.utils.dpToPx
 
 class StartIconHolder(
     view: ImageView,

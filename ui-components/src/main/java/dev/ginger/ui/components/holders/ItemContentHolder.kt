@@ -1,4 +1,4 @@
-package dev.ginger.ui.components.factory
+package dev.ginger.ui.components.holders
 
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
