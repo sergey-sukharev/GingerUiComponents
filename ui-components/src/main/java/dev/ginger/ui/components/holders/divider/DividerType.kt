@@ -1,4 +1,4 @@
-package dev.ginger.ui.components.holders
+package dev.ginger.ui.components.holders.divider
 
 enum class DividerType(private val value: Int) {
     NONE(0), FULL_BLEED(1), INSET(2), MIDDLE(3);

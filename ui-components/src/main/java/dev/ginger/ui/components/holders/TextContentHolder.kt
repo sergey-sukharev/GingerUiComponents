@@ -4,17 +4,20 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import dev.ginger.ui.R
+import dev.ginger.ui.components.holders.text.SubtitleHolder
+import dev.ginger.ui.components.holders.text.TitleHolder
 import dev.ginger.ui.components.utils.dpToPx
 
-class ItemContentHolder(
+class TextContentHolder(
     val rootContainer: ConstraintLayout,
-    val titleView: TextView,
-    val subtitleView: TextView,
+    val titleHolder: TitleHolder,
+    val subtitleHolder: SubtitleHolder,
     imageType: Int
 ) {
 
     init {
         setLeftMarginByIconType(imageType)
+
     }
 
     // Set a left indent from start icon by icon type (dp)

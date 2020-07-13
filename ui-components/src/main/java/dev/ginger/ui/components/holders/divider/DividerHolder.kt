@@ -1,4 +1,4 @@
-package dev.ginger.ui.components.holders
+package dev.ginger.ui.components.holders.divider
 
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -26,13 +26,25 @@ class DividerHolder(
             }
             DividerType.INSET -> {
                 measureIndent(rootContainer, ConstraintSet.START, 32)
-                measureIndent(rootContainer, ConstraintSet.END, 0)
+                measureRightSide(rootContainer, ConstraintSet.START)
             }
             DividerType.MIDDLE -> {
                 measureIndent(rootContainer, ConstraintSet.START, 16)
                 measureIndent(rootContainer, ConstraintSet.END, 16)
             }
         }
+    }
+
+    private fun measureRightSide(rootContainer: ConstraintLayout, site: Int) {
+        val constraintSet = ConstraintSet()
+        constraintSet.clone(rootContainer)
+        constraintSet.clear(R.id.ginger_divider, site)
+        constraintSet.connect(
+            R.id.ginger_divider, site,
+            R.id.ginger_text_content, site,
+            0
+        )
+        constraintSet.applyTo(rootContainer)
     }
 
     private fun measureIndent(rootContainer: ConstraintLayout, site: Int, indent: Int) {

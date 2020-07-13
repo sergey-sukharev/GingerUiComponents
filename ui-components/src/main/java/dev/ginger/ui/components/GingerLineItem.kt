@@ -12,6 +12,12 @@ import androidx.core.content.res.getStringOrThrow
 import dev.ginger.ui.R
 import dev.ginger.ui.components.factory.GingerLineItemViewFactory
 import dev.ginger.ui.components.holders.*
+import dev.ginger.ui.components.holders.divider.DividerHolder
+import dev.ginger.ui.components.holders.divider.DividerType
+import dev.ginger.ui.components.holders.icon.ActionIconHolder
+import dev.ginger.ui.components.holders.icon.StartIconHolder
+import dev.ginger.ui.components.holders.text.SubtitleHolder
+import dev.ginger.ui.components.holders.text.TitleHolder
 import dev.ginger.ui.components.utils.dpToPx
 import java.lang.Exception
 
@@ -21,10 +27,10 @@ class GingerLineItem : ConstraintLayout, View.OnClickListener {
 
     constructor(context: Context) : this(context, null)
 
-    private lateinit var startIconHolder: StartIconHolder
-    private lateinit var actionIconHolder: ActionIconHolder
-    private lateinit var dividerHolder: DividerHolder
-
+    private val startIconHolder: StartIconHolder
+    private val actionIconHolder: ActionIconHolder
+    private val dividerHolder: DividerHolder
+    private val textContentHolder: TextContentHolder
 
     constructor(context: Context, attributeSet: AttributeSet?) : super(context, attributeSet) {
         viewFactory = GingerLineItemViewFactory(
@@ -33,7 +39,7 @@ class GingerLineItem : ConstraintLayout, View.OnClickListener {
         )
         val attrs = context.obtainStyledAttributes(attributeSet, R.styleable.GingerLineItem)
 
-        val startIconHolder = StartIconHolder(
+        startIconHolder = StartIconHolder(
             viewFactory.startIcon!!,
             getResourceOrNullAttr(attrs, R.styleable.GingerLineItem_startIcon)
         ).apply {
@@ -41,7 +47,7 @@ class GingerLineItem : ConstraintLayout, View.OnClickListener {
             type = attrs.getInt(R.styleable.GingerLineItem_imageType, 1)
         }
 
-        val actionIconHolder = ActionIconHolder(
+        actionIconHolder = ActionIconHolder(
             viewFactory.endIcon!!,
             getResourceOrNullAttr(attrs, R.styleable.GingerLineItem_actionIcon)
         ).apply {
@@ -49,19 +55,21 @@ class GingerLineItem : ConstraintLayout, View.OnClickListener {
             type = 1
         }
 
-        val textContentHolder = ItemContentHolder(
+        textContentHolder = TextContentHolder(
             viewFactory.containerView!!,
-            viewFactory.titleView!!, viewFactory.subtitleView!!, startIconHolder.type
+            TitleHolder(viewFactory.titleView!!),
+            SubtitleHolder(viewFactory.titleView!!),
+            startIconHolder.type
         ).apply {
             setTitleText(getStringOrNullAttr(attrs, R.styleable.GingerLineItem_titleText))
             setSubtitleText(getStringOrNullAttr(attrs, R.styleable.GingerLineItem_subtitleText))
         }
 
-        val dividerHolder = DividerHolder(
-            viewFactory.dividerView!!,
-            DividerType.getByValue(attrs.getInt(R.styleable.GingerLineItem_dividerType, 0)),
-            viewFactory.containerView!!
-        )
+        dividerHolder = DividerHolder(
+                viewFactory.dividerView!!,
+                DividerType.getByValue(attrs.getInt(R.styleable.GingerLineItem_dividerType, 0)),
+                viewFactory.containerView!!
+            )
 
         viewFactory.containerView?.minimumHeight = dpToPx(context, 48)
 

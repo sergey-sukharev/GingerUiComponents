@@ -1,7 +1,8 @@
-package dev.ginger.ui.components.holders
+package dev.ginger.ui.components.holders.icon
 
 import android.view.View
 import android.widget.ImageView
+import dev.ginger.ui.components.holders.icon.BaseIconHolder
 
 class StartIconHolder(
     view: ImageView,

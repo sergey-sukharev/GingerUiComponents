@@ -1,4 +1,4 @@
-package dev.ginger.ui.components.holders
+package dev.ginger.ui.components.holders.icon
 
 
 import android.graphics.drawable.Drawable
