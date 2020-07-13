@@ -34,11 +34,19 @@ class GingerLineItem : ConstraintLayout, View.OnClickListener {
     private val textContentHolder: TextContentHolder
 
     constructor(context: Context, attributeSet: AttributeSet?) : super(context, attributeSet) {
+
+        val attrs = context.obtainStyledAttributes(attributeSet, R.styleable.GingerLineItem)
+
+        val resourceLayout = getResourceLayout(
+            attrs.getInt(
+                R.styleable.GingerLineItem_actionType, 0
+            )
+        )
+
         viewFactory = GingerLineItemViewFactory(
             LayoutInflater.from(context)
-                .inflate(R.layout.ginger_base_line_item, this)
+                .inflate(resourceLayout, this)
         )
-        val attrs = context.obtainStyledAttributes(attributeSet, R.styleable.GingerLineItem)
 
         startIconHolder = StartIconHolder(
             viewFactory.startIcon!!,
@@ -59,9 +67,12 @@ class GingerLineItem : ConstraintLayout, View.OnClickListener {
         textContentHolder = TextContentHolder(
             viewFactory.containerView!!,
             TitleHolder(viewFactory.titleView!!),
-            SubtitleHolder(viewFactory.subtitleView!!,
+            SubtitleHolder(
+                viewFactory.subtitleView!!,
                 lineType = SubtitleLineType.getByValue(
-                    attrs.getInt(R.styleable.GingerLineItem_type, 1))),
+                    attrs.getInt(R.styleable.GingerLineItem_type, 0)
+                )
+            ),
             startIconHolder.type
         ).apply {
             setTitleText(getStringOrNullAttr(attrs, R.styleable.GingerLineItem_titleText))
@@ -69,14 +80,21 @@ class GingerLineItem : ConstraintLayout, View.OnClickListener {
         }
 
         dividerHolder = DividerHolder(
-                viewFactory.dividerView!!,
-                DividerType.getByValue(attrs.getInt(R.styleable.GingerLineItem_dividerType, 0)),
-                viewFactory.containerView!!
-            )
+            viewFactory.dividerView!!,
+            DividerType.getByValue(attrs.getInt(R.styleable.GingerLineItem_dividerType, 0)),
+            viewFactory.containerView!!
+        )
 
         viewFactory.containerView?.minimumHeight = dpToPx(context, 48)
 
         attrs.recycle()
+    }
+
+    private fun getResourceLayout(attrId: Int): Int {
+        return when (GingerActionType.getByValue(attrId)) {
+            GingerActionType.CHECKBOX -> R.layout.ginger_view_action_checkbox
+            else -> R.layout.ginger_view_action_icon
+        }
     }
 
     fun setTitleText(value: String?) {
