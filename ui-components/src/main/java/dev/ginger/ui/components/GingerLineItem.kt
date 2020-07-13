@@ -59,7 +59,7 @@ class GingerLineItem : ConstraintLayout, View.OnClickListener {
         textContentHolder = TextContentHolder(
             viewFactory.containerView!!,
             TitleHolder(viewFactory.titleView!!),
-            SubtitleHolder(viewFactory.titleView!!,
+            SubtitleHolder(viewFactory.subtitleView!!,
                 lineType = SubtitleLineType.getByValue(
                     attrs.getInt(R.styleable.GingerLineItem_type, 1))),
             startIconHolder.type
