@@ -6,11 +6,11 @@ package dev.ginger.ui.components.holders.text
  * @property value - line type
  */
 enum class SubtitleLineType(private val value: Int) {
-    ONE_LINE(0), TWO_LINE(1), THREE_LINE(2);
+    ONE_LINE(1), TWO_LINE(2), THREE_LINE(3);
 
     companion object {
         fun getByValue(value: Int): SubtitleLineType {
-            return SubtitleLineType.values().find { it.value == value } ?: throw IllegalArgumentException()
+            return values().find { it.value == value } ?: throw IllegalArgumentException()
         }
     }
 }

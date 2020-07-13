@@ -17,6 +17,7 @@ import dev.ginger.ui.components.holders.divider.DividerType
 import dev.ginger.ui.components.holders.icon.ActionIconHolder
 import dev.ginger.ui.components.holders.icon.StartIconHolder
 import dev.ginger.ui.components.holders.text.SubtitleHolder
+import dev.ginger.ui.components.holders.text.SubtitleLineType
 import dev.ginger.ui.components.holders.text.TitleHolder
 import dev.ginger.ui.components.utils.dpToPx
 import java.lang.Exception
@@ -58,7 +59,9 @@ class GingerLineItem : ConstraintLayout, View.OnClickListener {
         textContentHolder = TextContentHolder(
             viewFactory.containerView!!,
             TitleHolder(viewFactory.titleView!!),
-            SubtitleHolder(viewFactory.titleView!!),
+            SubtitleHolder(viewFactory.titleView!!,
+                lineType = SubtitleLineType.getByValue(
+                    attrs.getInt(R.styleable.GingerLineItem_type, 1))),
             startIconHolder.type
         ).apply {
             setTitleText(getStringOrNullAttr(attrs, R.styleable.GingerLineItem_titleText))

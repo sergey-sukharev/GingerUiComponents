@@ -13,9 +13,9 @@ class SubtitleHolder(view: TextView, style: Int? = null,
 
     private fun changeLineType(lineType: SubtitleLineType) {
         when(lineType) {
-            SubtitleLineType.ONE_LINE -> view.setLines(1)
-            SubtitleLineType.TWO_LINE -> view.setLines(2)
-            SubtitleLineType.THREE_LINE -> view.setLines(3)
+            SubtitleLineType.ONE_LINE -> view.maxLines = 1
+            SubtitleLineType.TWO_LINE -> view.maxLines = 2
+            SubtitleLineType.THREE_LINE -> view.maxLines = 3
         }
     }
 
