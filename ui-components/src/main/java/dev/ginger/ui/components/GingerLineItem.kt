@@ -29,7 +29,7 @@ class GingerLineItem : ConstraintLayout, View.OnClickListener {
     constructor(context: Context) : this(context, null)
 
     private val startIconHolder: StartIconHolder
-    private val actionIconHolder: ActionIconHolder
+//    private val actionIconHolder: ActionIconHolder
     private val dividerHolder: DividerHolder
     private val textContentHolder: TextContentHolder
 
@@ -56,13 +56,13 @@ class GingerLineItem : ConstraintLayout, View.OnClickListener {
             type = attrs.getInt(R.styleable.GingerLineItem_imageType, 1)
         }
 
-        actionIconHolder = ActionIconHolder(
-            viewFactory.endIcon!!,
-            getResourceOrNullAttr(attrs, R.styleable.GingerLineItem_actionIcon)
-        ).apply {
-            tint = getResourceOrNullAttr(attrs, R.styleable.GingerLineItem_actionIconTint)
-            type = 1
-        }
+//        actionIconHolder = ActionIconHolder(
+//            viewFactory.endIcon!!,
+//            getResourceOrNullAttr(attrs, R.styleable.GingerLineItem_actionIcon)
+//        ).apply {
+//            tint = getResourceOrNullAttr(attrs, R.styleable.GingerLineItem_actionIconTint)
+//            type = 1
+//        }
 
         textContentHolder = TextContentHolder(
             viewFactory.containerView!!,
@@ -93,6 +93,7 @@ class GingerLineItem : ConstraintLayout, View.OnClickListener {
     private fun getResourceLayout(attrId: Int): Int {
         return when (GingerActionType.getByValue(attrId)) {
             GingerActionType.CHECKBOX -> R.layout.ginger_view_action_checkbox
+            GingerActionType.SWITCH -> R.layout.ginger_view_action_switcher
             else -> R.layout.ginger_view_action_icon
         }
     }
