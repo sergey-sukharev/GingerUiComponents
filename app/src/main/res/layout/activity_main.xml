@@ -15,4 +15,18 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <dev.ginger.ui.components.GingerLineItem
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:startIcon="@drawable/ic_ginger"
+        app:actionIcon="@drawable/ic_ginger"
+        app:imageType="middle"
+        app:titleText="MyTitleText"
+        app:dividerType="inset"
+        app:subtitleText="The perfect subtitle in one line... I love my job. Oh..dsdsdshdjshajhdjhkhdashdkhsahgfdg "
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:type="two_line" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
