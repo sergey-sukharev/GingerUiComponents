@@ -5,6 +5,7 @@ import android.content.res.TypedArray
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.getIntOrThrow
 import androidx.core.content.res.getResourceIdOrThrow
@@ -29,7 +30,7 @@ class GingerLineItem : ConstraintLayout, View.OnClickListener {
     constructor(context: Context) : this(context, null)
 
     private val startIconHolder: StartIconHolder
-//    private val actionIconHolder: ActionIconHolder
+    private lateinit var actionIconHolder: ActionIconHolder
     private val dividerHolder: DividerHolder
     private val textContentHolder: TextContentHolder
 
@@ -37,15 +38,21 @@ class GingerLineItem : ConstraintLayout, View.OnClickListener {
 
         val attrs = context.obtainStyledAttributes(attributeSet, R.styleable.GingerLineItem)
 
-        val resourceLayout = getResourceLayout(
-            attrs.getInt(
-                R.styleable.GingerLineItem_actionType, 0
-            )
-        )
+//        val resourceLayout = getResourceLayout(
+//            attrs.getInt(
+//                R.styleable.GingerLineItem_actionType, 0
+//            )
+//        )
+
+        val resourceLayout = R.layout.ginger_base_line_item
 
         viewFactory = GingerLineItemViewFactory(
-            LayoutInflater.from(context)
-                .inflate(resourceLayout, this)
+            LayoutInflater.from(context).inflate(resourceLayout, this),
+            GingerActionType.getByValue(
+                attrs.getInt(
+                    R.styleable.GingerLineItem_actionType, 0
+                )
+            )
         )
 
         startIconHolder = StartIconHolder(
@@ -70,7 +77,7 @@ class GingerLineItem : ConstraintLayout, View.OnClickListener {
             SubtitleHolder(
                 viewFactory.subtitleView!!,
                 lineType = SubtitleLineType.getByValue(
-                    attrs.getInt(R.styleable.GingerLineItem_type, 0)
+                    attrs.getInt(R.styleable.GingerLineItem_lineType, 0)
                 )
             ),
             startIconHolder.type

@@ -2,7 +2,7 @@
 <resources>
     <declare-styleable name="GingerLineItem">
 
-        <attr name="type" format="enum">
+        <attr name="lineType" format="enum">
             <enum name="one_line" value="0"/>
             <enum name="two_line" value="1"/>
             <enum name="three_line" value="2"/>
