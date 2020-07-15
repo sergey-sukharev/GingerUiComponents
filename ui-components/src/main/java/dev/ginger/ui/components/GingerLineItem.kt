@@ -105,6 +105,8 @@ class GingerLineItem : ConstraintLayout, View.OnClickListener {
         }
     }
 
+    fun getActionView(): Any? = viewFactory.actionView
+
     fun setTitleText(value: String?) {
         viewFactory.titleView?.text = value
     }

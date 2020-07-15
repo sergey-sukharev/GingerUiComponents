@@ -53,7 +53,7 @@ class DividerHolder(
         constraintSet.clear(R.id.ginger_divider, site)
         constraintSet.connect(
             R.id.ginger_divider, site,
-            R.id.parent, site,
+            R.id.container, site,
             dpToPx(rootContainer.context, indent)
         )
         constraintSet.applyTo(rootContainer)
