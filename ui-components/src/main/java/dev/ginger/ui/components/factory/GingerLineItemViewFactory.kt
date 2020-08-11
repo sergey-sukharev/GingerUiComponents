@@ -22,6 +22,7 @@ class GingerLineItemViewFactory(
     var actionView: Any? = null
 
     init {
+        containerView?.minimumHeight = dpToPx(viewContainer.context, 48)
         addAction(actionType)
     }
 

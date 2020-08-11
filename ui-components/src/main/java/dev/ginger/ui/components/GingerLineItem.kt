@@ -5,6 +5,7 @@ import android.content.res.TypedArray
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.getIntOrThrow
 import androidx.core.content.res.getResourceIdOrThrow
@@ -14,12 +15,12 @@ import dev.ginger.ui.components.factory.GingerLineItemViewFactory
 import dev.ginger.ui.components.holders.*
 import dev.ginger.ui.components.holders.divider.DividerHolder
 import dev.ginger.ui.components.holders.divider.DividerType
+import dev.ginger.ui.components.holders.icon.ActionIconHolder
 import dev.ginger.ui.components.holders.icon.ActionIconType
 import dev.ginger.ui.components.holders.icon.StartIconHolder
 import dev.ginger.ui.components.holders.text.SubtitleHolder
 import dev.ginger.ui.components.holders.text.SubtitleLineType
 import dev.ginger.ui.components.holders.text.TitleHolder
-import dev.ginger.ui.components.utils.dpToPx
 import java.lang.Exception
 
 class GingerLineItem : ConstraintLayout, View.OnClickListener {
@@ -31,6 +32,7 @@ class GingerLineItem : ConstraintLayout, View.OnClickListener {
     private val startIconHolder: StartIconHolder
     private val dividerHolder: DividerHolder
     private val textContentHolder: TextContentHolder
+    private lateinit var actionIconHolder: ActionIconHolder
 
     constructor(context: Context, attributeSet: AttributeSet?) : super(context, attributeSet) {
         val attrs = context.obtainStyledAttributes(attributeSet, R.styleable.GingerLineItem)
@@ -75,7 +77,10 @@ class GingerLineItem : ConstraintLayout, View.OnClickListener {
             viewFactory.containerView!!
         )
 
-        viewFactory.containerView?.minimumHeight = dpToPx(context, 48)
+        (viewFactory.actionView as? ImageView)?.let {
+            actionIconHolder = ActionIconHolder(it,
+                getResourceOrNullAttr(attrs, R.styleable.GingerLineItem_actionIcon))
+        }
 
         attrs.recycle()
     }

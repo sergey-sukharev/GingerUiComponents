@@ -2,6 +2,7 @@ package dev.ginger.ui.components.holders.icon
 
 
 import android.graphics.drawable.Drawable
+import android.view.View
 import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.graphics.drawable.DrawableCompat
@@ -63,11 +64,11 @@ abstract class BaseIconHolder(
     abstract fun measureSize()
 
     protected fun setImageViewSize(width: Int, height: Int) {
+        view.visibility = View.VISIBLE
         (view.layoutParams as ConstraintLayout.LayoutParams).apply {
             this.width = dpToPx(view.context, width)
             this.height = dpToPx(view.context, height)
         }
-
         view.requestLayout()
     }
 
