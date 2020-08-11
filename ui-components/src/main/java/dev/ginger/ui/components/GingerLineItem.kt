@@ -5,7 +5,6 @@ import android.content.res.TypedArray
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.getIntOrThrow
 import androidx.core.content.res.getResourceIdOrThrow
@@ -15,7 +14,7 @@ import dev.ginger.ui.components.factory.GingerLineItemViewFactory
 import dev.ginger.ui.components.holders.*
 import dev.ginger.ui.components.holders.divider.DividerHolder
 import dev.ginger.ui.components.holders.divider.DividerType
-import dev.ginger.ui.components.holders.icon.ActionIconHolder
+import dev.ginger.ui.components.holders.icon.ActionIconType
 import dev.ginger.ui.components.holders.icon.StartIconHolder
 import dev.ginger.ui.components.holders.text.SubtitleHolder
 import dev.ginger.ui.components.holders.text.SubtitleLineType
@@ -30,28 +29,18 @@ class GingerLineItem : ConstraintLayout, View.OnClickListener {
     constructor(context: Context) : this(context, null)
 
     private val startIconHolder: StartIconHolder
-    private lateinit var actionIconHolder: ActionIconHolder
     private val dividerHolder: DividerHolder
     private val textContentHolder: TextContentHolder
 
     constructor(context: Context, attributeSet: AttributeSet?) : super(context, attributeSet) {
-
         val attrs = context.obtainStyledAttributes(attributeSet, R.styleable.GingerLineItem)
-
-//        val resourceLayout = getResourceLayout(
-//            attrs.getInt(
-//                R.styleable.GingerLineItem_actionType, 0
-//            )
-//        )
 
         val resourceLayout = R.layout.ginger_base_line_item
 
         viewFactory = GingerLineItemViewFactory(
             LayoutInflater.from(context).inflate(resourceLayout, this),
             GingerActionType.getByValue(
-                attrs.getInt(
-                    R.styleable.GingerLineItem_actionType, 0
-                )
+                attrs.getInt(R.styleable.GingerLineItem_actionType, GingerActionType.ICON.ordinal)
             )
         )
 
@@ -60,16 +49,8 @@ class GingerLineItem : ConstraintLayout, View.OnClickListener {
             getResourceOrNullAttr(attrs, R.styleable.GingerLineItem_startIcon)
         ).apply {
             tint = getResourceOrNullAttr(attrs, R.styleable.GingerLineItem_startIconTint)
-            type = attrs.getInt(R.styleable.GingerLineItem_imageType, 1)
+            type = attrs.getInt(R.styleable.GingerLineItem_imageType, ActionIconType.ICON.ordinal)
         }
-
-//        actionIconHolder = ActionIconHolder(
-//            viewFactory.endIcon!!,
-//            getResourceOrNullAttr(attrs, R.styleable.GingerLineItem_actionIcon)
-//        ).apply {
-//            tint = getResourceOrNullAttr(attrs, R.styleable.GingerLineItem_actionIconTint)
-//            type = 1
-//        }
 
         textContentHolder = TextContentHolder(
             viewFactory.containerView!!,
@@ -77,7 +58,8 @@ class GingerLineItem : ConstraintLayout, View.OnClickListener {
             SubtitleHolder(
                 viewFactory.subtitleView!!,
                 lineType = SubtitleLineType.getByValue(
-                    attrs.getInt(R.styleable.GingerLineItem_lineType, 0)
+                    attrs.getInt(R.styleable.GingerLineItem_lineType,
+                        SubtitleLineType.ONE_LINE.ordinal)
                 )
             ),
             startIconHolder.type
@@ -88,7 +70,8 @@ class GingerLineItem : ConstraintLayout, View.OnClickListener {
 
         dividerHolder = DividerHolder(
             viewFactory.dividerView!!,
-            DividerType.getByValue(attrs.getInt(R.styleable.GingerLineItem_dividerType, 0)),
+            DividerType.getByValue(attrs.getInt(R.styleable.GingerLineItem_dividerType,
+            DividerType.NONE.ordinal)),
             viewFactory.containerView!!
         )
 

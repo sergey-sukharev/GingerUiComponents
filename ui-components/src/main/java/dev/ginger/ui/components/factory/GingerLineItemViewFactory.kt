@@ -12,10 +12,7 @@ class GingerLineItemViewFactory(
     private val viewContainer: View,
     actionType: GingerActionType
 ) {
-
     val startIcon: ImageView? = viewContainer.findViewById(R.id.iconStart)
-
-    //    val endIcon: ImageView? = viewContainer.findViewById(R.id.iconEnd)
     val titleView: TextView? = viewContainer.findViewById(R.id.ginger_label_title)
     val subtitleView: TextView? = viewContainer.findViewById(R.id.ginger_label_subtitle)
     val dividerView: View? = viewContainer.findViewById(R.id.ginger_divider)
@@ -25,93 +22,58 @@ class GingerLineItemViewFactory(
     var actionView: Any? = null
 
     init {
-        println()
-        if (actionType == GingerActionType.SWITCH)
-            addSwitchAction()
-        else if (actionType == GingerActionType.CHECKBOX)
-            addCheckboxAction()
-        else
-            addIconAction()
+        addAction(actionType)
     }
 
-    private fun addCheckboxAction() {
-        val checkbox = CheckBox(viewContainer.context)
-        val id = View.generateViewId()
-        checkbox.id = id
+    private fun getActionView(actionType: GingerActionType): View? {
+        return when (actionType) {
+            GingerActionType.SWITCH -> Switch(viewContainer.context)
+            GingerActionType.CHECKBOX -> CheckBox(viewContainer.context)
+            else -> null
+        }
+    }
 
-        containerView?.addView(checkbox)
+    private fun addAction(actionType: GingerActionType) {
+        val view = getActionView(actionType)
+        view?.let {
+            val id = View.generateViewId()
+            it.id = id
+            containerView?.addView(view)
+            setActionIndent(id)
+            actionView = view
+        } ?: run { addIconAction() }
+    }
 
+    private fun setActionIndent(viewId: Int) {
         val constraintSet = ConstraintSet()
         constraintSet.clone(containerView)
 
         // END indent
         constraintSet.connect(
-            id, ConstraintSet.END,
+            viewId, ConstraintSet.END,
             R.id.container, ConstraintSet.END, dpToPx(viewContainer.context, 16)
         )
 
         // TOP indent
         constraintSet.connect(
-            id, ConstraintSet.TOP,
+            viewId, ConstraintSet.TOP,
             R.id.container, ConstraintSet.TOP, dpToPx(viewContainer.context, 16)
         )
 
         // BOTTOM indent
         constraintSet.connect(
-            id, ConstraintSet.BOTTOM,
+            viewId, ConstraintSet.BOTTOM,
             R.id.container, ConstraintSet.BOTTOM, dpToPx(viewContainer.context, 16)
         )
 
         //
         constraintSet.connect(
             R.id.ginger_text_content, ConstraintSet.END,
-            id, ConstraintSet.START, dpToPx(viewContainer.context, 16)
+            viewId, ConstraintSet.START, dpToPx(viewContainer.context, 16)
         )
 
 
         constraintSet.applyTo(containerView)
-
-        actionView = checkbox
-    }
-
-    private fun addSwitchAction() {
-        val switch = Switch(viewContainer.context)
-        val id = View.generateViewId()
-        switch.id = id
-
-        containerView?.addView(switch)
-
-        val constraintSet = ConstraintSet()
-        constraintSet.clone(containerView)
-
-        // END indent
-        constraintSet.connect(
-            id, ConstraintSet.END,
-            R.id.container, ConstraintSet.END, dpToPx(viewContainer.context, 16)
-        )
-
-        // TOP indent
-        constraintSet.connect(
-            id, ConstraintSet.TOP,
-            R.id.container, ConstraintSet.TOP, dpToPx(viewContainer.context, 16)
-        )
-
-        // BOTTOM indent
-        constraintSet.connect(
-            id, ConstraintSet.BOTTOM,
-            R.id.container, ConstraintSet.BOTTOM, dpToPx(viewContainer.context, 16)
-        )
-
-        //
-        constraintSet.connect(
-            R.id.ginger_text_content, ConstraintSet.END,
-            id, ConstraintSet.START, dpToPx(viewContainer.context, 16)
-        )
-
-
-        constraintSet.applyTo(containerView)
-
-        actionView = switch
     }
 
     private fun addIconAction() {

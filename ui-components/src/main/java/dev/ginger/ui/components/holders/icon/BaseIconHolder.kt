@@ -17,10 +17,10 @@ abstract class BaseIconHolder(
     val sizeMiddle = listOf(56, 56)
     val sizeLarge = listOf(100, 56)
 
-    var type: Int = 1
+    var type: Int = ActionIconType.ICON.ordinal
         set(value) {
             field = value
-            drawable ?: run { field = 0 }
+            drawable ?: run { field = ActionIconType.NONE.ordinal }
             measureSize()
         }
 
@@ -32,7 +32,7 @@ abstract class BaseIconHolder(
                     DrawableCompat.setTint(view.drawable, view.resources.getColor(it, null))
                 }
             } ?: run {
-                type = 0
+                type = ActionIconType.NONE.ordinal
             }
             measureSize()
         }
