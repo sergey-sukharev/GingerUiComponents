@@ -29,6 +29,8 @@
             <enum name="middle" value="3"/>
         </attr>
 
+        <attr name="dividerTint" format="color"/>
+
         <attr name="titleText" format="string"/>
         <attr name="subtitleText" format="string"/>
 

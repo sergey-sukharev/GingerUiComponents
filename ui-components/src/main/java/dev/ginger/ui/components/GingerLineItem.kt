@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import androidx.core.content.res.getIntOrThrow
 import androidx.core.content.res.getResourceIdOrThrow
 import androidx.core.content.res.getStringOrThrow
@@ -70,10 +71,17 @@ class GingerLineItem : ConstraintLayout, View.OnClickListener {
             setSubtitleText(getStringOrNullAttr(attrs, R.styleable.GingerLineItem_subtitleText))
         }
 
+
+        val dividerTint = getResourceOrNullAttr(attrs, R.styleable.GingerLineItem_dividerTint)?.also {
+            ContextCompat.getColor(context, it)
+        } ?: ContextCompat.getColor(context, R.color.ginger_divider_tint)
+
+
         dividerHolder = DividerHolder(
             viewFactory.dividerView!!,
             DividerType.getByValue(attrs.getInt(R.styleable.GingerLineItem_dividerType,
             DividerType.NONE.ordinal)),
+            dividerTint,
             viewFactory.containerView!!
         )
 

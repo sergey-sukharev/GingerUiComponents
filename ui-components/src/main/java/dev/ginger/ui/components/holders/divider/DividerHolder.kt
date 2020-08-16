@@ -3,6 +3,7 @@ package dev.ginger.ui.components.holders.divider
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
+import androidx.core.graphics.drawable.DrawableCompat.setTint
 import dev.ginger.ui.R
 import dev.ginger.ui.components.utils.dpToPx
 
@@ -10,11 +11,17 @@ import dev.ginger.ui.components.utils.dpToPx
 class DividerHolder(
     val view: View,
     dividerType: DividerType,
+    dividerColor: Int,
     rootContainer: ConstraintLayout
 ) {
 
     init {
         resize(dividerType, rootContainer)
+        setTint(dividerColor)
+    }
+
+    private fun setTint(color: Int) {
+        view.setBackgroundColor(color)
     }
 
     fun resize(dividerType: DividerType, rootContainer: ConstraintLayout) {
