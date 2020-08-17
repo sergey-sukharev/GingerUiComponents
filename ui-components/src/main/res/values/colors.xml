@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<!--    <color name="ginger_divider_tint">#BFBFBF</color>-->
-    <color name="ginger_divider_tint">#FF0000</color>
-    <color name="test">#7CB342</color>
+    <color name="ginger_divider_tint">#BFBFBF</color>
 </resources>

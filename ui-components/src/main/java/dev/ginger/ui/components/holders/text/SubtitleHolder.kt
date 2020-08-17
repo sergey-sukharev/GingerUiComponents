@@ -2,9 +2,9 @@ package dev.ginger.ui.components.holders.text
 
 import android.widget.TextView
 
-class SubtitleHolder(view: TextView, style: Int? = null,
+class SubtitleHolder(view: TextView, color: Int?, style: Int? = null,
                      lineType: SubtitleLineType = SubtitleLineType.ONE_LINE ):
-    BaseTextHolder(view, style) {
+    BaseTextHolder(view, color, style) {
 
     init {
         println("ConstructorSubtitle")

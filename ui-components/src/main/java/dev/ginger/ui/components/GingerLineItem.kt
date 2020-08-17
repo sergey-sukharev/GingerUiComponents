@@ -47,6 +47,12 @@ class GingerLineItem : ConstraintLayout, View.OnClickListener {
             )
         )
 
+        val titleTextColor: Int? = getResourceOrNullAttr(attrs,
+            R.styleable.GingerLineItem_titleTextColor)
+
+        val subtitleTextColor: Int? = getResourceOrNullAttr(attrs,
+            R.styleable.GingerLineItem_subtitleTextColor)
+
         startIconHolder = StartIconHolder(
             viewFactory.startIcon!!,
             getResourceOrNullAttr(attrs, R.styleable.GingerLineItem_startIcon)
@@ -57,9 +63,10 @@ class GingerLineItem : ConstraintLayout, View.OnClickListener {
 
         textContentHolder = TextContentHolder(
             viewFactory.containerView!!,
-            TitleHolder(viewFactory.titleView!!),
+            TitleHolder(viewFactory.titleView!!, titleTextColor),
             SubtitleHolder(
                 viewFactory.subtitleView!!,
+                subtitleTextColor,
                 lineType = SubtitleLineType.getByValue(
                     attrs.getInt(R.styleable.GingerLineItem_lineType,
                         SubtitleLineType.ONE_LINE.ordinal)
@@ -71,11 +78,9 @@ class GingerLineItem : ConstraintLayout, View.OnClickListener {
             setSubtitleText(getStringOrNullAttr(attrs, R.styleable.GingerLineItem_subtitleText))
         }
 
-
-        val dividerTint = getResourceOrNullAttr(attrs, R.styleable.GingerLineItem_dividerTint)?.also {
-            ContextCompat.getColor(context, it)
+        val dividerTint = getResourceOrNullAttr(attrs, R.styleable.GingerLineItem_dividerTint)?.run {
+            context.resources.getColor(this, null)
         } ?: ContextCompat.getColor(context, R.color.ginger_divider_tint)
-
 
         dividerHolder = DividerHolder(
             viewFactory.dividerView!!,

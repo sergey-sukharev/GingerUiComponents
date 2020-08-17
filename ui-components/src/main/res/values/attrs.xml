@@ -34,8 +34,11 @@
         <attr name="titleText" format="string"/>
         <attr name="subtitleText" format="string"/>
 
-        <attr name="titleTextStyle" format="reference"/>
-        <attr name="subtitleTextStyle" format="reference"/>
+<!--        <attr name="titleTextStyle" format="reference"/>-->
+<!--        <attr name="subtitleTextStyle" format="reference"/>-->
+
+        <attr name="titleTextColor" format="color"/>
+        <attr name="subtitleTextColor" format="color"/>
 
         <attr name="startIcon" format="reference"/>
         <attr name="actionIcon" format="reference"/>
