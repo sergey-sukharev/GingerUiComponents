@@ -28,5 +28,9 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this, isChecked.toString(), Toast.LENGTH_SHORT).show()
             })
         }
+
+        my_item2.setOnClickListener {
+            println()
+        }
     }
 }

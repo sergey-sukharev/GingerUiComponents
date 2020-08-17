@@ -37,10 +37,25 @@
         app:actionIcon="@drawable/ic_ginger"
         app:actionType="checkbox"
         app:dividerType="full_bleed"
+        app:startIcon="@drawable/ic_ginger"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/my_item"
         app:lineType="one_line"
+        app:titleText="MyTitleText" />
+
+    <dev.ginger.ui.components.GingerLineItem
+        android:id="@+id/my_item3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:actionIcon="@drawable/ic_ginger"
+        app:actionType="icon"
+        app:dividerType="inset"
+        app:dividerTint="@color/colorPrimary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/my_item2"
+        app:lineType="two_line"
         app:subtitleText="The perfect subtitle in one line... I love my job. Oh..dsdshdjshajhdjhkhdashdkhsahgfdg "
         app:titleText="MyTitleText" />
 
