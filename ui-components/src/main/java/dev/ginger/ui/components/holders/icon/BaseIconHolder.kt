@@ -31,7 +31,7 @@ abstract class BaseIconHolder(
             field = value
             field?.also { draw ->
                 tint?.let {
-                    DrawableCompat.setTint(view.drawable, view.resources.getColor(it, null))
+                    DrawableCompat.setTint(view.drawable, it)
                 }
             } ?: run {
                 type = ActionIconType.NONE.ordinal
@@ -44,7 +44,7 @@ abstract class BaseIconHolder(
         set(value) {
             field = value
             field?.let {
-                DrawableCompat.setTint(view.drawable, view.resources.getColor(it, null))
+                DrawableCompat.setTint(view.drawable, it)
             }
         }
 

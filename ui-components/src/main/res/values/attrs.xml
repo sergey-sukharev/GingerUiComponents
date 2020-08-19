@@ -14,7 +14,7 @@
             <enum name="switcher" value="2"/>
         </attr>
 
-        <attr name="iconSize" format="enum">
+        <attr name="startIconSize" format="enum">
             <enum name="none" value="0"/>
             <enum name="icon" value="1"/>
             <enum name="small" value="2"/>

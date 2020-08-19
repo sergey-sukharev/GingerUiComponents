@@ -9,6 +9,7 @@ import android.widget.CompoundButton
 import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.getColorOrThrow
 import androidx.core.content.res.getIntOrThrow
 import androidx.core.content.res.getResourceIdOrThrow
 import androidx.core.content.res.getStringOrThrow
@@ -48,18 +49,23 @@ class GingerLineItem : ConstraintLayout, View.OnClickListener {
             )
         )
 
-        val titleTextColor: Int? = getResourceOrNullAttr(attrs,
-            R.styleable.GingerLineItem_titleTextColor)
+        val titleTextColor: Int? = getResourceOrNullAttr(
+            attrs,
+            R.styleable.GingerLineItem_titleTextColor
+        )
 
-        val subtitleTextColor: Int? = getResourceOrNullAttr(attrs,
-            R.styleable.GingerLineItem_subtitleTextColor)
+        val subtitleTextColor: Int? = getResourceOrNullAttr(
+            attrs,
+            R.styleable.GingerLineItem_subtitleTextColor
+        )
 
         startIconHolder = StartIconHolder(
             viewFactory.startIcon!!,
             getResourceOrNullAttr(attrs, R.styleable.GingerLineItem_startIcon)
         ).apply {
-            tint = getResourceOrNullAttr(attrs, R.styleable.GingerLineItem_startIconTint)
-            type = attrs.getInt(R.styleable.GingerLineItem_iconSize, ActionIconType.ICON.ordinal)
+            tint = getColorOrNullAttr(attrs, R.styleable.GingerLineItem_startIconTint)
+            type =
+                attrs.getInt(R.styleable.GingerLineItem_startIconSize, ActionIconType.ICON.ordinal)
         }
 
         textContentHolder = TextContentHolder(
@@ -69,8 +75,10 @@ class GingerLineItem : ConstraintLayout, View.OnClickListener {
                 viewFactory.subtitleView!!,
                 subtitleTextColor,
                 lineType = SubtitleLineType.getByValue(
-                    attrs.getInt(R.styleable.GingerLineItem_lineType,
-                        SubtitleLineType.ONE_LINE.ordinal)
+                    attrs.getInt(
+                        R.styleable.GingerLineItem_lineType,
+                        SubtitleLineType.ONE_LINE.ordinal
+                    )
                 )
             ),
             startIconHolder.type
@@ -79,21 +87,26 @@ class GingerLineItem : ConstraintLayout, View.OnClickListener {
             setSubtitleText(getStringOrNullAttr(attrs, R.styleable.GingerLineItem_subtitleText))
         }
 
-        val dividerTint = getResourceOrNullAttr(attrs, R.styleable.GingerLineItem_dividerTint)?.run {
-            context.resources.getColor(this, null)
-        } ?: ContextCompat.getColor(context, R.color.ginger_divider_tint)
+        val dividerTint = getColorOrNullAttr(attrs, R.styleable.GingerLineItem_dividerTint)
+            ?: ContextCompat.getColor(context, R.color.ginger_divider_tint)
 
         dividerHolder = DividerHolder(
             viewFactory.dividerView!!,
-            DividerType.getByValue(attrs.getInt(R.styleable.GingerLineItem_dividerType,
-            DividerType.NONE.ordinal)),
+            DividerType.getByValue(
+                attrs.getInt(
+                    R.styleable.GingerLineItem_dividerType,
+                    DividerType.NONE.ordinal
+                )
+            ),
             dividerTint,
             viewFactory.containerView!!
         )
 
         (viewFactory.actionView as? ImageView)?.let {
-            actionIconHolder = ActionIconHolder(it,
-                getResourceOrNullAttr(attrs, R.styleable.GingerLineItem_actionIcon))
+            actionIconHolder = ActionIconHolder(
+                it,
+                getResourceOrNullAttr(attrs, R.styleable.GingerLineItem_actionIcon)
+            )
         }
 
         viewFactory.containerView?.setOnClickListener(this)
@@ -133,7 +146,7 @@ class GingerLineItem : ConstraintLayout, View.OnClickListener {
     }
 
     override fun onClick(v: View?) {
-        when(viewFactory.actionView) {
+        when (viewFactory.actionView) {
             is ActionIconHolder -> onClickListener?.onClick(v)
             else -> {
                 (viewFactory.actionView as? CompoundButton)?.apply {
@@ -157,6 +170,12 @@ class GingerLineItem : ConstraintLayout, View.OnClickListener {
 
     protected fun getResourceOrNullAttr(attrs: TypedArray, attrId: Int): Int? = try {
         attrs.getResourceIdOrThrow(attrId)
+    } catch (e: Exception) {
+        null
+    }
+
+    protected fun getColorOrNullAttr(attrs: TypedArray, attrId: Int): Int? = try {
+        attrs.getColorOrThrow(attrId)
     } catch (e: Exception) {
         null
     }
