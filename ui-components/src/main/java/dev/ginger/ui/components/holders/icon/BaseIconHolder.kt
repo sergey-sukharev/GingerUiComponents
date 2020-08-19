@@ -44,7 +44,7 @@ abstract class BaseIconHolder(
         set(value) {
             field = value
             field?.let {
-                DrawableCompat.setTint(view.drawable, it)
+                view.drawable?.let { drawable -> DrawableCompat.setTint(drawable, it) }
             }
         }
 

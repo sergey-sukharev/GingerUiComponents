@@ -57,6 +57,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/my_item2"
         app:lineType="two_line"
+        app:actionIconTint="@color/colorAccent"
         app:subtitleText="The perfect subtitle in one line... I love my job. Oh..dsdshdjshajhdjhkhdashdkhsahgfdg "
         app:titleText="MyTitleText" />
 

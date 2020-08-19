@@ -106,7 +106,9 @@ class GingerLineItem : ConstraintLayout, View.OnClickListener {
             actionIconHolder = ActionIconHolder(
                 it,
                 getResourceOrNullAttr(attrs, R.styleable.GingerLineItem_actionIcon)
-            )
+            ).apply {
+                tint = getColorOrNullAttr(attrs, R.styleable.GingerLineItem_actionIconTint)
+            }
         }
 
         viewFactory.containerView?.setOnClickListener(this)
