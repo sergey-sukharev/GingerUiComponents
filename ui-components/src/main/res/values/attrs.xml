@@ -14,7 +14,7 @@
             <enum name="switcher" value="2"/>
         </attr>
 
-        <attr name="imageType" format="enum">
+        <attr name="iconSize" format="enum">
             <enum name="none" value="0"/>
             <enum name="icon" value="1"/>
             <enum name="small" value="2"/>
@@ -43,7 +43,7 @@
         <attr name="startIcon" format="reference"/>
         <attr name="actionIcon" format="reference"/>
 
-        <attr name="startIconTint" format="reference"/>
-        <attr name="actionIconTint" format="reference"/>
+        <attr name="startIconTint" format="color"/>
+        <attr name="actionIconTint" format="color"/>
     </declare-styleable>
 </resources>

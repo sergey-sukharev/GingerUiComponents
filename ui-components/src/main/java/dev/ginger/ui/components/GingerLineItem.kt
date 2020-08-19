@@ -5,10 +5,8 @@ import android.content.res.TypedArray
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.CheckBox
 import android.widget.CompoundButton
 import android.widget.ImageView
-import android.widget.Switch
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.getIntOrThrow
@@ -61,7 +59,7 @@ class GingerLineItem : ConstraintLayout, View.OnClickListener {
             getResourceOrNullAttr(attrs, R.styleable.GingerLineItem_startIcon)
         ).apply {
             tint = getResourceOrNullAttr(attrs, R.styleable.GingerLineItem_startIconTint)
-            type = attrs.getInt(R.styleable.GingerLineItem_imageType, ActionIconType.ICON.ordinal)
+            type = attrs.getInt(R.styleable.GingerLineItem_iconSize, ActionIconType.ICON.ordinal)
         }
 
         textContentHolder = TextContentHolder(
@@ -128,14 +126,6 @@ class GingerLineItem : ConstraintLayout, View.OnClickListener {
         }
     }
 
-    fun setTitleStyle(style: Int) {
-        TODO("Not yet implemented")
-    }
-
-    fun setSubtitleStyle(style: Int) {
-        TODO("Not yet implemented")
-    }
-
     private var onClickListener: OnClickListener? = null
 
     override fun setOnClickListener(l: OnClickListener?) {
@@ -146,7 +136,7 @@ class GingerLineItem : ConstraintLayout, View.OnClickListener {
         when(viewFactory.actionView) {
             is ActionIconHolder -> onClickListener?.onClick(v)
             else -> {
-                (viewFactory.actionView as CompoundButton).apply {
+                (viewFactory.actionView as? CompoundButton)?.apply {
                     isChecked = !isChecked
                 }
             }

@@ -22,6 +22,7 @@ abstract class BaseIconHolder(
         set(value) {
             field = value
             drawable ?: run { field = ActionIconType.NONE.ordinal }
+            view.setImageDrawable(drawable)
             measureSize()
         }
 
@@ -35,6 +36,7 @@ abstract class BaseIconHolder(
             } ?: run {
                 type = ActionIconType.NONE.ordinal
             }
+            view.setImageDrawable(field)
             measureSize()
         }
 
@@ -48,6 +50,7 @@ abstract class BaseIconHolder(
 
     init {
         this.drawable = getDrawableFromRes(drawableRes)
+        view.setImageDrawable(this.drawable)
         measureSize()
     }
 
