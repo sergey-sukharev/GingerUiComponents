@@ -149,7 +149,7 @@ class GingerLineItem : ConstraintLayout, View.OnClickListener {
 
     override fun onClick(v: View?) {
         when (viewFactory.actionView) {
-            is ActionIconHolder -> onClickListener?.onClick(v)
+            is ImageView -> onClickListener?.onClick(v)
             else -> {
                 (viewFactory.actionView as? CompoundButton)?.apply {
                     isChecked = !isChecked

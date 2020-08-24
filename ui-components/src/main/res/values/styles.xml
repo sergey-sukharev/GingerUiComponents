@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="AppTheme.FullScreenDialog" parent="Theme.MaterialComponents.Light.Dialog">
+<!--        <item name="colorPrimaryDark">@color/design_default_color_primary_dark</item>-->
+        <item name="colorAccent">@color/design_default_color_secondary</item>
+<!--        <item name="colorPrimary">@color/design_default_color_primary</item>-->
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowBackground">@android:color/white</item>
+<!--        <item name="actionMenuTextColor">@color/design_default_color_secondary</item>-->
+    </style>
+
+    <style name="ToolbarTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize color of navigation drawer icon and back arrow -->
+        <item name="colorControlNormal">#fff</item>
+    </style>
+</resources>
