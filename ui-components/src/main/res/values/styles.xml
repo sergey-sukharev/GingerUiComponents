@@ -11,6 +11,6 @@
 
     <style name="ToolbarTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize color of navigation drawer icon and back arrow -->
-        <item name="colorControlNormal">#fff</item>
+<!--        <item name="colorControlNormal">#fff</item>-->
     </style>
 </resources>
