@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.*
 import dev.ginger.ui.components.dialog.GingerBaseDialog
+import dev.ginger.ui.components.dialog.GingerDialogState
 import dev.ginger.ui.components.utils.setCursorToEnd
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -31,23 +32,40 @@ class MainActivity : AppCompatActivity() {
         }
 
         my_item3.setOnClickListener {
-            val dlg = GingerBaseDialog.display(supportFragmentManager)
-            dlg.getViews().subscribe {
-                it?.let {
-                    when (it.id) {
-                        R.id.edit_field_label -> (it as TextView).text = "STARGERAS"
-                        R.id.edit_field_input -> {
-                            (it as EditText).apply {
-                                hint = "My hint"
-                                setText("My text")
-                                setCursorToEnd()
-                            }
+            val dlg = GingerBaseDialog.display(supportFragmentManager).subscribe {
+                when(it.getState()) {
+                    GingerDialogState.ON_SHOW -> {
+                        (it.getViewByResourceId(R.id.edit_field_label) as? TextView)?.apply {
+                            text = "MY LIFE"
                         }
-                        else -> {
+
+                        (it.getViewByResourceId(R.id.edit_field_input) as? EditText)?.apply {
+                            setCursorToEnd()
                         }
+                    }
+
+                    GingerDialogState.ON_DISMISS -> {
+                        it.dismiss()
+                        Toast.makeText(this, "DIsmissed", Toast.LENGTH_SHORT).show()
                     }
                 }
             }
+//            dlg.getViews().subscribe {
+//                it?.let {
+//                    when (it.id) {
+//                        R.id.edit_field_label -> (it as TextView).text = "STARGER3AS"
+//                        R.id.edit_field_input -> {
+//                            (it as EditText).apply {
+//                                hint = "My hint"
+//                                setText("My text")
+//                                setCursorToEnd()
+//                            }
+//                        }
+//                        else -> {
+//                        }
+//                    }
+//                }
+//            }
         }
     }
 }

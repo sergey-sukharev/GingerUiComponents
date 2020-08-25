@@ -12,11 +12,10 @@ import androidx.core.view.size
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import dev.ginger.ui.R
-import dev.ginger.ui.components.utils.dpToPx
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 
-class GingerBaseDialog : DialogFragment(), GingerEditDialog {
+class GingerBaseDialog : DialogFragment(), GingerEditDialog, GingerDialog {
 
     // View's list contains view id and view instance
     private val views = mutableMapOf<Int, View>()
@@ -25,13 +24,16 @@ class GingerBaseDialog : DialogFragment(), GingerEditDialog {
 
     private val publishSubject = PublishSubject.create<View>()
 
+    private val dialogSubject = PublishSubject.create<GingerDialog>()
+
+    private var dialogState = GingerDialogState.ON_SHOW
+
     companion object {
-        fun display(fragmentManager: FragmentManager): GingerBaseDialog {
+        fun display(fragmentManager: FragmentManager): Observable<GingerDialog> {
             val dialog = GingerBaseDialog()
             dialog.show(fragmentManager, null)
-            return dialog
+            return dialog.dialogSubject
         }
-
     }
 
     private var toolbar: Toolbar? = null
@@ -67,19 +69,27 @@ class GingerBaseDialog : DialogFragment(), GingerEditDialog {
         findViews(containerView as ViewGroup)
 
         toolbar?.title = "Some Title"
-        toolbar?.setNavigationOnClickListener { v: View? -> dismiss() }
+        toolbar?.setNavigationOnClickListener { v: View? ->
+            run {
+                dialogState = GingerDialogState.ON_DISMISS
+                dialogSubject.onNext(this)
+            }
+        }
         toolbar?.setOnMenuItemClickListener {
-            dismiss()
+            dialogState = GingerDialogState.ON_MENU_SELECTED
+            dialogSubject.onNext(this)
             true
         }
+
+        dialogSubject.onNext(this)
     }
 
     private fun findViews(root: ViewGroup) {
         for (viewIndex in 0 until root.size) {
             val view = root.getChildAt(viewIndex)
 
-            if (view.id != -1) publishSubject.onNext(view)
-//                views[view.id] = view
+            if (view.id != -1)
+                views[view.id] = view
 
             if (view is ViewGroup)
                 findViews(view)
@@ -92,15 +102,16 @@ class GingerBaseDialog : DialogFragment(), GingerEditDialog {
         (TODO())
     }
 
-    fun getView(resource: Int): View? =
-        views[resource]
-
     override fun getLabelTextView(): TextView {
         (TODO())
     }
 
-    fun getViews() : Observable<View> {
-        return publishSubject
+    override fun getViewByResourceId(resourceId: Int): View? = views[resourceId]
+
+    override fun getState(): GingerDialogState = dialogState
+
+    override fun dismiss() {
+        super.dismiss()
     }
 
 }
