@@ -9,30 +9,34 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.size
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import dev.ginger.ui.R
+import dev.ginger.ui.components.utils.setCursorToEnd
+import dev.ginger.ui.components.utils.showSoftKeyboard
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 
-class GingerBaseDialog : DialogFragment(), GingerDialog {
-
+class GingerEditDialogFragment: DialogFragment(), GingerEditDialog {
     // View's list contains view id and view instance
     private val views = mutableMapOf<Int, View>()
 
     private val layoutResourceId = R.layout.ginger_edit_dialog_template
 
-    private val publishSubject = PublishSubject.create<View>()
+    private val publishSubject = PublishSubject.create<GingerEditDialog>()
 
-    private val dialogSubject = PublishSubject.create<GingerDialog>()
+    private val onSaveSubject = PublishSubject.create<String>()
+    private val onDismissSubject = PublishSubject.create<String>()
+    private val onTextChangeSubject = PublishSubject.create<String>()
 
-    private var dialogState = GingerDialogState.ON_SHOW
+    private var xFragmentManager: FragmentManager? = null
 
     companion object {
-        fun display(fragmentManager: FragmentManager): Observable<GingerDialog> {
-            val dialog = GingerBaseDialog()
-            dialog.show(fragmentManager, null)
-            return dialog.dialogSubject
+        fun display(fragmentManager: FragmentManager): GingerEditDialogFragment {
+            val dialog = GingerEditDialogFragment()
+            dialog.xFragmentManager = fragmentManager
+            return dialog
         }
     }
 
@@ -46,6 +50,15 @@ class GingerBaseDialog : DialogFragment(), GingerDialog {
             val height = ViewGroup.LayoutParams.MATCH_PARENT
             window?.setLayout(width, height)
         }
+
+    }
+
+    fun onDismissAction(): Observable<String> {
+        return onDismissSubject
+    }
+
+    fun onSaveAction(): Observable<String> {
+        return onSaveSubject
     }
 
     override fun onCreateView(
@@ -59,6 +72,8 @@ class GingerBaseDialog : DialogFragment(), GingerDialog {
         return view
     }
 
+    fun onTextChange(): Observable<String> = onTextChangeSubject
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val containerView = LayoutInflater.from(requireContext()).inflate(layoutResourceId, null)
@@ -71,17 +86,35 @@ class GingerBaseDialog : DialogFragment(), GingerDialog {
         toolbar?.title = "Some Title"
         toolbar?.setNavigationOnClickListener { v: View? ->
             run {
-                dialogState = GingerDialogState.ON_DISMISS
-                dialogSubject.onNext(this)
+                onDismissSubject.onNext((views[R.id.edit_field_input] as? EditText)?.text.toString())
+                dismiss()
             }
         }
         toolbar?.setOnMenuItemClickListener {
-            dialogState = GingerDialogState.ON_MENU_SELECTED
-            dialogSubject.onNext(this)
+            onSaveSubject.onNext((views[R.id.edit_field_input] as? EditText)?.text.toString())
+            dismiss()
             true
         }
 
-        dialogSubject.onNext(this)
+        getEditTextView().apply {
+            setCursorToEnd()
+            showSoftKeyboard()
+            doOnTextChanged { text, start, before, count ->
+                onTextChangeSubject.onNext(text.toString())
+            }
+        }
+
+        publishSubject.onNext(this)
+
+    }
+
+    override fun setTitle(title: String) {
+        toolbar?.title = title
+    }
+
+    fun show() : Observable<GingerEditDialog> {
+        show(xFragmentManager!!, null)
+        return publishSubject
     }
 
     private fun findViews(root: ViewGroup) {
@@ -95,15 +128,18 @@ class GingerBaseDialog : DialogFragment(), GingerDialog {
                 findViews(view)
         }
 
-        publishSubject.onComplete()
     }
 
-    override fun getViewByResourceId(resourceId: Int): View? = views[resourceId]
-
-    override fun getState(): GingerDialogState = dialogState
 
     override fun dismiss() {
         super.dismiss()
     }
 
+    override fun getEditTextView(): EditText {
+        return views[R.id.edit_field_input] as EditText
+    }
+
+    override fun getLabelTextView(): TextView {
+        return views[R.id.edit_field_label] as TextView
+    }
 }

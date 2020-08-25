@@ -6,4 +6,5 @@ import android.widget.TextView
 interface GingerEditDialog {
     fun getEditTextView(): EditText
     fun getLabelTextView(): TextView
+    fun setTitle(title: String)
 }

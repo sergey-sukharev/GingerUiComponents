@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.*
 import dev.ginger.ui.components.dialog.GingerBaseDialog
 import dev.ginger.ui.components.dialog.GingerDialogState
+import dev.ginger.ui.components.dialog.GingerEditDialogFragment
 import dev.ginger.ui.components.utils.setCursorToEnd
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -32,24 +33,45 @@ class MainActivity : AppCompatActivity() {
         }
 
         my_item3.setOnClickListener {
-            val dlg = GingerBaseDialog.display(supportFragmentManager).subscribe {
-                when(it.getState()) {
-                    GingerDialogState.ON_SHOW -> {
-                        (it.getViewByResourceId(R.id.edit_field_label) as? TextView)?.apply {
-                            text = "MY LIFE"
-                        }
+            val editDialog = GingerEditDialogFragment.display(supportFragmentManager)
+            var label: TextView? = null
 
-                        (it.getViewByResourceId(R.id.edit_field_input) as? EditText)?.apply {
-                            setCursorToEnd()
-                        }
-                    }
-
-                    GingerDialogState.ON_DISMISS -> {
-                        it.dismiss()
-                        Toast.makeText(this, "DIsmissed", Toast.LENGTH_SHORT).show()
-                    }
-                }
+            editDialog.show().subscribe {
+                label = it.getLabelTextView()
+                it.getEditTextView().setText("HELLO WORLD")
+                it.setTitle("My title")
             }
+
+            editDialog.onSaveAction().subscribe {
+                println("SAVED $it")
+            }
+
+            editDialog.onDismissAction().subscribe {
+                println("DISMISSED $it")
+            }
+
+            editDialog.onTextChange().subscribe {
+                println("TEXT CHANGED $it")
+                label?.setText(it)
+            }
+//            val dlg = GingerBaseDialog.display(supportFragmentManager).subscribe {
+//                when(it.getState()) {
+//                    GingerDialogState.ON_SHOW -> {
+//                        (it.getViewByResourceId(R.id.edit_field_label) as? TextView)?.apply {
+//                            text = "MY LIFE"
+//                        }
+//
+//                        (it.getViewByResourceId(R.id.edit_field_input) as? EditText)?.apply {
+//                            setCursorToEnd()
+//                        }
+//                    }
+//
+//                    GingerDialogState.ON_DISMISS -> {
+//                        it.dismiss()
+//                        Toast.makeText(this, "DIsmissed", Toast.LENGTH_SHORT).show()
+//                    }
+//                }
+//            }
 //            dlg.getViews().subscribe {
 //                it?.let {
 //                    when (it.id) {
