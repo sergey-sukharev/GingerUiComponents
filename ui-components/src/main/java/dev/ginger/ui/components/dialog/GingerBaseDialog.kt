@@ -14,25 +14,32 @@ import androidx.fragment.app.FragmentManager
 import dev.ginger.ui.R
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
+import io.reactivex.subjects.ReplaySubject
 
-class GingerBaseDialog : DialogFragment(), GingerDialog {
+open class GingerBaseDialog(protected val dialogFragment: FragmentManager,
+                            protected val resourceId: Int) : DialogFragment(), GingerDialog, GingerDialogHandler, DismissCommand {
 
     // View's list contains view id and view instance
     private val views = mutableMapOf<Int, View>()
 
-    private val layoutResourceId = R.layout.ginger_edit_dialog_template
+    private val layoutResourceId = R.layout.ginger_base_dialog_
 
     private val publishSubject = PublishSubject.create<View>()
 
-    private val dialogSubject = PublishSubject.create<GingerDialog>()
+    private val dialogSubject = ReplaySubject.create<GingerDialogHandler>()
+
+    private val dismissSubject = PublishSubject.create<DismissCommand>()
 
     private var dialogState = GingerDialogState.ON_SHOW
 
     companion object {
-        fun display(fragmentManager: FragmentManager): Observable<GingerDialog> {
-            val dialog = GingerBaseDialog()
-            dialog.show(fragmentManager, null)
-            return dialog.dialogSubject
+        fun display(fragmentManager: FragmentManager,
+                    resourceId: Int = R.layout.ginger_base_dialog_): GingerBaseDialog {
+            val dialog = GingerBaseDialog(fragmentManager, resourceId)
+
+            dialog.dialogSubject.onNext(dialog)
+//            dialog.show(fragmentManager, null)
+            return dialog
         }
     }
 
@@ -49,11 +56,11 @@ class GingerBaseDialog : DialogFragment(), GingerDialog {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
 
-        val view = inflater.inflate(R.layout.ginger_base_dialog_, container, false)
+        val view = inflater.inflate(resourceId, container, false)
         toolbar = view.findViewById(R.id.toolbar)
 
         return view
@@ -98,12 +105,32 @@ class GingerBaseDialog : DialogFragment(), GingerDialog {
         publishSubject.onComplete()
     }
 
+    override fun show(): Observable<GingerDialogHandler> {
+        show(dialogFragment, null)
+        return dialogSubject
+    }
+
+    override fun onDismiss(): Observable<DismissCommand> {
+        return dismissSubject
+    }
+
     override fun getViewByResourceId(resourceId: Int): View? = views[resourceId]
 
-    override fun getState(): GingerDialogState = dialogState
+    override fun getState(): GingerDialogState {
+        TODO("Not yet implemented")
+    }
+
+    override fun dismiss(flag: Boolean) {
+        if (flag) super.dismiss()
+    }
 
     override fun dismiss() {
-        super.dismiss()
+        dismissSubject.onNext(this)
     }
+
+//    override fun getViewByResourceId(resourceId: Int): View? = views[resourceId]
+//
+//    override fun getState(): GingerDialogState = dialogState
+
 
 }

@@ -1,0 +1,4 @@
+<vector android:height="20dp" android:viewportHeight="511.992"
+    android:viewportWidth="511.992" android:width="20dp" xmlns:android="http://schemas.android.com/apk/res/android">
+    <path android:fillColor="@color/ginger_toolbar_icon_tint" android:pathData="M504.219,58.222c-9.13,-7.53 -22.527,-6.186 -30.015,2.901L190.483,405.62L36.42,251.579c-8.341,-8.341 -21.823,-8.341 -30.164,0c-8.341,8.341 -8.341,21.823 0,30.164l170.66,170.66c3.989,4.032 9.429,6.25 15.082,6.25c0.341,0 0.683,0 1.024,-0.021c6.037,-0.277 11.626,-3.093 15.445,-7.744L507.12,88.236C514.608,79.127 513.328,65.709 504.219,58.222z"/>
+</vector>

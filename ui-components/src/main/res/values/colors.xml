@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="ginger_divider_tint">#BFBFBF</color>
+    <color name="ginger_toolbar_icon_tint">#fff</color>
+
 </resources>

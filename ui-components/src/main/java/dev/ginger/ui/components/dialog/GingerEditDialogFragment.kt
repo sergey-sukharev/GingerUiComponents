@@ -18,11 +18,11 @@ import dev.ginger.ui.components.utils.showSoftKeyboard
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 
-class GingerEditDialogFragment: DialogFragment(), GingerEditDialog {
+class GingerEditDialogFragment(private  val dialogFragment: FragmentManager): DialogFragment(),
+        GingerEditDialog {
+
     // View's list contains view id and view instance
     private val views = mutableMapOf<Int, View>()
-
-    private val layoutResourceId = R.layout.ginger_edit_dialog_template
 
     private val publishSubject = PublishSubject.create<GingerEditDialog>()
 
@@ -33,9 +33,8 @@ class GingerEditDialogFragment: DialogFragment(), GingerEditDialog {
     private var xFragmentManager: FragmentManager? = null
 
     companion object {
-        fun display(fragmentManager: FragmentManager): GingerEditDialogFragment {
-            val dialog = GingerEditDialogFragment()
-            dialog.xFragmentManager = fragmentManager
+        fun display(dialogFragment: FragmentManager): GingerEditDialogFragment {
+            val dialog = GingerEditDialogFragment(dialogFragment)
             return dialog
         }
     }
@@ -50,7 +49,6 @@ class GingerEditDialogFragment: DialogFragment(), GingerEditDialog {
             val height = ViewGroup.LayoutParams.MATCH_PARENT
             window?.setLayout(width, height)
         }
-
     }
 
     fun onDismissAction(): Observable<String> {
@@ -76,7 +74,8 @@ class GingerEditDialogFragment: DialogFragment(), GingerEditDialog {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val containerView = LayoutInflater.from(requireContext()).inflate(layoutResourceId, null)
+        val containerView = LayoutInflater.from(requireContext())
+                .inflate(R.layout.ginger_edit_dialog_template, null)
         view.findViewById<LinearLayout>(R.id.container).apply {
             addView(containerView)
         }
@@ -113,7 +112,7 @@ class GingerEditDialogFragment: DialogFragment(), GingerEditDialog {
     }
 
     fun show() : Observable<GingerEditDialog> {
-        show(xFragmentManager!!, null)
+        show(dialogFragment, null)
         return publishSubject
     }
 
@@ -128,11 +127,6 @@ class GingerEditDialogFragment: DialogFragment(), GingerEditDialog {
                 findViews(view)
         }
 
-    }
-
-
-    override fun dismiss() {
-        super.dismiss()
     }
 
     override fun getEditTextView(): EditText {

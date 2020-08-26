@@ -7,14 +7,16 @@
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
+        style="@style/GingerTheme.GingerToolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="?attr/actionBarSize"
         android:paddingStart="6dp"
         android:paddingEnd="16dp"
+
+        android:theme="@style/Widget.MaterialComponents.ActionBar.Primary"
         tools:title="Title"
         app:menu="@menu/menu_dialog"
         app:navigationIcon="@drawable/ic_arrow"
-        app:contentInsetStartWithNavigation="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
