@@ -2,14 +2,29 @@ package dev.ginger.app
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.InputType
 import android.widget.*
-import dev.ginger.ui.components.dialog.GingerBaseDialog
-import dev.ginger.ui.components.dialog.GingerDialogState
-import dev.ginger.ui.components.dialog.GingerEditDialogFragment
+import androidx.fragment.app.DialogFragment
+import dev.ginger.ui.components.dialog.*
 import dev.ginger.ui.components.utils.setCursorToEnd
+import dev.ginger.ui.components.utils.showSoftKeyboard
+import io.reactivex.Observable
+import io.reactivex.subjects.PublishSubject
+import io.reactivex.subjects.ReplaySubject
 import kotlinx.android.synthetic.main.activity_main.*
+import java.util.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), EditDialogProvider {
+
+    private val valueSubject = ReplaySubject.create<EditDialogState>()
+    private val dialogSubject = ReplaySubject.create<DialogFragment>()
+    private val toolbarStateSubject = ReplaySubject.create<DialogToolbarState>()
+
+    val dialogState = EditDialogState()
+
+    var editDialog : GingerEditDialogFragment? = null
+    var toolbarState : DialogToolbarState = DialogToolbarState("State 1")
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -22,6 +37,8 @@ class MainActivity : AppCompatActivity() {
             })
         }
 
+
+
         if (myItem is Switch) {
             myItem.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { buttonView, isChecked ->
                 Toast.makeText(this, isChecked.toString(), Toast.LENGTH_SHORT).show()
@@ -32,62 +49,48 @@ class MainActivity : AppCompatActivity() {
             println()
         }
 
+        val ttt = "dsadasd"
+
         my_item3.setOnClickListener {
-            val editDialog = GingerEditDialogFragment.display(supportFragmentManager)
-            var label: TextView? = null
+            editDialog = GingerEditDialogFragment.display(supportFragmentManager, this)
+            editDialog?.show(supportFragmentManager, null)
 
-            editDialog.show().subscribe {
-                label = it.getLabelTextView()
-                it.getEditTextView().setText("HELLO WORLD")
-                it.setTitle("My title")
-            }
+            dialogState.text = "Elon"
+            dialogState.helperText = "Write ur name please"
+            dialogState.hint = "John Doe"
 
-            editDialog.onSaveAction().subscribe {
-                println("SAVED $it")
-            }
+            valueSubject.onNext(dialogState)
+            toolbarStateSubject.onNext(toolbarState)
 
-            editDialog.onDismissAction().subscribe {
-                println("DISMISSED $it")
-            }
-
-            editDialog.onTextChange().subscribe {
-                println("TEXT CHANGED $it")
-                label?.setText(it)
-            }
-//            val dlg = GingerBaseDialog.display(supportFragmentManager).subscribe {
-//                when(it.getState()) {
-//                    GingerDialogState.ON_SHOW -> {
-//                        (it.getViewByResourceId(R.id.edit_field_label) as? TextView)?.apply {
-//                            text = "MY LIFE"
-//                        }
-//
-//                        (it.getViewByResourceId(R.id.edit_field_input) as? EditText)?.apply {
-//                            setCursorToEnd()
-//                        }
-//                    }
-//
-//                    GingerDialogState.ON_DISMISS -> {
-//                        it.dismiss()
-//                        Toast.makeText(this, "DIsmissed", Toast.LENGTH_SHORT).show()
-//                    }
-//                }
-//            }
-//            dlg.getViews().subscribe {
-//                it?.let {
-//                    when (it.id) {
-//                        R.id.edit_field_label -> (it as TextView).text = "STARGER3AS"
-//                        R.id.edit_field_input -> {
-//                            (it as EditText).apply {
-//                                hint = "My hint"
-//                                setText("My text")
-//                                setCursorToEnd()
-//                            }
-//                        }
-//                        else -> {
-//                        }
-//                    }
-//                }
-//            }
+            Thread {
+                while (true) {
+                    toolbarState.title = "Updating..."
+                    toolbarStateSubject.onNext(toolbarState)
+                    Thread.sleep(2000)
+                    toolbarState.title = "Hello"
+                    toolbarStateSubject.onNext(toolbarState)
+                    Thread.sleep(2000)
+                }
+            }.start()
         }
+
+
     }
+
+    override fun observeOnState(): Observable<EditDialogState> = valueSubject
+
+    override fun postSave(value: String): Boolean {
+        valueSubject.onNext(dialogState.apply { text = "SAVEEE" })
+        if (value.isEmpty()) return false
+        return true
+    }
+
+    override fun postDismiss(value: String): Boolean {
+        if (value.isEmpty()) return false
+        return true
+    }
+
+    override fun observeOnDialog(): Observable<DialogFragment> = dialogSubject
+
+    override fun observeOnToolbar(): Observable<DialogToolbarState> = toolbarStateSubject
 }

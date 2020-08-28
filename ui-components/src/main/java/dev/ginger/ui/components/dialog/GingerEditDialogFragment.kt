@@ -8,38 +8,35 @@ import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
-import androidx.core.view.size
-import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import dev.ginger.ui.R
-import dev.ginger.ui.components.utils.setCursorToEnd
-import dev.ginger.ui.components.utils.showSoftKeyboard
-import io.reactivex.Observable
-import io.reactivex.subjects.PublishSubject
+import dev.ginger.ui.components.utils.addToCompositeDisposable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 
-class GingerEditDialogFragment(private  val dialogFragment: FragmentManager): DialogFragment(),
-        GingerEditDialog {
+class GingerEditDialogFragment(
+    private val dialogFragment: FragmentManager,
+    private val editDialogProvider: EditDialogProvider
+) : DialogFragment(),
+    GingerEditDialog {
 
-    // View's list contains view id and view instance
-    private val views = mutableMapOf<Int, View>()
-
-    private val publishSubject = PublishSubject.create<GingerEditDialog>()
-
-    private val onSaveSubject = PublishSubject.create<String>()
-    private val onDismissSubject = PublishSubject.create<String>()
-    private val onTextChangeSubject = PublishSubject.create<String>()
-
-    private var xFragmentManager: FragmentManager? = null
+    private val compositeDisposable = CompositeDisposable()
 
     companion object {
-        fun display(dialogFragment: FragmentManager): GingerEditDialogFragment {
-            val dialog = GingerEditDialogFragment(dialogFragment)
+        fun display(
+            dialogFragment: FragmentManager,
+            editDialogProvider: EditDialogProvider
+        ): GingerEditDialogFragment {
+            val dialog = GingerEditDialogFragment(dialogFragment, editDialogProvider)
             return dialog
         }
     }
 
     private var toolbar: Toolbar? = null
+
+    private var valueEditText: EditText? = null
+    private var helperText: TextView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,89 +48,65 @@ class GingerEditDialogFragment(private  val dialogFragment: FragmentManager): Di
         }
     }
 
-    fun onDismissAction(): Observable<String> {
-        return onDismissSubject
-    }
-
-    fun onSaveAction(): Observable<String> {
-        return onSaveSubject
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
+        // Retain our dialog when change configuration state
+        retainInstance = true
         val view = inflater.inflate(R.layout.ginger_base_dialog_, container, false)
         toolbar = view.findViewById(R.id.toolbar)
 
         return view
     }
 
-    fun onTextChange(): Observable<String> = onTextChangeSubject
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val containerView = LayoutInflater.from(requireContext())
-                .inflate(R.layout.ginger_edit_dialog_template, null)
+            .inflate(R.layout.ginger_edit_dialog_template, null)
         view.findViewById<LinearLayout>(R.id.container).apply {
             addView(containerView)
         }
 
-        findViews(containerView as ViewGroup)
+        valueEditText = view.findViewById(R.id.edit_field_input)
+        helperText = view.findViewById(R.id.edit_field_label)
 
-        toolbar?.title = "Some Title"
+        toolbar = view.findViewById(R.id.toolbar)
+
         toolbar?.setNavigationOnClickListener { v: View? ->
             run {
-                onDismissSubject.onNext((views[R.id.edit_field_input] as? EditText)?.text.toString())
-                dismiss()
+                if (editDialogProvider.postDismiss(valueEditText?.text.toString())) dismiss()
             }
         }
         toolbar?.setOnMenuItemClickListener {
-            onSaveSubject.onNext((views[R.id.edit_field_input] as? EditText)?.text.toString())
-            dismiss()
+            if (editDialogProvider.postSave(valueEditText?.text.toString())) dismiss()
             true
         }
 
-        getEditTextView().apply {
-            setCursorToEnd()
-            showSoftKeyboard()
-            doOnTextChanged { text, start, before, count ->
-                onTextChangeSubject.onNext(text.toString())
+
+        editDialogProvider.observeOnDialog().observeOn(AndroidSchedulers.mainThread()).subscribe {
+            it?.show(childFragmentManager, null)
+        }.addToCompositeDisposable(compositeDisposable)
+
+        editDialogProvider.observeOnToolbar().observeOn(AndroidSchedulers.mainThread()).subscribe {
+            toolbar?.apply {
+                title = it.title
+                subtitle = it.subtitle
             }
-        }
+        }.addToCompositeDisposable(compositeDisposable)
 
-        publishSubject.onNext(this)
-
-    }
-
-    override fun setTitle(title: String) {
-        toolbar?.title = title
-    }
-
-    fun show() : Observable<GingerEditDialog> {
-        show(dialogFragment, null)
-        return publishSubject
-    }
-
-    private fun findViews(root: ViewGroup) {
-        for (viewIndex in 0 until root.size) {
-            val view = root.getChildAt(viewIndex)
-
-            if (view.id != -1)
-                views[view.id] = view
-
-            if (view is ViewGroup)
-                findViews(view)
-        }
+        editDialogProvider.observeOnState().observeOn(AndroidSchedulers.mainThread()).subscribe {
+            valueEditText?.setText(it.text)
+            valueEditText?.hint = it.hint
+            helperText?.text = it.helperText
+        }.addToCompositeDisposable(compositeDisposable)
 
     }
 
-    override fun getEditTextView(): EditText {
-        return views[R.id.edit_field_input] as EditText
+    override fun onDestroy() {
+        super.onDestroy()
+        compositeDisposable.dispose()
     }
 
-    override fun getLabelTextView(): TextView {
-        return views[R.id.edit_field_label] as TextView
-    }
 }
