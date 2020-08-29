@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity(), EditDialogProvider {
     private val dialogSubject = ReplaySubject.create<DialogFragment>()
     private val toolbarStateSubject = ReplaySubject.create<DialogToolbarState>()
 
-    val dialogState = EditDialogState()
+    val dialogState = EditDialogState(inputType = InputType.TYPE_CLASS_NUMBER)
 
     var editDialog : GingerEditDialogFragment? = null
     var toolbarState : DialogToolbarState = DialogToolbarState("State 1")
@@ -37,8 +37,6 @@ class MainActivity : AppCompatActivity(), EditDialogProvider {
             })
         }
 
-
-
         if (myItem is Switch) {
             myItem.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { buttonView, isChecked ->
                 Toast.makeText(this, isChecked.toString(), Toast.LENGTH_SHORT).show()
@@ -49,7 +47,6 @@ class MainActivity : AppCompatActivity(), EditDialogProvider {
             println()
         }
 
-        val ttt = "dsadasd"
 
         my_item3.setOnClickListener {
             editDialog = GingerEditDialogFragment.display(supportFragmentManager, this)
@@ -73,21 +70,29 @@ class MainActivity : AppCompatActivity(), EditDialogProvider {
                 }
             }.start()
         }
-
-
     }
 
     override fun observeOnState(): Observable<EditDialogState> = valueSubject
 
-    override fun postSave(value: String): Boolean {
+    override fun postSave(value: EditDialogState): Boolean {
+        my_item3.setTitleText(value.text)
         valueSubject.onNext(dialogState.apply { text = "SAVEEE" })
-        if (value.isEmpty()) return false
+        if (value.text.isEmpty()) return false
         return true
     }
 
-    override fun postDismiss(value: String): Boolean {
-        if (value.isEmpty()) return false
+    override fun postDismiss(value: EditDialogState): Boolean {
+        if (value.text.isEmpty()) return false
         return true
+    }
+
+    override fun postChangedValue(value: EditDialogState) {
+        println(value.text)
+        if (value.text.isEmpty())
+            value.hint = "This field is required"
+        else
+            value.hint = null
+        valueSubject.onNext(value)
     }
 
     override fun observeOnDialog(): Observable<DialogFragment> = dialogSubject

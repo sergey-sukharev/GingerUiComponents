@@ -8,18 +8,20 @@ import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import dev.ginger.ui.R
 import dev.ginger.ui.components.utils.addToCompositeDisposable
+import dev.ginger.ui.components.utils.setCursorToEnd
+import dev.ginger.ui.components.utils.showSoftKeyboard
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 
 class GingerEditDialogFragment(
     private val dialogFragment: FragmentManager,
-    private val editDialogProvider: EditDialogProvider
-) : DialogFragment(),
-    GingerEditDialog {
+    private val provider: EditDialogProvider
+) : DialogFragment(), GingerEditDialog {
 
     private val compositeDisposable = CompositeDisposable()
 
@@ -38,9 +40,11 @@ class GingerEditDialogFragment(
     private var valueEditText: EditText? = null
     private var helperText: TextView? = null
 
+    private var state: EditDialogState = EditDialogState("", "", "", false)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setStyle(DialogFragment.STYLE_NORMAL, R.style.AppTheme_FullScreenDialog)
+        setStyle(STYLE_NORMAL, R.style.AppTheme_FullScreenDialog)
         dialog?.apply {
             val width = ViewGroup.LayoutParams.MATCH_PARENT
             val height = ViewGroup.LayoutParams.MATCH_PARENT
@@ -72,35 +76,53 @@ class GingerEditDialogFragment(
         valueEditText = view.findViewById(R.id.edit_field_input)
         helperText = view.findViewById(R.id.edit_field_label)
 
+        valueEditText?.addTextChangedListener {
+            it?.let {
+                provider.postChangedValue(state.apply { text = it.toString() })
+            }
+        }
+
+        valueEditText?.setCursorToEnd()
+        valueEditText?.showSoftKeyboard()
+
         toolbar = view.findViewById(R.id.toolbar)
 
         toolbar?.setNavigationOnClickListener { v: View? ->
             run {
-                if (editDialogProvider.postDismiss(valueEditText?.text.toString())) dismiss()
+                if (provider.postDismiss(state)) dismiss()
             }
         }
+
         toolbar?.setOnMenuItemClickListener {
-            if (editDialogProvider.postSave(valueEditText?.text.toString())) dismiss()
+            if (provider.postSave(state)) dismiss()
             true
         }
 
-
-        editDialogProvider.observeOnDialog().observeOn(AndroidSchedulers.mainThread()).subscribe {
+        provider.observeOnDialog().observeOn(AndroidSchedulers.mainThread()).subscribe {
             it?.show(childFragmentManager, null)
         }.addToCompositeDisposable(compositeDisposable)
 
-        editDialogProvider.observeOnToolbar().observeOn(AndroidSchedulers.mainThread()).subscribe {
+        provider.observeOnToolbar().observeOn(AndroidSchedulers.mainThread()).subscribe {
             toolbar?.apply {
                 title = it.title
                 subtitle = it.subtitle
             }
         }.addToCompositeDisposable(compositeDisposable)
 
-        editDialogProvider.observeOnState().observeOn(AndroidSchedulers.mainThread()).subscribe {
-            valueEditText?.setText(it.text)
-            valueEditText?.hint = it.hint
-            helperText?.text = it.helperText
-        }.addToCompositeDisposable(compositeDisposable)
+        provider.observeOnState().observeOn(AndroidSchedulers.mainThread())
+            .subscribe { state ->
+                state?.let {
+                    if (this.state.text != state.text) {
+                        this.state = it
+                        valueEditText?.setText(state.text)
+                    }
+
+                    valueEditText?.inputType = this.state.inputType
+                    valueEditText?.setCursorToEnd()
+                    valueEditText?.hint = state.hint
+                    helperText?.text = state.helperText
+                }
+            }.addToCompositeDisposable(compositeDisposable)
 
     }
 

@@ -12,9 +12,19 @@ fun EditText.setCursorToEnd() {
 }
 
 fun EditText.showSoftKeyboard() {
-    val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-    requestFocus()
-    imm.showSoftInput(this, 0)
+    post {
+        if (requestFocus()) {
+            val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.showSoftInput(this, InputMethodManager.SHOW_IMPLICIT)
+        }
+    }
+}
+
+fun EditText.hideSoftKeyboard() {
+    post {
+        val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(this.windowToken, InputMethodManager.HIDE_IMPLICIT_ONLY)
+    }
 }
 
 fun Disposable.addToCompositeDisposable(compositeDisposable: CompositeDisposable): Disposable {
