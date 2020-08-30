@@ -1,6 +1,7 @@
 package dev.ginger.ui.components.dialog
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -40,7 +41,7 @@ class GingerEditDialogFragment(
     private var valueEditText: EditText? = null
     private var helperText: TextView? = null
 
-    private var state: EditDialogState = EditDialogState("", "", "", false)
+    private var state: EditDialogState = EditDialogState("", "", "", "", false)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -89,12 +90,12 @@ class GingerEditDialogFragment(
 
         toolbar?.setNavigationOnClickListener { v: View? ->
             run {
-                if (provider.postDismiss(state)) dismiss()
+                if (provider.postDismiss(state.copyObject())) dismiss()
             }
         }
 
         toolbar?.setOnMenuItemClickListener {
-            if (provider.postSave(state)) dismiss()
+            if (provider.postSave(state.copyObject())) dismiss()
             true
         }
 
@@ -112,11 +113,13 @@ class GingerEditDialogFragment(
         provider.observeOnState().observeOn(AndroidSchedulers.mainThread())
             .subscribe { state ->
                 state?.let {
-                    if (this.state.text != state.text) {
-                        this.state = it
+                    val oldState = this.state.copy(this.state.id, this.state.text)
+                    this.state = it
+
+                    Log.d("GingerDialog", "newState = $state")
+                    if (this.state.text != oldState.text) {
                         valueEditText?.setText(state.text)
                     }
-
                     valueEditText?.inputType = this.state.inputType
                     valueEditText?.setCursorToEnd()
                     valueEditText?.hint = state.hint

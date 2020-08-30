@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity(), EditDialogProvider {
     private val dialogSubject = ReplaySubject.create<DialogFragment>()
     private val toolbarStateSubject = ReplaySubject.create<DialogToolbarState>()
 
-    val dialogState = EditDialogState(inputType = InputType.TYPE_CLASS_NUMBER)
+    val dialogState = EditDialogState("no_state",inputType = InputType.TYPE_CLASS_NUMBER)
 
     var editDialog : GingerEditDialogFragment? = null
     var toolbarState : DialogToolbarState = DialogToolbarState("State 1")
@@ -50,13 +50,13 @@ class MainActivity : AppCompatActivity(), EditDialogProvider {
 
         my_item3.setOnClickListener {
             editDialog = GingerEditDialogFragment.display(supportFragmentManager, this)
-            editDialog?.show(supportFragmentManager, null)
+            editDialog?.show(supportFragmentManager, UUID.randomUUID().toString())
 
             dialogState.text = "Elon"
             dialogState.helperText = "Write ur name please"
             dialogState.hint = "John Doe"
 
-            valueSubject.onNext(dialogState)
+            valueSubject.onNext(EditDialogState("dialog", "Hi"))
             toolbarStateSubject.onNext(toolbarState)
 
             Thread {
@@ -76,7 +76,7 @@ class MainActivity : AppCompatActivity(), EditDialogProvider {
 
     override fun postSave(value: EditDialogState): Boolean {
         my_item3.setTitleText(value.text)
-        valueSubject.onNext(dialogState.apply { text = "SAVEEE" })
+//        valueSubject.onNext(dialogState.apply { text = "SAVEEE" })
         if (value.text.isEmpty()) return false
         return true
     }
@@ -88,8 +88,9 @@ class MainActivity : AppCompatActivity(), EditDialogProvider {
 
     override fun postChangedValue(value: EditDialogState) {
         println(value.text)
-        if (value.text.isEmpty())
+        if (value.text.isEmpty()) {
             value.hint = "This field is required"
+        }
         else
             value.hint = null
         valueSubject.onNext(value)
