@@ -1,11 +1,12 @@
 package dev.ginger.ui.components.dialog
 
 import android.view.View
+import androidx.fragment.app.FragmentManager
 import io.reactivex.Observable
 
 interface GingerDialog {
-    fun show(): Observable<GingerDialogHandler>
-    fun onDismiss(): Observable<DismissCommand>
+    fun show()
+    fun dismiss()
 }
 
 interface GingerDialogHandler {

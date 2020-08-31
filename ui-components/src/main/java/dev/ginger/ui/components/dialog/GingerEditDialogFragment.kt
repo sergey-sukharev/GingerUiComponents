@@ -1,7 +1,6 @@
 package dev.ginger.ui.components.dialog
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,35 +12,52 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import dev.ginger.ui.R
-import dev.ginger.ui.components.utils.addToCompositeDisposable
 import dev.ginger.ui.components.utils.setCursorToEnd
 import dev.ginger.ui.components.utils.showSoftKeyboard
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
 
 class GingerEditDialogFragment(
-    private val dialogFragment: FragmentManager,
-    private val provider: EditDialogProvider
+    private val dialogFragmentManager: FragmentManager,
+    private val provider: EditDialogProvider,
+    val dialogTag: String?
 ) : DialogFragment(), GingerEditDialog {
 
-    private val compositeDisposable = CompositeDisposable()
-
     companion object {
-        fun display(
+        fun create(
             dialogFragment: FragmentManager,
-            editDialogProvider: EditDialogProvider
-        ): GingerEditDialogFragment {
-            val dialog = GingerEditDialogFragment(dialogFragment, editDialogProvider)
-            return dialog
+            editDialogProvider: EditDialogProvider,
+            tag: String? = null
+        ): GingerDialog {
+            return GingerEditDialogFragment(dialogFragment, editDialogProvider, tag)
         }
     }
 
     private var toolbar: Toolbar? = null
 
     private var valueEditText: EditText? = null
-    private var helperText: TextView? = null
+    private var helperTextView: TextView? = null
 
     private var state: EditDialogState = EditDialogState("", "", "", "", false)
+
+    private var isShow = false
+
+    override fun setState(state: EditDialogState) {
+        this.state = state
+        updateState()
+    }
+
+    override fun show() {
+        show(dialogFragmentManager, tag)
+    }
+
+    private fun updateState() {
+        state.apply {
+            valueEditText?.setText(text)
+            valueEditText?.inputType = inputType
+            valueEditText?.setCursorToEnd()
+            valueEditText?.hint = hint
+            helperTextView?.text = helperText
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,7 +91,7 @@ class GingerEditDialogFragment(
         }
 
         valueEditText = view.findViewById(R.id.edit_field_input)
-        helperText = view.findViewById(R.id.edit_field_label)
+        helperTextView = view.findViewById(R.id.edit_field_label)
 
         valueEditText?.addTextChangedListener {
             it?.let {
@@ -90,48 +106,20 @@ class GingerEditDialogFragment(
 
         toolbar?.setNavigationOnClickListener { v: View? ->
             run {
-                if (provider.postDismiss(state.copyObject())) dismiss()
+                if (provider.postDismiss(state)) dismiss()
             }
         }
 
         toolbar?.setOnMenuItemClickListener {
-            if (provider.postSave(state.copyObject())) dismiss()
+            if (provider.postSave(state)) dismiss()
             true
         }
 
-        provider.observeOnDialog().observeOn(AndroidSchedulers.mainThread()).subscribe {
-            it?.show(childFragmentManager, null)
-        }.addToCompositeDisposable(compositeDisposable)
-
-        provider.observeOnToolbar().observeOn(AndroidSchedulers.mainThread()).subscribe {
-            toolbar?.apply {
-                title = it.title
-                subtitle = it.subtitle
-            }
-        }.addToCompositeDisposable(compositeDisposable)
-
-        provider.observeOnState().observeOn(AndroidSchedulers.mainThread())
-            .subscribe { state ->
-                state?.let {
-                    val oldState = this.state.copy(this.state.id, this.state.text)
-                    this.state = it
-
-                    Log.d("GingerDialog", "newState = $state")
-                    if (this.state.text != oldState.text) {
-                        valueEditText?.setText(state.text)
-                    }
-                    valueEditText?.inputType = this.state.inputType
-                    valueEditText?.setCursorToEnd()
-                    valueEditText?.hint = state.hint
-                    helperText?.text = state.helperText
-                }
-            }.addToCompositeDisposable(compositeDisposable)
-
+        updateState()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        compositeDisposable.dispose()
     }
 
 }

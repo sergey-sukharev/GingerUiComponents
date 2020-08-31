@@ -105,14 +105,6 @@ open class GingerBaseDialog(protected val dialogFragment: FragmentManager,
         publishSubject.onComplete()
     }
 
-    override fun show(): Observable<GingerDialogHandler> {
-        show(dialogFragment, null)
-        return dialogSubject
-    }
-
-    override fun onDismiss(): Observable<DismissCommand> {
-        return dismissSubject
-    }
 
     override fun getViewByResourceId(resourceId: Int): View? = views[resourceId]
 
@@ -122,6 +114,10 @@ open class GingerBaseDialog(protected val dialogFragment: FragmentManager,
 
     override fun dismiss(flag: Boolean) {
         if (flag) super.dismiss()
+    }
+
+    override fun show() {
+        TODO("Not yet implemented")
     }
 
     override fun dismiss() {
