@@ -130,6 +130,8 @@ class GingerLineItem : ConstraintLayout, View.OnClickListener {
         viewFactory.titleView?.text = value
     }
 
+    fun getTitleText() = viewFactory.titleView?.text.toString()
+
     fun setSubtitleText(value: String?) {
         viewFactory.subtitleView?.apply {
             value?.also {
@@ -140,6 +142,8 @@ class GingerLineItem : ConstraintLayout, View.OnClickListener {
             }
         }
     }
+
+    fun getSubtitleText() = viewFactory.subtitleView?.text.toString()
 
     private var onClickListener: OnClickListener? = null
 
