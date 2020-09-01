@@ -3,14 +3,13 @@ package dev.ginger.ui.components.dialog
 import android.content.res.TypedArray
 import android.os.Bundle
 import android.util.TypedValue
-import android.view.ContextThemeWrapper
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.appcompat.view.menu.MenuBuilder
 import androidx.appcompat.widget.Toolbar
+import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
@@ -77,7 +76,7 @@ class GingerEditDialogFragment(
             toolbar?.title = title
             toolbar?.subtitle = subtitle
             style?.let {resId ->
-                toolbar = Toolbar(ContextThemeWrapper(requireContext(), resId))
+//                toolbar = Toolbar(ContextThemeWrapper(requireContext(), resId))
             }
         }
     }
@@ -100,18 +99,25 @@ class GingerEditDialogFragment(
         // Retain our dialog when change configuration state
         retainInstance = true
         val view = inflater.inflate(R.layout.ginger_base_dialog_, container, false)
-        toolbar = view.findViewById(R.id.toolbar)
+//        toolbar = view.findViewById(R.id.toolbar)
+        val containerView = LayoutInflater.from(requireContext())
+            .inflate(R.layout.ginger_edit_dialog_template, null)
 
+        view.findViewById<LinearLayout>(R.id.container).apply {
+            toolbar = Toolbar(ContextThemeWrapper(requireContext(), toolbarState.style!!))
+            addView(toolbar)
+            addView(containerView)
+        }
         return view
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+//        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.menu_dialog, menu)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val containerView = LayoutInflater.from(requireContext())
-            .inflate(R.layout.ginger_edit_dialog_template, null)
-        view.findViewById<LinearLayout>(R.id.container).apply {
-            addView(containerView)
-        }
 
         valueEditText = view.findViewById(R.id.edit_field_input)
         helperTextView = view.findViewById(R.id.edit_field_label)
@@ -125,12 +131,24 @@ class GingerEditDialogFragment(
         valueEditText?.setCursorToEnd()
         valueEditText?.showSoftKeyboard()
 
-        toolbar = view.findViewById(R.id.toolbar)
+//        toolbar = view.findViewById(R.id.toolbar)
 
         toolbar?.setNavigationOnClickListener { v: View? ->
             run {
                 if (provider.postDismiss(state)) dismiss()
             }
+        }
+
+        toolbar?.navigationIcon = resources.getDrawable(R.drawable.ic_arrow, null).apply {
+            DrawableCompat.setTint(this, resources.getColor(R.color.colorPrimary,
+                ContextThemeWrapper(requireContext(), toolbarState.style!!).theme))
+        }
+
+        toolbar?.inflateMenu(R.menu.menu_dialog)
+
+        toolbar?.menu?.findItem(R.id.action_save)?.icon?.apply {
+            DrawableCompat.setTint(this, resources.getColor(R.color.colorPrimary,
+                ContextThemeWrapper(requireContext(), toolbarState.style!!).theme))
         }
 
         toolbar?.setOnMenuItemClickListener {

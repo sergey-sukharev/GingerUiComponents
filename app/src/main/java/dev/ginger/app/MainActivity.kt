@@ -4,10 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.InputType
 import android.widget.*
-import androidx.fragment.app.DialogFragment
 import dev.ginger.ui.components.dialog.*
-import io.reactivex.Observable
-import io.reactivex.subjects.BehaviorSubject
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 
@@ -54,7 +51,7 @@ class MainActivity : AppCompatActivity(), EditDialogProvider {
 
             (editDialog as GingerEditDialog).setState(dialogState)
             (editDialog as GingerEditDialog).setToolbarState(DialogToolbarState("Edit username",
-                style = R.style.GingerTheme_GingerToolbar))
+                style = R.style.GingerToolbarAZA))
 
         }
     }

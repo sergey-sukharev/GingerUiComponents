@@ -61,7 +61,7 @@ open class GingerBaseDialog(protected val dialogFragment: FragmentManager,
     ): View? {
 
         val view = inflater.inflate(resourceId, container, false)
-        toolbar = view.findViewById(R.id.toolbar)
+//        toolbar = view.findViewById(R.id.toolbar)
 
         return view
     }

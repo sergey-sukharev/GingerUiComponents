@@ -7,11 +7,21 @@
         <item name="colorAccent">#E53935</item>
     </style>
 
-    <style name="GingerTheme.GingerToolbar2" parent="Widget.AppCompat.Toolbar">
-        <!-- Customize color of navigation drawer icon and back arrow -->
-        <!--        <item name="titleTextColor">#E53935</item>-->
-        <!--        <item name="android:backgroundTint">#53E61E</item>-->
-        <!--        <item name="android:elevation">10dp</item>-->
+
+    <style name="GingerToolbarAZA" parent="GingerToolbarTheme">
+        <!-- android:textColorPrimary is the color of the title text in the Toolbar  -->
+        <item name="android:textColorPrimary">@color/colorPrimary</item>
+        <item name="android:textStyle">normal</item>
+        <!-- actionMenuTextColor is the color of the text of action (menu) items  -->
+        <item name="actionMenuTextColor">@android:color/holo_green_light</item>
+        <!-- Tints the input fields like checkboxes and text fields -->
+<!--        <item name="colorAccent">@color/cardview_shadow_end_color</item>-->
+        <!-- Applies to views in their normal state. -->
+        <item name="colorControlNormal">@color/colorPrimary</item>
+        <!--        &lt;!&ndash; Applies to views in their activated state (i.e checked or switches) &ndash;&gt;-->
+        <item name="colorControlActivated">#E53935</item>
+        <!--        &lt;!&ndash; Applied to framework control highlights (i.e ripples or list selectors) &ndash;&gt;-->
     </style>
+
 
 </resources>
