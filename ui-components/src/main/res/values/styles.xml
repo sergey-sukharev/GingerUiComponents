@@ -9,8 +9,9 @@
 <!--        <item name="actionMenuTextColor">@color/design_default_color_secondary</item>-->
     </style>
 
-    <style name="GingerTheme.GingerToolbar" parent="Widget.MaterialComponents.Toolbar.Primary">
+    <style name="GingerTheme.GingerToolbar" parent="Widget.MaterialComponents.Toolbar.Surface">
         <!-- Customize color of navigation drawer icon and back arrow -->
+        <item name="titleTextColor">#E53935</item>
 <!--        <item name="titleTextColor">#E53935</item>-->
 <!--        <item name="android:backgroundTint">#53E61E</item>-->
 <!--        <item name="android:elevation">10dp</item>-->

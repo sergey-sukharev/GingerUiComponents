@@ -7,4 +7,11 @@
         <item name="colorAccent">#E53935</item>
     </style>
 
+    <style name="GingerTheme.GingerToolbar2" parent="Widget.AppCompat.Toolbar">
+        <!-- Customize color of navigation drawer icon and back arrow -->
+        <!--        <item name="titleTextColor">#E53935</item>-->
+        <!--        <item name="android:backgroundTint">#53E61E</item>-->
+        <!--        <item name="android:elevation">10dp</item>-->
+    </style>
+
 </resources>

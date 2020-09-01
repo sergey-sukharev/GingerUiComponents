@@ -6,23 +6,16 @@ import android.text.InputType
 import android.widget.*
 import androidx.fragment.app.DialogFragment
 import dev.ginger.ui.components.dialog.*
-import dev.ginger.ui.components.utils.setCursorToEnd
-import dev.ginger.ui.components.utils.showSoftKeyboard
 import io.reactivex.Observable
-import io.reactivex.subjects.PublishSubject
-import io.reactivex.subjects.ReplaySubject
+import io.reactivex.subjects.BehaviorSubject
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 
 class MainActivity : AppCompatActivity(), EditDialogProvider {
 
-    private val valueSubject = ReplaySubject.create<EditDialogState>()
-    private val dialogSubject = ReplaySubject.create<DialogFragment>()
-    private val toolbarStateSubject = ReplaySubject.create<DialogToolbarState>()
+    var dialogState = EditDialogState("no_state",inputType = InputType.TYPE_CLASS_NUMBER)
 
-    val dialogState = EditDialogState("no_state",inputType = InputType.TYPE_CLASS_NUMBER)
-
-    var editDialog : GingerEditDialogFragment? = null
+    var editDialog : GingerDialog? = null
     var toolbarState : DialogToolbarState = DialogToolbarState("State 1")
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,34 +42,25 @@ class MainActivity : AppCompatActivity(), EditDialogProvider {
 
 
         my_item3.setOnClickListener {
-            editDialog = GingerEditDialogFragment.display(supportFragmentManager, this)
-            editDialog?.show(supportFragmentManager, UUID.randomUUID().toString())
+            editDialog = GingerEditDialogFragment.create(supportFragmentManager, this)
+            editDialog?.show()
 
-            dialogState.text = "Elon"
-            dialogState.helperText = "Write ur name please"
+            dialogState = EditDialogState(UUID.randomUUID().toString(),inputType = InputType.TYPE_CLASS_TEXT)
+            dialogState.text = my_item3.getTitleText()
+            dialogState.helperText = my_item3.getSubtitleText()
             dialogState.hint = "John Doe"
 
-            valueSubject.onNext(EditDialogState("dialog", "Hi"))
-            toolbarStateSubject.onNext(toolbarState)
+//            valueSubject.onNext(EditDialogState("dialog", "Hi"))
 
-            Thread {
-                while (true) {
-                    toolbarState.title = "Updating..."
-                    toolbarStateSubject.onNext(toolbarState)
-                    Thread.sleep(2000)
-                    toolbarState.title = "Hello"
-                    toolbarStateSubject.onNext(toolbarState)
-                    Thread.sleep(2000)
-                }
-            }.start()
+            (editDialog as GingerEditDialog).setState(dialogState)
+            (editDialog as GingerEditDialog).setToolbarState(DialogToolbarState("Edit username",
+                style = R.style.GingerTheme_GingerToolbar))
+
         }
     }
 
-    override fun observeOnState(): Observable<EditDialogState> = valueSubject
-
     override fun postSave(value: EditDialogState): Boolean {
         my_item3.setTitleText(value.text)
-//        valueSubject.onNext(dialogState.apply { text = "SAVEEE" })
         if (value.text.isEmpty()) return false
         return true
     }
@@ -93,10 +77,8 @@ class MainActivity : AppCompatActivity(), EditDialogProvider {
         }
         else
             value.hint = null
-        valueSubject.onNext(value)
+
+        (editDialog as GingerEditDialog).setState(value)
     }
 
-    override fun observeOnDialog(): Observable<DialogFragment> = dialogSubject
-
-    override fun observeOnToolbar(): Observable<DialogToolbarState> = toolbarStateSubject
 }

@@ -1,6 +1,9 @@
 package dev.ginger.ui.components.dialog
 
+import android.content.res.TypedArray
 import android.os.Bundle
+import android.util.TypedValue
+import android.view.ContextThemeWrapper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +17,7 @@ import androidx.fragment.app.FragmentManager
 import dev.ginger.ui.R
 import dev.ginger.ui.components.utils.setCursorToEnd
 import dev.ginger.ui.components.utils.showSoftKeyboard
+import kotlin.reflect.typeOf
 
 class GingerEditDialogFragment(
     private val dialogFragmentManager: FragmentManager,
@@ -37,13 +41,21 @@ class GingerEditDialogFragment(
     private var helperTextView: TextView? = null
 
     private var state: EditDialogState = EditDialogState("", "", "", "", false)
-
-    private var isShow = false
+    private var toolbarState: DialogToolbarState = DialogToolbarState("", "")
 
     override fun setState(state: EditDialogState) {
         this.state = state
         updateState()
     }
+
+    override fun getState(): EditDialogState = state
+
+    override fun setToolbarState(state: DialogToolbarState) {
+        toolbarState = state
+        context?.let { updateToolbarState() }
+    }
+
+    override fun getToolbarState(): DialogToolbarState = toolbarState
 
     override fun show() {
         show(dialogFragmentManager, tag)
@@ -51,11 +63,22 @@ class GingerEditDialogFragment(
 
     private fun updateState() {
         state.apply {
-            valueEditText?.setText(text)
+            if (valueEditText?.text.toString() != text)
+                valueEditText?.setText(text)
             valueEditText?.inputType = inputType
             valueEditText?.setCursorToEnd()
             valueEditText?.hint = hint
             helperTextView?.text = helperText
+        }
+    }
+
+    private fun updateToolbarState() {
+        toolbarState.apply {
+            toolbar?.title = title
+            toolbar?.subtitle = subtitle
+            style?.let {resId ->
+                toolbar = Toolbar(ContextThemeWrapper(requireContext(), resId))
+            }
         }
     }
 
@@ -93,11 +116,11 @@ class GingerEditDialogFragment(
         valueEditText = view.findViewById(R.id.edit_field_input)
         helperTextView = view.findViewById(R.id.edit_field_label)
 
-        valueEditText?.addTextChangedListener {
-            it?.let {
-                provider.postChangedValue(state.apply { text = it.toString() })
-            }
-        }
+//        valueEditText?.addTextChangedListener {
+//            it?.let {
+//                provider.postChangedValue(state.apply { text = it.toString() })
+//            }
+//        }
 
         valueEditText?.setCursorToEnd()
         valueEditText?.showSoftKeyboard()
@@ -116,6 +139,13 @@ class GingerEditDialogFragment(
         }
 
         updateState()
+        updateToolbarState()
+
+        valueEditText?.addTextChangedListener {
+            it?.let {
+                provider.postChangedValue(state.apply { text = it.toString() })
+            }
+        }
     }
 
     override fun onDestroy() {

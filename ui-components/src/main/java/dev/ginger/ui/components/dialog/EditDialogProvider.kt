@@ -17,8 +17,4 @@ data class EditDialogState(
     var helperText: String? = null,
     var required: Boolean = false,
     var inputType: Int = InputType.TYPE_CLASS_TEXT
-) {
-    fun copyObject(): EditDialogState {
-        return EditDialogState(id, text, hint, helperText, required, inputType)
-    }
-}
+)
