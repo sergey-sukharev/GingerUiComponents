@@ -46,4 +46,8 @@
         <attr name="startIconTint" format="color"/>
         <attr name="actionIconTint" format="color"/>
     </declare-styleable>
+
+    <attr name="dialogToolbarTextColor" format="reference"/>
+    <attr name="dialogToolbarIconsColor" format="reference"/>
+    <attr name="dialogToolbarBackgroundColor" format="reference"/>
 </resources>

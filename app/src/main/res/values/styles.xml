@@ -5,22 +5,18 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">#E53935</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowBackground">@android:color/white</item>
+<!--        <item name="android:windowTranslucentStatus">true</item>-->
+<!--        <item name="android:windowTranslucentNavigation">true</item>-->
     </style>
 
 
     <style name="GingerToolbarAZA" parent="GingerToolbarTheme">
-        <!-- android:textColorPrimary is the color of the title text in the Toolbar  -->
         <item name="android:textColorPrimary">@color/colorPrimary</item>
-        <item name="android:textStyle">normal</item>
-        <!-- actionMenuTextColor is the color of the text of action (menu) items  -->
-        <item name="actionMenuTextColor">@android:color/holo_green_light</item>
-        <!-- Tints the input fields like checkboxes and text fields -->
-<!--        <item name="colorAccent">@color/cardview_shadow_end_color</item>-->
-        <!-- Applies to views in their normal state. -->
-        <item name="colorControlNormal">@color/colorPrimary</item>
-        <!--        &lt;!&ndash; Applies to views in their activated state (i.e checked or switches) &ndash;&gt;-->
-        <item name="colorControlActivated">#E53935</item>
-        <!--        &lt;!&ndash; Applied to framework control highlights (i.e ripples or list selectors) &ndash;&gt;-->
+        <item name="android:background">#fff</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowBackground">@android:color/white</item>
     </style>
 
 

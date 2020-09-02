@@ -1,13 +1,12 @@
 package dev.ginger.ui.components.dialog
 
-import android.content.res.TypedArray
+import android.annotation.SuppressLint
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.*
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.appcompat.view.menu.MenuBuilder
 import androidx.appcompat.widget.Toolbar
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.widget.addTextChangedListener
@@ -16,7 +15,6 @@ import androidx.fragment.app.FragmentManager
 import dev.ginger.ui.R
 import dev.ginger.ui.components.utils.setCursorToEnd
 import dev.ginger.ui.components.utils.showSoftKeyboard
-import kotlin.reflect.typeOf
 
 class GingerEditDialogFragment(
     private val dialogFragmentManager: FragmentManager,
@@ -116,6 +114,7 @@ class GingerEditDialogFragment(
         inflater.inflate(R.menu.menu_dialog, menu)
     }
 
+    @SuppressLint("RestrictedApi")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -139,17 +138,45 @@ class GingerEditDialogFragment(
             }
         }
 
-        toolbar?.navigationIcon = resources.getDrawable(R.drawable.ic_arrow, null).apply {
-            DrawableCompat.setTint(this, resources.getColor(R.color.colorPrimary,
-                ContextThemeWrapper(requireContext(), toolbarState.style!!).theme))
-        }
-
         toolbar?.inflateMenu(R.menu.menu_dialog)
 
-        toolbar?.menu?.findItem(R.id.action_save)?.icon?.apply {
-            DrawableCompat.setTint(this, resources.getColor(R.color.colorPrimary,
-                ContextThemeWrapper(requireContext(), toolbarState.style!!).theme))
+//        Thread {
+//            val r = Toolbar::class.java
+//            val field = r.getDeclaredField("mTitleTextView")
+//            field.isAccessible = true
+//            val view = field.get(toolbar) as? TextView
+//            val color = view?.currentTextColor
+//            field.isAccessible = false
+//            toolbar?.post {
+//                toolbar?.menu?.findItem(R.id.action_save)?.icon?.apply {
+//                    DrawableCompat.setTint(this, color!!)
+//                }
+//            }
+//            println("TEXTVIEW color $color")
+//
+//        }.start()
+//        val f = r.getDeclaredField("mTitleTextView")
+//        f.isAccessible = true
+//        val textview = f.get(toolbar) as TextView
+
+        toolbar?.post {
+            val r = Toolbar::class.java
+            val field = r.getDeclaredField("mTitleTextView")
+            field.isAccessible = true
+            val view = field.get(toolbar) as? TextView
+            val color = view?.currentTextColor
+            field.isAccessible = false
+
+            toolbar?.menu?.findItem(R.id.action_save)?.icon?.apply {
+                DrawableCompat.setTint(this, color!!)
+            }
+
+            toolbar?.navigationIcon = resources.getDrawable(R.drawable.ic_arrow, null).apply {
+                DrawableCompat.setTint(this, color!!)
+            }
         }
+
+
 
         toolbar?.setOnMenuItemClickListener {
             if (provider.postSave(state)) dismiss()
