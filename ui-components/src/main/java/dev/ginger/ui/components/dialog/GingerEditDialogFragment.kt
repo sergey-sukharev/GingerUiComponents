@@ -1,6 +1,7 @@
 package dev.ginger.ui.components.dialog
 
 import android.annotation.SuppressLint
+import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.*
@@ -85,7 +86,12 @@ class GingerEditDialogFragment(
         dialog?.apply {
             val width = ViewGroup.LayoutParams.MATCH_PARENT
             val height = ViewGroup.LayoutParams.MATCH_PARENT
-            window?.setLayout(width, height)
+            activity?.window?.apply {
+                setLayout(width, height)
+                addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+                statusBarColor = Color.WHITE
+            }
+
         }
     }
 
