@@ -1,19 +1,14 @@
 <resources>
     <style name="AppTheme.FullScreenDialog" parent="Theme.MaterialComponents.Light.Dialog">
-<!--        <item name="colorPrimaryDark">@color/design_default_color_primary_dark</item>-->
-        <item name="colorAccent">@color/design_default_color_secondary</item>
-        <item name="colorPrimary">@color/design_default_color_primary</item>
         <item name="android:windowIsFloating">false</item>
         <item name="android:windowBackground">@android:color/white</item>
-        <item name="android:statusBarColor">#fff</item>
-<!--        <item name="actionMenuTextColor">@color/design_default_color_secondary</item>-->
     </style>
 
     <style name="GingerToolbarTheme" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
         <item name="android:textColorPrimary">#fff</item>
         <item name="android:background">@color/colorPrimary</item>
-        <item name="actionMenuTextColor">#CF0F0F</item>
-        <item name="android:actionMenuTextColor">#CF0F0F</item>
-        <item name="colorControlHighlight">#FFB300</item>
+        <item name="actionMenuTextColor">#454545</item>
+        <item name="android:actionMenuTextColor">@color/colorPrimary</item>
+        <item name="colorControlHighlight">#DFDFDF</item>
     </style>
 </resources>

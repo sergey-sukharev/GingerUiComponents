@@ -86,11 +86,12 @@ class GingerEditDialogFragment(
         dialog?.apply {
             val width = ViewGroup.LayoutParams.MATCH_PARENT
             val height = ViewGroup.LayoutParams.MATCH_PARENT
-            activity?.window?.apply {
-                setLayout(width, height)
-                addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-                statusBarColor = Color.WHITE
-            }
+            window?.setLayout(width, height)
+//            activity?.window?.apply {
+//                setLayout(width, height)
+//                addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+//                statusBarColor = Color.WHITE
+//            }
 
         }
     }

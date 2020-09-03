@@ -6,17 +6,17 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">#E53935</item>
         <item name="android:windowIsFloating">false</item>
-        <item name="android:statusBarColor">#fff</item>
-        <item name="android:windowLightStatusBar">true</item>
+<!--        <item name="android:statusBarColor">#fff</item>-->
+<!--        <item name="android:windowLightStatusBar">true</item>-->
 <!--        <item name="android:windowTranslucentStatus">true</item>-->
 <!--        <item name="android:windowTranslucentNavigation">true</item>-->
     </style>
 
 
     <style name="GingerToolbarAZA" parent="GingerToolbarTheme">
-        <item name="android:textColorPrimary">#494949</item>
-        <item name="android:background">#fff</item>
-        <item name="colorControlHighlight">#D1D1D1</item>
+<!--        <item name="android:textColorPrimary">#494949</item>-->
+<!--        <item name="android:background">#fff</item>-->
+<!--        <item name="colorControlHighlight">#D1D1D1</item>-->
     </style>
 
 
