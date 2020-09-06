@@ -1,4 +1,4 @@
-package dev.ginger.ui.components.factory
+package dev.ginger.ui.components.composite
 
 import android.view.View
 import android.widget.*
@@ -8,7 +8,7 @@ import dev.ginger.ui.R
 import dev.ginger.ui.components.holders.GingerActionType
 import dev.ginger.ui.components.utils.dpToPx
 
-class GingerLineItemViewFactory(
+internal class GingerCompositeTextViewFactory(
     private val viewContainer: View,
     actionType: GingerActionType
 ) {

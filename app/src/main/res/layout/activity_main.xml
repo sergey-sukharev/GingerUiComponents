@@ -15,7 +15,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/my_item2" />
 
-    <dev.ginger.ui.components.GingerLineItem
+    <dev.ginger.ui.components.composite.GingerGingerCompositeTextView
         android:id="@+id/my_item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -29,7 +29,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:lineType="one_line" />
 
-    <dev.ginger.ui.components.GingerLineItem
+    <dev.ginger.ui.components.composite.GingerGingerCompositeTextView
         android:id="@+id/my_item2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -45,7 +45,7 @@
         app:lineType="one_line"
         app:titleText="MyTitleText" />
 
-    <dev.ginger.ui.components.GingerLineItem
+    <dev.ginger.ui.components.composite.GingerGingerCompositeTextView
         android:id="@+id/my_item3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
