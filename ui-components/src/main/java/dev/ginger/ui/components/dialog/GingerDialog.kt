@@ -5,7 +5,7 @@ import androidx.fragment.app.FragmentManager
 import io.reactivex.Observable
 
 interface GingerDialog {
-    fun show()
+    fun show(tag: String = "default_dialog")
     fun dismiss()
 }
 

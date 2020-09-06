@@ -116,7 +116,7 @@ open class GingerBaseDialog(protected val dialogFragment: FragmentManager,
         if (flag) super.dismiss()
     }
 
-    override fun show() {
+    override fun show(tag: String) {
         TODO("Not yet implemented")
     }
 

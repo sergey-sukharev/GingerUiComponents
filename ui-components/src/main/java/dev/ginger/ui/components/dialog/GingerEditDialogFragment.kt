@@ -19,8 +19,7 @@ import dev.ginger.ui.components.utils.showSoftKeyboard
 
 class GingerEditDialogFragment(
     private val dialogFragmentManager: FragmentManager,
-    private val provider: EditDialogProvider,
-    val dialogTag: String?
+    private val provider: EditDialogProvider
 ) : DialogFragment(), GingerEditDialog {
 
     companion object {
@@ -29,7 +28,7 @@ class GingerEditDialogFragment(
             editDialogProvider: EditDialogProvider,
             tag: String? = null
         ): GingerDialog {
-            return GingerEditDialogFragment(dialogFragment, editDialogProvider, tag)
+            return GingerEditDialogFragment(dialogFragment, editDialogProvider)
         }
     }
 
@@ -55,7 +54,7 @@ class GingerEditDialogFragment(
 
     override fun getToolbarState(): DialogToolbarState = toolbarState
 
-    override fun show() {
+    override fun show(tag: String) {
         show(dialogFragmentManager, tag)
     }
 
@@ -74,7 +73,7 @@ class GingerEditDialogFragment(
         toolbarState.apply {
             toolbar?.title = title
             toolbar?.subtitle = subtitle
-            style?.let {resId ->
+            style?.let { resId ->
 //                toolbar = Toolbar(ContextThemeWrapper(requireContext(), resId))
             }
         }
@@ -101,15 +100,16 @@ class GingerEditDialogFragment(
         savedInstanceState: Bundle?
     ): View? {
 
-        // Retain our dialog when change configuration state
+        // Retain a dialog when change configuration state
         retainInstance = true
         val view = inflater.inflate(R.layout.ginger_base_dialog_, container, false)
-//        toolbar = view.findViewById(R.id.toolbar)
+
         val containerView = LayoutInflater.from(requireContext())
             .inflate(R.layout.ginger_edit_dialog_template, null)
 
         view.findViewById<LinearLayout>(R.id.container).apply {
-            toolbar = Toolbar(ContextThemeWrapper(requireContext(), toolbarState.style!!))
+            toolbar = Toolbar(ContextThemeWrapper(requireContext(), toolbarState.style ?:
+            R.style.GingerToolbarTheme))
             addView(toolbar)
             addView(containerView)
         }
@@ -117,7 +117,6 @@ class GingerEditDialogFragment(
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-//        super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.menu_dialog, menu)
     }
 
@@ -128,16 +127,8 @@ class GingerEditDialogFragment(
         valueEditText = view.findViewById(R.id.edit_field_input)
         helperTextView = view.findViewById(R.id.edit_field_label)
 
-//        valueEditText?.addTextChangedListener {
-//            it?.let {
-//                provider.postChangedValue(state.apply { text = it.toString() })
-//            }
-//        }
-
         valueEditText?.setCursorToEnd()
         valueEditText?.showSoftKeyboard()
-
-//        toolbar = view.findViewById(R.id.toolbar)
 
         toolbar?.setNavigationOnClickListener { v: View? ->
             run {
@@ -147,43 +138,26 @@ class GingerEditDialogFragment(
 
         toolbar?.inflateMenu(R.menu.menu_dialog)
 
-//        Thread {
-//            val r = Toolbar::class.java
-//            val field = r.getDeclaredField("mTitleTextView")
-//            field.isAccessible = true
-//            val view = field.get(toolbar) as? TextView
-//            val color = view?.currentTextColor
-//            field.isAccessible = false
-//            toolbar?.post {
-//                toolbar?.menu?.findItem(R.id.action_save)?.icon?.apply {
-//                    DrawableCompat.setTint(this, color!!)
-//                }
-//            }
-//            println("TEXTVIEW color $color")
-//
-//        }.start()
-//        val f = r.getDeclaredField("mTitleTextView")
-//        f.isAccessible = true
-//        val textview = f.get(toolbar) as TextView
-
         toolbar?.post {
             val r = Toolbar::class.java
             val field = r.getDeclaredField("mTitleTextView")
             field.isAccessible = true
             val view = field.get(toolbar) as? TextView
-            val color = view?.currentTextColor
+            val color: Int? = view?.currentTextColor
             field.isAccessible = false
 
             toolbar?.menu?.findItem(R.id.action_save)?.icon?.apply {
-                DrawableCompat.setTint(this, color!!)
+                color?.let {
+                    DrawableCompat.setTint(this, it)
+                }
             }
 
             toolbar?.navigationIcon = resources.getDrawable(R.drawable.ic_arrow, null).apply {
-                DrawableCompat.setTint(this, color!!)
+                color?.let {
+                    DrawableCompat.setTint(this, it)
+                }
             }
         }
-
-
 
         toolbar?.setOnMenuItemClickListener {
             if (provider.postSave(state)) dismiss()
