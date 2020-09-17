@@ -5,4 +5,6 @@
     <color name="colorPrimary">#6200EE</color>
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
+    <color name="disabledIcon">#BFBFBF</color>
+    <color name="ripple_click_efect">#919191</color>
 </resources>

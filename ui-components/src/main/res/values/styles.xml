@@ -4,6 +4,10 @@
         <item name="android:windowBackground">@android:color/white</item>
     </style>
 
+    <style name="CustomAlertDialog" parent="Theme.AppCompat.Light.Dialog">
+        <item name="android:windowBackground">@drawable/popup_background</item>
+    </style>
+
     <style name="GingerToolbarTheme" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
         <item name="android:textColorPrimary">#fff</item>
         <item name="android:background">@color/colorPrimary</item>

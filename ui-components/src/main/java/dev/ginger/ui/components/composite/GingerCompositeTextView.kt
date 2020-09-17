@@ -22,7 +22,7 @@ import dev.ginger.ui.components.utils.getColorOrNullAttr
 import dev.ginger.ui.components.utils.getResourceOrNullAttr
 import dev.ginger.ui.components.utils.getStringOrNullAttr
 
-class GingerGingerCompositeTextView : ConstraintLayout, View.OnClickListener {
+class GingerCompositeTextView : ConstraintLayout, View.OnClickListener {
 
     private var viewFactory: GingerCompositeTextViewFactory
 

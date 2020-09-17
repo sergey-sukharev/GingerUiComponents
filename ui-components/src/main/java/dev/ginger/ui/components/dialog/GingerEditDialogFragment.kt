@@ -53,10 +53,17 @@ class GingerEditDialogFragment(
     }
 
     override fun getToolbarState(): DialogToolbarState = toolbarState
-
     override fun show(tag: String) {
-        show(dialogFragmentManager, tag)
+        TODO("Not yet implemented")
     }
+
+    override fun show(manager: FragmentManager, tag: String?) {
+
+    }
+
+//    override fun show(tag: String) {
+//        show(dialogFragmentManager, tag)
+//    }
 
     private fun updateState() {
         state.apply {
@@ -82,10 +89,12 @@ class GingerEditDialogFragment(
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NORMAL, R.style.AppTheme_FullScreenDialog)
+
         dialog?.apply {
             val width = ViewGroup.LayoutParams.MATCH_PARENT
             val height = ViewGroup.LayoutParams.MATCH_PARENT
             window?.setLayout(width, height)
+            window?.setBackgroundDrawableResource(android.R.color.transparent)
 //            activity?.window?.apply {
 //                setLayout(width, height)
 //                addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
