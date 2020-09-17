@@ -7,7 +7,7 @@
     <TextView
         android:id="@+id/ginger_dialog_title_text"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
-        android:layout_margin="16dp"
+        android:layout_margin="@dimen/ginger_dialog_corner_radius"
         android:layout_weight="1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -15,7 +15,7 @@
 
     <ImageView
         android:id="@+id/ginger_dialog_close_icon"
-        android:layout_margin="16dp"
+        android:layout_margin="@dimen/ginger_dialog_corner_radius"
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:tint="@color/disabledIcon"

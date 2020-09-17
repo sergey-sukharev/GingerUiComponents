@@ -4,7 +4,7 @@
         <item name="android:windowBackground">@android:color/white</item>
     </style>
 
-    <style name="CustomAlertDialog" parent="Theme.AppCompat.Light.Dialog">
+    <style name="GingerDialogStyle" parent="Theme.MaterialComponents.Light.Dialog">
         <item name="android:windowBackground">@drawable/popup_background</item>
     </style>
 
