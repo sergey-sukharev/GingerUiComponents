@@ -8,10 +8,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import dev.ginger.ui.components.composite.TextDetailCell
 import dev.ginger.ui.components.dialog.*
-import dev.ginger.ui.components.dialog.factory.AlertDialog
+import dev.ginger.ui.components.dialog.popup.AlertDialog
+import dev.ginger.ui.components.dialog.popup.DialogButtonState
+import dev.ginger.ui.components.dialog.popup.DialogStateListener
 
 
-class UserFragment: Fragment(), EditDialogProvider {
+class UserFragment: Fragment(), EditDialogProvider, DialogStateListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,32 +34,17 @@ class UserFragment: Fragment(), EditDialogProvider {
         val ss = TextDetailCell(context)
         ss.setTextAndValue("DSS", "SDS", false)
 
-
-//        val a = GingerDialogA.Builder(childFragmentManager, "S")
-//            .setTitle("HELLO")
-//            .enableCloseIcon(true)
-//            .build()
-//            .show(childFragmentManager, "asds")
-
-
         val alert = AlertDialog.Builder().apply {
             titleText = "Ошибка"
             messageText = "Проверьте интернет-соединение и повторите попытку"
             positiveButtonText = "Повторить"
             negativeButtonText = "Отмена"
+            onStateListener = this@UserFragment
         }.build()
 
         alert.isCancelable = false
         alert.show(childFragmentManager, "")
 
-
-//        val d = GingerDialog(childFragmentManager).get(GingerEditDialog::class.java)
-//        d.show()
-
-
-//        GingerRadioDialogFragment()
-//                .show(childFragmentManager, "SS")
-//        cont.addView(ss)
     }
 
     override fun postChangedValue(state: EditDialogState) {
@@ -70,6 +57,10 @@ class UserFragment: Fragment(), EditDialogProvider {
 
     override fun postDismiss(state: EditDialogState): Boolean {
         TODO("Not yet implemented")
+    }
+
+    override fun onChangeState(state: DialogButtonState) {
+        println(state.name)
     }
 
 }
