@@ -21,14 +21,8 @@ import dev.ginger.ui.R
  *
  * @property builder
  */
-abstract class AbstractDialog(private val builder: AbstractBuilder): DialogFragment(),
+abstract class AbstractDialog(private val builder: AbstractBuilder) : DialogFragment(),
     View.OnClickListener {
-
-    private var titleTextView: TextView? = null
-    private var closeIcon: ImageView? = null
-
-    private var positiveButton: Button? = null
-    private var negativeButton: Button? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,47 +44,56 @@ abstract class AbstractDialog(private val builder: AbstractBuilder): DialogFragm
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setButtons(view)
+        setTitleView(view)
+        setIconView(view)
+        createCustomView(view)
+    }
 
+    private fun setTitleView(view: View) {
+        view.findViewById<TextView?>(R.id.ginger_dialog_title_text)?.apply {
+            text = builder.titleText
+        } ?: throw NoSuchElementException()
+    }
+
+    protected fun getTitleView(): TextView {
+        return view?.findViewById<TextView?>(R.id.ginger_dialog_title_text)
+            ?: throw NoSuchElementException()
+    }
+
+    private fun setIconView(view: View) {
+        view.findViewById<ImageView?>(R.id.ginger_dialog_close_icon)?.apply {
+            visibility = if (builder.hasCloseIcon) View.VISIBLE else View.GONE
+            setOnClickListener(this@AbstractDialog)
+        }
+    }
+
+    protected fun getIconView(): ImageView {
+        return view?.findViewById<ImageView?>(R.id.ginger_dialog_close_icon)
+            ?: throw NoSuchElementException()
+    }
+
+    private fun setButtons(view: View) {
         val buttonGroup = LayoutInflater.from(requireContext())
             .inflate(R.layout.ginger_dialog_container_footer, null)
 
         val footer = view.findViewById<FrameLayout>(R.id.ginger_dialog_container_footer)
         footer.addView(buttonGroup)
 
-        positiveButton = footer.findViewById(R.id.ginger_dialog_positive_button)
-        positiveButton?.apply {
-            builder.positiveButtonText?.let {
-                text = it
-            } ?: run {
-                visibility = View.GONE
-            }
-
-            setOnClickListener(this@AbstractDialog)
+        footer.findViewById<Button>(R.id.ginger_dialog_positive_button)?.apply {
+            setButtonText(builder.positiveButtonText, this)
         }
 
-        negativeButton = footer.findViewById(R.id.ginger_dialog_negative_button)
-        negativeButton?.apply {
-            builder.negativeButtonText?.let {
-                text = it
-            } ?: run {
-                visibility = View.GONE
-            }
-
-            setOnClickListener(this@AbstractDialog)
+        footer.findViewById<Button>(R.id.ginger_dialog_negative_button)?.apply {
+            setButtonText(builder.negativeButtonText, this)
         }
+    }
 
-        closeIcon = view.findViewById(R.id.ginger_dialog_close_icon)
-        titleTextView = view.findViewById(R.id.ginger_dialog_title_text)
-
-        titleTextView?.text = builder.titleText
-        closeIcon?.visibility = builder.enableCloseIcon.let {
-            if (it) View.VISIBLE
-            else View.GONE
-        }
-
-        closeIcon?.setOnClickListener(this)
-
-        createCustomView(view as ViewGroup)
+    private fun setButtonText(text: String?, button: Button) {
+        text?.let {
+            button.text = text
+            button.setOnClickListener(this@AbstractDialog)
+        } ?: run { button.visibility = View.GONE }
     }
 
     override fun onCancel(dialog: DialogInterface) {
@@ -116,14 +119,14 @@ abstract class AbstractDialog(private val builder: AbstractBuilder): DialogFragm
         }
     }
 
-    abstract fun createCustomView(container: ViewGroup)
+    abstract fun createCustomView(container: View)
 
     abstract class AbstractBuilder {
         var negativeButtonText: String? = null
         var positiveButtonText: String? = null
         var onStateListener: DialogStateListener? = null
         var titleText: String? = null
-        var enableCloseIcon: Boolean = false
+        var hasCloseIcon: Boolean = false
 
         abstract fun build(): Any
     }

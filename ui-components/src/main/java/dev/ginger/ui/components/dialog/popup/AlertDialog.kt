@@ -1,6 +1,6 @@
 package dev.ginger.ui.components.dialog.popup
 
-import android.view.ViewGroup
+import android.view.View
 import android.widget.*
 import dev.ginger.ui.R
 
@@ -11,7 +11,7 @@ import dev.ginger.ui.R
  */
 class AlertDialog(private val builder: Builder) : AbstractDialog(builder) {
 
-    override fun createCustomView(container: ViewGroup) {
+    override fun createCustomView(container: View) {
         container.findViewById<FrameLayout>(R.id.ginger_dialog_container_frame)?.apply {
             val textView = TextView(requireContext(), null, R.style.TextAppearance_AppCompat_Body1)
             textView.text = builder.messageText
