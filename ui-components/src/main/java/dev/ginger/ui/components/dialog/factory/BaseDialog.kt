@@ -9,10 +9,14 @@ import android.widget.TextView
 import androidx.fragment.app.DialogFragment
 import dev.ginger.ui.R
 
-open class BaseDialog(private var builder: Builder): DialogFragment(), View.OnClickListener {
+open class BaseDialog(private var builder: Builder): AbstractDialog(), View.OnClickListener {
 
     private var titleTextView: TextView? = null
     private var closeIcon: ImageView? = null
+
+    override fun createCustomView(container: ViewGroup) {
+
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,6 +48,7 @@ open class BaseDialog(private var builder: Builder): DialogFragment(), View.OnCl
         }
 
         closeIcon?.setOnClickListener(this)
+        createCustomView(view as ViewGroup)
     }
 
     override fun onClick(v: View?) {

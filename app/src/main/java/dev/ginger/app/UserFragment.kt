@@ -8,7 +8,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import dev.ginger.ui.components.composite.TextDetailCell
 import dev.ginger.ui.components.dialog.*
-import dev.ginger.ui.components.dialog.factory.GingerDialogA
+import dev.ginger.ui.components.dialog.factory.AlertDialog
+
 
 class UserFragment: Fragment(), EditDialogProvider {
 
@@ -32,11 +33,23 @@ class UserFragment: Fragment(), EditDialogProvider {
         ss.setTextAndValue("DSS", "SDS", false)
 
 
-        val a = GingerDialogA.Builder(childFragmentManager, "S")
-            .setTitle("HELLO")
-            .enableCloseIcon(true)
-            .build()
-            .show(childFragmentManager, "asds")
+//        val a = GingerDialogA.Builder(childFragmentManager, "S")
+//            .setTitle("HELLO")
+//            .enableCloseIcon(true)
+//            .build()
+//            .show(childFragmentManager, "asds")
+
+
+        val alert = AlertDialog.Builder().apply {
+            titleText = "Ошибка"
+            messageText = "Проверьте интернет-соединение и повторите попытку"
+            positiveButtonText = "Повторить"
+            negativeButtonText = "Отмена"
+        }.build()
+
+        alert.isCancelable = false
+        alert.show(childFragmentManager, "")
+
 
 //        val d = GingerDialog(childFragmentManager).get(GingerEditDialog::class.java)
 //        d.show()
