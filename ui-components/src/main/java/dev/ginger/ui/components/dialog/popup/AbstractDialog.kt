@@ -44,91 +44,16 @@ abstract class AbstractDialog(private val builder: AbstractBuilder) : DialogFrag
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setButtons(view)
-        setTitleView(view)
-        setIconView(view)
-        createCustomView(view)
+        addHeaderView(view)
+        addContainerView(view)
+        addFooterView(view)
     }
 
-    private fun setTitleView(view: View) {
-        view.findViewById<TextView?>(R.id.ginger_dialog_title_text)?.apply {
-            text = builder.titleText
-        } ?: throw NoSuchElementException()
-    }
-
-    protected fun getTitleView(): TextView {
-        return view?.findViewById<TextView?>(R.id.ginger_dialog_title_text)
-            ?: throw NoSuchElementException()
-    }
-
-    private fun setIconView(view: View) {
-        view.findViewById<ImageView?>(R.id.ginger_dialog_close_icon)?.apply {
-            visibility = if (builder.hasCloseIcon) View.VISIBLE else View.GONE
-            setOnClickListener(this@AbstractDialog)
-        }
-    }
-
-    protected fun getIconView(): ImageView {
-        return view?.findViewById<ImageView?>(R.id.ginger_dialog_close_icon)
-            ?: throw NoSuchElementException()
-    }
-
-    private fun setButtons(view: View) {
-        val buttonGroup = LayoutInflater.from(requireContext())
-            .inflate(R.layout.ginger_dialog_container_footer, null)
-
-        val footer = view.findViewById<FrameLayout>(R.id.ginger_dialog_container_footer)
-        footer.addView(buttonGroup)
-
-        footer.findViewById<Button>(R.id.ginger_dialog_positive_button)?.apply {
-            setButtonText(builder.positiveButtonText, this)
-        }
-
-        footer.findViewById<Button>(R.id.ginger_dialog_negative_button)?.apply {
-            setButtonText(builder.negativeButtonText, this)
-        }
-    }
-
-    private fun setButtonText(text: String?, button: Button) {
-        text?.let {
-            button.text = text
-            button.setOnClickListener(this@AbstractDialog)
-        } ?: run { button.visibility = View.GONE }
-    }
-
-    override fun onCancel(dialog: DialogInterface) {
-        super.onCancel(dialog)
-        builder.onStateListener?.onChangeState(DialogButtonState.ON_CANCELLABLE)
-    }
-
-    override fun onClick(v: View?) {
-        when (v?.id) {
-            R.id.ginger_dialog_close_icon -> {
-                builder.onStateListener?.onChangeState(DialogButtonState.ON_CANCELLABLE)
-                dismiss()
-            }
-            R.id.ginger_dialog_negative_button -> {
-                builder.onStateListener?.onChangeState(DialogButtonState.ON_NEGATIVE_CLICK)
-                dismiss()
-            }
-
-            R.id.ginger_dialog_positive_button -> {
-                builder.onStateListener?.onChangeState(DialogButtonState.ON_POSITIVE_CLICK)
-                    ?: throw NotImplementedError("Click on positive button isn't implemented")
-                dismiss()
-            }
-        }
-    }
-
-    abstract fun createCustomView(container: View)
+    abstract fun addHeaderView(container: View)
+    abstract fun addFooterView(container: View)
+    abstract fun addContainerView(container: View)
 
     abstract class AbstractBuilder {
-        var negativeButtonText: String? = null
-        var positiveButtonText: String? = null
-        var onStateListener: DialogStateListener? = null
-        var titleText: String? = null
-        var hasCloseIcon: Boolean = false
-
         abstract fun build(): Any
     }
 }

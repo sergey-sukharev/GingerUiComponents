@@ -7,11 +7,10 @@
     android:minHeight="126dp"
     android:minWidth="340dp">
 
-    <include
-        android:id="@+id/include2"
-        layout="@layout/ginger_dialog_container_title"
+    <FrameLayout
+        android:id="@+id/ginger_dialog_header_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"/>
 
     <FrameLayout
         android:id="@+id/ginger_dialog_container_frame"
@@ -39,6 +38,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/include2" />
-
 
 </LinearLayout>

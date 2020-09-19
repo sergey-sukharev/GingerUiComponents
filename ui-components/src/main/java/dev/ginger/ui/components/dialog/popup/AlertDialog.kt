@@ -9,9 +9,9 @@ import dev.ginger.ui.R
  *
  * @property builder
  */
-class AlertDialog(private val builder: Builder) : AbstractDialog(builder) {
+class AlertDialog(private val builder: Builder) : AbstractPopupDialog(builder) {
 
-    override fun createCustomView(container: View) {
+    override fun addContainerView(container: View) {
         container.findViewById<FrameLayout>(R.id.ginger_dialog_container_frame)?.apply {
             val textView = TextView(requireContext(), null, R.style.TextAppearance_AppCompat_Body1)
             textView.text = builder.messageText
@@ -23,7 +23,7 @@ class AlertDialog(private val builder: Builder) : AbstractDialog(builder) {
         }
     }
 
-    class Builder : AbstractBuilder() {
+    class Builder : AbstractPopupDialog.Builder() {
         var messageText: String? = null
         override fun build(): AlertDialog {
             return AlertDialog(this)
