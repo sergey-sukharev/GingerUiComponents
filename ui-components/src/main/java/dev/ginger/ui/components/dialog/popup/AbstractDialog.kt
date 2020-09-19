@@ -27,6 +27,7 @@ abstract class AbstractDialog(private val builder: AbstractBuilder) : DialogFrag
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        retainInstance = true
         setStyle(STYLE_NORMAL, R.style.GingerDialogStyle)
     }
 

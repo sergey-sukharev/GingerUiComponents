@@ -8,10 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import dev.ginger.ui.components.composite.TextDetailCell
 import dev.ginger.ui.components.dialog.*
-import dev.ginger.ui.components.dialog.popup.AlertDialog
-import dev.ginger.ui.components.dialog.popup.DialogButtonState
-import dev.ginger.ui.components.dialog.popup.DialogStateListener
-import dev.ginger.ui.components.dialog.popup.PopupMenuDialog
+import dev.ginger.ui.components.dialog.popup.*
 import kotlinx.android.synthetic.main.fragment_user.*
 
 
@@ -37,17 +34,30 @@ class UserFragment : Fragment(), EditDialogProvider, DialogStateListener {
         ss.setTextAndValue("DSS", "SDS", false)
 
         gingerCompositeTextView.setOnClickListener {
-            val alert = AlertDialog.Builder().apply {
-                hasCloseIcon = true
-                titleText = "AS"
-                messageText = "Проверьте интернет-соединение и повторите попытку"
-                positiveButtonText = "Повторить"
-                negativeButtonText = "Отмена"
+//            val alert = AlertDialog.Builder().apply {
+//                hasCloseIcon = true
+//                titleText = "AS"
+//                messageText = "Проверьте интернет-соединение и повторите попытку"
+//                positiveButtonText = "Повторить"
+//                negativeButtonText = "Отмена"
+//                onStateListener = this@UserFragment
+//            }.build()
+//
+//            alert.isCancelable = false
+//            alert.show(childFragmentManager, "")
+
+            val alert = RadioGroupDialog.Builder().apply {
+                titleText = "Смена пола"
+                items.add(RadioGroupDialog.Item("132", "Мужской"))
+                items.add(RadioGroupDialog.Item("2423", "Женский"))
+//                positiveButtonText = "SAVE"
                 onStateListener = this@UserFragment
             }.build()
 
-            alert.isCancelable = false
+//            alert.isCancelable = false
             alert.show(childFragmentManager, "")
+
+
         }
 
 
@@ -60,7 +70,7 @@ class UserFragment : Fragment(), EditDialogProvider, DialogStateListener {
                     resources.getDrawable(R.drawable.ic_ginger, null)
                 )
             )
-                titleText = "Выберите пол"
+            titleText = "Выберите пол"
         }.build()
 
         popup.show(childFragmentManager, "HH")
@@ -80,6 +90,7 @@ class UserFragment : Fragment(), EditDialogProvider, DialogStateListener {
         TODO("Not yet implemented")
     }
 
+    // TODO add dialog id or dialog fragment
     override fun onChangeState(state: DialogButtonState) {
         println(state.name)
     }
