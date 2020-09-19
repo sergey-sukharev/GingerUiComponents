@@ -2,6 +2,7 @@ package dev.ginger.ui.components.dialog.popup
 
 import android.content.DialogInterface
 import android.os.Bundle
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +12,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.DialogFragment
 import dev.ginger.ui.R
+import dev.ginger.ui.components.utils.toPx
 
 /**
  * An abstract class of GingerDialog
@@ -26,9 +28,14 @@ abstract class AbstractDialog(private val builder: AbstractBuilder) : DialogFrag
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NORMAL, R.style.GingerDialogStyle)
+    }
+
+    override fun onResume() {
+        super.onResume()
+
         dialog?.apply {
-            val width = ViewGroup.LayoutParams.WRAP_CONTENT
-            val height = ViewGroup.LayoutParams.MATCH_PARENT
+            val width = 340.toPx()
+            val height = ViewGroup.LayoutParams.WRAP_CONTENT
             window?.setLayout(width, height)
         }
     }

@@ -30,15 +30,15 @@ abstract class AbstractPopupDialog(private val builder: Builder) : AbstractDialo
     }
 
     override fun addHeaderView(container: View) {
-        val headerC = LayoutInflater.from(requireContext())
+        val headerView = LayoutInflater.from(requireContext())
             .inflate(R.layout.ginger_dialog_container_title, null)
-        container.findViewById<FrameLayout?>(R.id.ginger_dialog_header_container)?.addView(headerC)
+        container.findViewById<FrameLayout?>(R.id.ginger_dialog_container_header)?.addView(headerView)
     }
 
     override fun addFooterView(container: View) {
-        val headerC = LayoutInflater.from(requireContext())
+        val footerView = LayoutInflater.from(requireContext())
             .inflate(R.layout.ginger_dialog_container_footer, null)
-        container.findViewById<FrameLayout?>(R.id.ginger_dialog_container_footer)?.addView(headerC)
+        container.findViewById<FrameLayout?>(R.id.ginger_dialog_container_footer)?.addView(footerView)
     }
 
     private fun setTitleView(view: View) {

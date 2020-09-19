@@ -3,8 +3,6 @@ package dev.ginger.ui.components.dialog.popup
 import android.view.View
 import android.widget.*
 import dev.ginger.ui.R
-import dev.ginger.ui.components.utils.dpToPx
-import dev.ginger.ui.components.utils.toDp
 import dev.ginger.ui.components.utils.toPx
 
 /**
@@ -15,7 +13,7 @@ import dev.ginger.ui.components.utils.toPx
 class AlertDialog(private val builder: Builder) : AbstractPopupDialog(builder) {
 
     override fun addContainerView(container: View) {
-        container.findViewById<FrameLayout>(R.id.ginger_dialog_container_frame)?.apply {
+        container.findViewById<FrameLayout>(R.id.ginger_dialog_container_content)?.apply {
             val textView = TextView(requireContext(), null, R.style.TextAppearance_AppCompat_Body1)
             textView.text = builder.messageText
             textView.layoutParams = LinearLayout.LayoutParams(

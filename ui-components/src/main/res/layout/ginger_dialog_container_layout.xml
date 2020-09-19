@@ -3,17 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:minHeight="126dp"
-    android:minWidth="340dp">
+    android:orientation="vertical">
 
     <FrameLayout
-        android:id="@+id/ginger_dialog_header_container"
+        android:id="@+id/ginger_dialog_container_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
     <FrameLayout
-        android:id="@+id/ginger_dialog_container_frame"
+        android:id="@+id/ginger_dialog_container_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
@@ -26,7 +24,6 @@
     <FrameLayout
         android:id="@+id/ginger_dialog_container_footer"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom" />
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

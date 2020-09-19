@@ -15,7 +15,7 @@ import dev.ginger.ui.components.dialog.popup.PopupMenuDialog
 import kotlinx.android.synthetic.main.fragment_user.*
 
 
-class UserFragment: Fragment(), EditDialogProvider, DialogStateListener {
+class UserFragment : Fragment(), EditDialogProvider, DialogStateListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,27 +37,34 @@ class UserFragment: Fragment(), EditDialogProvider, DialogStateListener {
         ss.setTextAndValue("DSS", "SDS", false)
 
         gingerCompositeTextView.setOnClickListener {
-            val popup = PopupMenuDialog.Builder().apply {
-                items.add(PopupMenuDialog.Item("1", "Hello"))
-                items.add(PopupMenuDialog.Item("2", "Мужской",
-                    resources.getDrawable(R.drawable.ic_ginger, null)))
-                titleText = "Выберите пол"
+            val alert = AlertDialog.Builder().apply {
+                hasCloseIcon = true
+                titleText = "AS"
+                messageText = "Проверьте интернет-соединение и повторите попытку"
+                positiveButtonText = "Повторить"
+                negativeButtonText = "Отмена"
+                onStateListener = this@UserFragment
             }.build()
 
-            popup.show(childFragmentManager, "HH")
+            alert.isCancelable = false
+            alert.show(childFragmentManager, "")
         }
 
-        val alert = AlertDialog.Builder().apply {
-            hasCloseIcon = true
-            titleText = "AS"
-            messageText = "Проверьте интернет-соединение и повторите попытку"
-            positiveButtonText = "Повторить"
-            negativeButtonText = "Отмена"
-            onStateListener = this@UserFragment
+
+        val popup = PopupMenuDialog.Builder().apply {
+            items.add(PopupMenuDialog.Item("1", "Hello"))
+            items.add(PopupMenuDialog.Item("1", "Hello"))
+            items.add(
+                PopupMenuDialog.Item(
+                    "2", "Мужской",
+                    resources.getDrawable(R.drawable.ic_ginger, null)
+                )
+            )
+                titleText = "Выберите пол"
         }.build()
 
-        alert.isCancelable = false
-        alert.show(childFragmentManager, "")
+        popup.show(childFragmentManager, "HH")
+
 
     }
 
