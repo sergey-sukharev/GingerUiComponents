@@ -3,6 +3,9 @@ package dev.ginger.ui.components.dialog.popup
 import android.view.View
 import android.widget.*
 import dev.ginger.ui.R
+import dev.ginger.ui.components.utils.dpToPx
+import dev.ginger.ui.components.utils.toDp
+import dev.ginger.ui.components.utils.toPx
 
 /**
  * Alert dialog which include base components and message view
@@ -18,7 +21,9 @@ class AlertDialog(private val builder: Builder) : AbstractPopupDialog(builder) {
             textView.layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
-            )
+            ).apply {
+                setMargins(16.toPx(), 0, 0, 16.toPx())
+            }
             addView(textView)
         }
     }

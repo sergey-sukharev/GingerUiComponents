@@ -11,6 +11,8 @@ import dev.ginger.ui.components.dialog.*
 import dev.ginger.ui.components.dialog.popup.AlertDialog
 import dev.ginger.ui.components.dialog.popup.DialogButtonState
 import dev.ginger.ui.components.dialog.popup.DialogStateListener
+import dev.ginger.ui.components.dialog.popup.PopupMenuDialog
+import kotlinx.android.synthetic.main.fragment_user.*
 
 
 class UserFragment: Fragment(), EditDialogProvider, DialogStateListener {
@@ -34,8 +36,20 @@ class UserFragment: Fragment(), EditDialogProvider, DialogStateListener {
         val ss = TextDetailCell(context)
         ss.setTextAndValue("DSS", "SDS", false)
 
+        gingerCompositeTextView.setOnClickListener {
+            val popup = PopupMenuDialog.Builder().apply {
+                items.add(PopupMenuDialog.Item("1", "Hello"))
+                items.add(PopupMenuDialog.Item("2", "Мужской",
+                    resources.getDrawable(R.drawable.ic_ginger, null)))
+                titleText = "Выберите пол"
+            }.build()
+
+            popup.show(childFragmentManager, "HH")
+        }
+
         val alert = AlertDialog.Builder().apply {
-            titleText = "Ошибка"
+            hasCloseIcon = true
+            titleText = "AS"
             messageText = "Проверьте интернет-соединение и повторите попытку"
             positiveButtonText = "Повторить"
             negativeButtonText = "Отмена"

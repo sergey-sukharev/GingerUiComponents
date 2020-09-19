@@ -21,8 +21,7 @@ import dev.ginger.ui.R
  *
  * @property builder
  */
-abstract class AbstractDialog(private val builder: AbstractBuilder) : DialogFragment(),
-    View.OnClickListener {
+abstract class AbstractDialog(private val builder: AbstractBuilder) : DialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

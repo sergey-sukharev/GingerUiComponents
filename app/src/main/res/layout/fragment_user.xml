@@ -21,7 +21,6 @@
             app:subtitleText="Subtitle2"
             app:titleText="Title1" />
 
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.core.widget.NestedScrollView>
