@@ -59,6 +59,7 @@ abstract class AbstractDialog(private val builder: AbstractBuilder) : DialogFrag
     abstract fun addHeaderView(container: View)
     abstract fun addFooterView(container: View)
     abstract fun addContainerView(container: View)
+    abstract fun onPositiveButtonClick()
 
     abstract class AbstractBuilder {
         abstract fun build(): Any

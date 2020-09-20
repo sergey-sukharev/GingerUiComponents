@@ -103,10 +103,14 @@ abstract class AbstractPopupDialog(private val builder: Builder) : AbstractDialo
 
             R.id.ginger_dialog_positive_button -> {
                 builder.onStateListener?.onChangeState(DialogButtonState.ON_POSITIVE_CLICK)
-                    ?: throw NotImplementedError("Click on positive button isn't implemented")
+                onPositiveButtonClick()
                 dismiss()
             }
         }
+    }
+
+    override fun onPositiveButtonClick() {
+
     }
 
 }

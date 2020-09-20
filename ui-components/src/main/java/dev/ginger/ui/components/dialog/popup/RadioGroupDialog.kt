@@ -14,6 +14,8 @@ class RadioGroupDialog(private val builder: Builder) : AbstractPopupDialog(build
 
     private val itemsMap = mutableMapOf<Int, String>()
 
+    private var checkedId: String? = null
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setTitleView(view)
@@ -30,23 +32,24 @@ class RadioGroupDialog(private val builder: Builder) : AbstractPopupDialog(build
     override fun addContainerView(container: View) {
         container.findViewById<FrameLayout?>(R.id.ginger_dialog_container_content)?.apply {
             val group = RadioGroup(requireContext())
-            group.setOnCheckedChangeListener { _, checkedId ->
-                val id = itemsMap[checkedId]
-                Toast.makeText(requireContext(), "CHECKED $id", Toast.LENGTH_SHORT).show()
-                builder.positiveButtonText ?: dismiss()
-            }
             group.orientation = RadioGroup.VERTICAL
             group.layoutParams = LinearLayout
                 .LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT
-                ).apply { setMargins(8.toPx(), 0, 8.toPx(), 16.toPx()) }
-
+                ).apply { setMargins(8.toPx(), 0, 8.toPx(), 0) }
 
             builder.items.forEach { model ->
                 group.addView(createRadioButton(model))
             }
 
+            group.setOnCheckedChangeListener { _, pos ->
+                checkedId = itemsMap[pos]
+                builder.positiveButtonText ?: run {
+                    builder.listener?.onChecked(this@RadioGroupDialog, checkedId!!)
+                    dismiss()
+                }
+            }
             addView(group)
         }
     }
@@ -71,7 +74,12 @@ class RadioGroupDialog(private val builder: Builder) : AbstractPopupDialog(build
     class Builder : AbstractPopupDialog.Builder() {
         val items = mutableListOf<Item>()
         var checkItem: String? = null
+        var listener: RadioDialogListener? = null
         override fun build(): RadioGroupDialog = RadioGroupDialog(this)
+    }
+
+    override fun onPositiveButtonClick() {
+        builder.listener?.onChecked(this@RadioGroupDialog, checkedId!!)
     }
 
     data class Item(
