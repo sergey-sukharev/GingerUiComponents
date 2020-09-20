@@ -1,17 +1,42 @@
 package dev.ginger.ui.components.dialog.popup
 
 import android.os.Bundle
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.TextView
+import androidx.fragment.app.FragmentManager
 import dev.ginger.ui.R
+import dev.ginger.ui.components.dialog.ProgressDialogTimerTask
+import java.util.*
+import kotlin.NoSuchElementException
+import kotlin.concurrent.schedule
 
 class ProgressDialog(private val builder: Builder) : AbstractDialog(builder) {
+
+    private val delayTimer = Timer()
+    private var delayTimerTask: TimerTask? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setTitleView(view)
+    }
+
+    override fun show(manager: FragmentManager, tag: String?) {
+        builder.delay?.let { delay ->
+            delayTimer.schedule(delay) {
+                super.show(manager, tag)
+            }
+        } ?: run {
+            super.show(manager, tag)
+        }
+    }
+
+    override fun dismiss() {
+        if (isVisible)
+            super.dismiss()
+        delayTimer.cancel()
     }
 
     private fun setTitleView(view: View) {
@@ -25,7 +50,7 @@ class ProgressDialog(private val builder: Builder) : AbstractDialog(builder) {
     class Builder : AbstractDialog.AbstractBuilder() {
         var title: String? = null
         var message: String? = null
-        var delay: Int? = null
+        var delay: Long? = null
 
         override fun build(): ProgressDialog {
             return ProgressDialog(this)
