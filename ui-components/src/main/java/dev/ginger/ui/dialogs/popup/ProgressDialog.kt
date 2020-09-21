@@ -17,10 +17,19 @@ class ProgressDialog(private val builder: Builder) : AbstractDialog(builder) {
 
     private val delayTimer = Timer()
 
+    private var needToDismiss = false
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setTitleView(view)
         setMessage(view)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (needToDismiss)
+            dismiss()
+        needToDismiss = true
     }
 
     private fun setMessage(view: View) {
@@ -43,9 +52,9 @@ class ProgressDialog(private val builder: Builder) : AbstractDialog(builder) {
 
     override fun dismiss() {
         delayTimer.cancel()
-        if (lifecycle.currentState == Lifecycle.State.RESUMED ||
-            lifecycle.currentState == Lifecycle.State.INITIALIZED)
+        if (needToDismiss)
             super.dismiss()
+        needToDismiss = true
     }
 
     private fun setTitleView(view: View) {
