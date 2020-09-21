@@ -1,14 +1,12 @@
-package dev.ginger.ui.components.dialog.popup
+package dev.ginger.ui.dialogs.popup
 
 import android.os.Bundle
-import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.fragment.app.FragmentManager
 import dev.ginger.ui.R
-import dev.ginger.ui.components.dialog.ProgressDialogTimerTask
 import java.util.*
 import kotlin.NoSuchElementException
 import kotlin.concurrent.schedule
@@ -47,7 +45,7 @@ class ProgressDialog(private val builder: Builder) : AbstractDialog(builder) {
         } ?: throw NoSuchElementException()
     }
 
-    class Builder : AbstractDialog.AbstractBuilder() {
+    class Builder : AbstractBuilder() {
         var title: String? = null
         var message: String? = null
         var delay: Long? = null

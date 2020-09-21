@@ -1,4 +1,4 @@
-package dev.ginger.ui.components.dialog.popup
+package dev.ginger.ui.dialogs.popup
 
 /**
  * State of dialog change

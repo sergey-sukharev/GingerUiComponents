@@ -1,15 +1,9 @@
-package dev.ginger.ui.components.dialog.popup
+package dev.ginger.ui.dialogs.popup
 
-import android.content.DialogInterface
 import android.os.Bundle
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.FrameLayout
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.fragment.app.DialogFragment
 import dev.ginger.ui.R
 import dev.ginger.ui.components.utils.toPx

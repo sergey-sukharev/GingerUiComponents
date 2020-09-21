@@ -1,4 +1,4 @@
-package dev.ginger.ui.components.dialog.popup
+package dev.ginger.ui.dialogs.popup
 
 import android.graphics.drawable.Drawable
 import android.os.Bundle
@@ -78,7 +78,7 @@ class PopupMenuDialog(private val builder: Builder) : AbstractDialog(builder) {
         } ?: throw NoSuchElementException()
     }
 
-    class Builder : AbstractDialog.AbstractBuilder() {
+    class Builder : AbstractBuilder() {
         val items = mutableListOf<Item>()
         var titleText: String? = null
         override fun build(): PopupMenuDialog {

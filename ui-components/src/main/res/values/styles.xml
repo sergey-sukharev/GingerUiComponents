@@ -1,5 +1,5 @@
 <resources>
-    <style name="AppTheme.FullScreenDialog" parent="Theme.MaterialComponents.Light.Dialog">
+    <style name="GingerTheme.FullScreenDialog" parent="Theme.MaterialComponents.Light.Dialog">
         <item name="android:windowIsFloating">false</item>
         <item name="android:windowBackground">@android:color/white</item>
     </style>

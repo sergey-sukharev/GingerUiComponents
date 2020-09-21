@@ -1,10 +1,8 @@
-package dev.ginger.ui.components.dialog.popup
+package dev.ginger.ui.dialogs.popup
 
 import android.os.Bundle
 import android.view.View
-import android.view.ViewGroup
 import android.widget.*
-import androidx.core.widget.NestedScrollView
 import dev.ginger.ui.R
 import dev.ginger.ui.components.utils.toPx
 
