@@ -43,7 +43,8 @@ class ProgressDialog(private val builder: Builder) : AbstractDialog(builder) {
 
     override fun dismiss() {
         delayTimer.cancel()
-        if (lifecycle.currentState == Lifecycle.State.RESUMED)
+        if (lifecycle.currentState == Lifecycle.State.RESUMED ||
+            lifecycle.currentState == Lifecycle.State.INITIALIZED)
             super.dismiss()
     }
 
