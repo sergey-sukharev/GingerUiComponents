@@ -5,7 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.TextView
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.Lifecycle
 import dev.ginger.ui.R
 import java.util.*
 import kotlin.NoSuchElementException
@@ -25,7 +27,7 @@ class ProgressDialog(private val builder: Builder) : AbstractDialog(builder) {
         view.findViewById<TextView?>(R.id.ginger_dialog_progress_text)?.apply {
             builder.message?.let {
                 text = it
-            } ?: run {visibility = View.GONE}
+            } ?: run { visibility = View.GONE }
         }
     }
 
@@ -40,8 +42,9 @@ class ProgressDialog(private val builder: Builder) : AbstractDialog(builder) {
     }
 
     override fun dismiss() {
-        if (isVisible) super.dismiss()
         delayTimer.cancel()
+        if (lifecycle.currentState == Lifecycle.State.RESUMED)
+            super.dismiss()
     }
 
     private fun setTitleView(view: View) {
