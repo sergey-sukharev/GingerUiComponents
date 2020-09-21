@@ -14,11 +14,19 @@ import kotlin.concurrent.schedule
 class ProgressDialog(private val builder: Builder) : AbstractDialog(builder) {
 
     private val delayTimer = Timer()
-    private var delayTimerTask: TimerTask? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setTitleView(view)
+        setMessage(view)
+    }
+
+    private fun setMessage(view: View) {
+        view.findViewById<TextView?>(R.id.ginger_dialog_progress_text)?.apply {
+            builder.message?.let {
+                text = it
+            } ?: run {visibility = View.GONE}
+        }
     }
 
     override fun show(manager: FragmentManager, tag: String?) {
@@ -32,8 +40,7 @@ class ProgressDialog(private val builder: Builder) : AbstractDialog(builder) {
     }
 
     override fun dismiss() {
-        if (isVisible)
-            super.dismiss()
+        if (isVisible) super.dismiss()
         delayTimer.cancel()
     }
 
@@ -41,7 +48,7 @@ class ProgressDialog(private val builder: Builder) : AbstractDialog(builder) {
         view.findViewById<TextView?>(R.id.ginger_dialog_title_text)?.apply {
             builder.title?.let {
                 text = it
-            } ?: run { visibility = View.INVISIBLE }
+            } ?: run { visibility = View.GONE }
         } ?: throw NoSuchElementException()
     }
 
@@ -78,10 +85,6 @@ class ProgressDialog(private val builder: Builder) : AbstractDialog(builder) {
         }
         container.findViewById<FrameLayout?>(R.id.ginger_dialog_container_content)
             ?.addView(containerView)
-    }
-
-    override fun onPositiveButtonClick() {
-
     }
 
 }

@@ -7,6 +7,6 @@ package dev.ginger.ui.dialogs.popup
  * ON_NEGATIVE_CLICK - click on negative button
  * ON_POSITIVE_CLICK - click on positive button
  */
-enum class DialogButtonState {
+enum class DialogState {
     ON_CANCELLABLE, ON_NEGATIVE_CLICK, ON_POSITIVE_CLICK
 }

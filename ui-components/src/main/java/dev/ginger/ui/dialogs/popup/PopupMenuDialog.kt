@@ -61,10 +61,6 @@ class PopupMenuDialog(private val builder: Builder) : AbstractDialog(builder) {
         }
     }
 
-    override fun onPositiveButtonClick() {
-
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setTitleView(view)

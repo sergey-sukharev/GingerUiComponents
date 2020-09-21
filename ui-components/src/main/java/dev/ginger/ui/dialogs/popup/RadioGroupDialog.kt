@@ -3,12 +3,12 @@ package dev.ginger.ui.dialogs.popup
 import android.os.Bundle
 import android.view.View
 import android.widget.*
+import androidx.fragment.app.DialogFragment
 import dev.ginger.ui.R
 import dev.ginger.ui.components.utils.toPx
 
 
-class RadioGroupDialog(private val builder: Builder) : AbstractPopupDialog(builder) {
-
+class RadioGroupDialog(private val builder: Builder) : AbstractPopupDialog(builder), OnStateListener {
 
     private val itemsMap = mutableMapOf<Int, String>()
 
@@ -18,11 +18,12 @@ class RadioGroupDialog(private val builder: Builder) : AbstractPopupDialog(build
         super.onViewCreated(view, savedInstanceState)
         setTitleView(view)
         checkedId = builder.checkedId
+        onChangeStateListeners.add(this)
     }
 
     private fun setTitleView(view: View) {
         view.findViewById<TextView?>(R.id.ginger_dialog_title_text)?.apply {
-            builder.titleText?.let {
+            builder.title?.let {
                 text = it
             } ?: run { visibility = View.GONE }
         } ?: throw NoSuchElementException()
@@ -100,12 +101,13 @@ class RadioGroupDialog(private val builder: Builder) : AbstractPopupDialog(build
         override fun build(): RadioGroupDialog = RadioGroupDialog(this)
     }
 
-    override fun onPositiveButtonClick() {
-        builder.listener?.onChecked(this@RadioGroupDialog, checkedId!!)
-    }
-
     data class Item(
         val id: String,
         val text: String
     )
+
+    override fun onChangeState(dialog: DialogFragment, state: DialogState) {
+        if (state == DialogState.ON_POSITIVE_CLICK)
+            builder.listener?.onChecked(this@RadioGroupDialog, checkedId!!)
+    }
 }

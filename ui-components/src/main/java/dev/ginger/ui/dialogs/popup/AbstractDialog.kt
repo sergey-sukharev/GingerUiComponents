@@ -1,9 +1,10 @@
 package dev.ginger.ui.dialogs.popup
 
+import android.graphics.Point
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.view.Surface.ROTATION_270
+import android.view.Surface.ROTATION_90
 import androidx.fragment.app.DialogFragment
 import dev.ginger.ui.R
 import dev.ginger.ui.components.utils.toPx
@@ -29,9 +30,16 @@ abstract class AbstractDialog(private val builder: AbstractBuilder) : DialogFrag
         super.onResume()
 
         dialog?.apply {
-            val width = 340.toPx()
+            val point = Point()
+            window?.windowManager?.defaultDisplay?.getSize(point)
+
+            val rotation = window?.windowManager?.defaultDisplay?.rotation
+            var width = point.x * 0.75
+            if (ROTATION_90 == rotation || ROTATION_270 == rotation)
+                width = point.x * 0.5
+
             val height = ViewGroup.LayoutParams.WRAP_CONTENT
-            window?.setLayout(width, height)
+            window?.setLayout(width.toInt(), height)
         }
     }
 
@@ -53,7 +61,6 @@ abstract class AbstractDialog(private val builder: AbstractBuilder) : DialogFrag
     abstract fun addHeaderView(container: View)
     abstract fun addFooterView(container: View)
     abstract fun addContainerView(container: View)
-    abstract fun onPositiveButtonClick()
 
     abstract class AbstractBuilder {
         abstract fun build(): Any

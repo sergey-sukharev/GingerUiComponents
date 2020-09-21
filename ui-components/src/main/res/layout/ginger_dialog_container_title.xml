@@ -4,12 +4,12 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="16dp"
     tools:ignore="UseCompoundDrawables">
     <TextView
         android:id="@+id/ginger_dialog_title_text"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
         android:layout_weight="1"
+        android:padding="16dp"
         android:layout_gravity="center"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -21,6 +21,7 @@
         android:tint="@color/disabledIcon"
         android:tintMode="src_in"
         android:visibility="gone"
+        android:layout_margin="16dp"
         android:layout_gravity="center"
         tools:visibility="visible"
         android:src="@drawable/ic_cancel"/>

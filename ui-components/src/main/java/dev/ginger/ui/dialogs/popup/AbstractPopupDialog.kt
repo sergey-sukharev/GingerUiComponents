@@ -8,18 +8,27 @@ import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.fragment.app.DialogFragment
 import dev.ginger.ui.R
 
 abstract class AbstractPopupDialog(private val builder: Builder) : AbstractDialog(builder),
     View.OnClickListener {
 
+    protected var onChangeStateListeners = mutableListOf<OnStateListener>()
 
     abstract class Builder : AbstractBuilder() {
         var negativeButtonText: String? = null
         var positiveButtonText: String? = null
-        var onStateListener: DialogStateListener? = null
-        var titleText: String? = null
-        var hasCloseIcon: Boolean = false
+        var onStateListener: OnStateListener? = null
+        var title: String? = null
+        var enableCloseIcon: Boolean = false
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        builder.onStateListener?.let { subscriber ->
+            onChangeStateListeners.add(subscriber)
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -43,7 +52,7 @@ abstract class AbstractPopupDialog(private val builder: Builder) : AbstractDialo
 
     private fun setTitleView(view: View) {
         view.findViewById<TextView?>(R.id.ginger_dialog_title_text)?.apply {
-            builder.titleText?.let {
+            builder.title?.let {
                 text = it
             } ?: run { visibility = View.INVISIBLE }
         } ?: throw NoSuchElementException()
@@ -56,7 +65,7 @@ abstract class AbstractPopupDialog(private val builder: Builder) : AbstractDialo
 
     private fun setIconView(view: View) {
         view.findViewById<ImageView?>(R.id.ginger_dialog_close_icon)?.apply {
-            visibility = if (builder.hasCloseIcon) View.VISIBLE else View.GONE
+            visibility = if (builder.enableCloseIcon) View.VISIBLE else View.GONE
             setOnClickListener(this@AbstractPopupDialog)
         }
     }
@@ -87,30 +96,30 @@ abstract class AbstractPopupDialog(private val builder: Builder) : AbstractDialo
 
     override fun onCancel(dialog: DialogInterface) {
         super.onCancel(dialog)
-        builder.onStateListener?.onChangeState(DialogButtonState.ON_CANCELLABLE)
+        sendStateToSubscribers(this, DialogState.ON_CANCELLABLE)
     }
 
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.ginger_dialog_close_icon -> {
-                builder.onStateListener?.onChangeState(DialogButtonState.ON_CANCELLABLE)
-                dismiss()
+                if (onChangeStateListeners.size == 0) dismiss()
+                sendStateToSubscribers(this, DialogState.ON_CANCELLABLE)
             }
             R.id.ginger_dialog_negative_button -> {
-                builder.onStateListener?.onChangeState(DialogButtonState.ON_NEGATIVE_CLICK)
-                dismiss()
+                if (onChangeStateListeners.size == 0) dismiss()
+                sendStateToSubscribers(this, DialogState.ON_NEGATIVE_CLICK)
             }
-
             R.id.ginger_dialog_positive_button -> {
-                builder.onStateListener?.onChangeState(DialogButtonState.ON_POSITIVE_CLICK)
-                onPositiveButtonClick()
-                dismiss()
+                sendStateToSubscribers(this, DialogState.ON_POSITIVE_CLICK)
             }
         }
     }
 
-    override fun onPositiveButtonClick() {
-
+    private fun sendStateToSubscribers(dialog: DialogFragment, state: DialogState) {
+        onChangeStateListeners.forEach {
+            it.onChangeState(dialog, state)
+        }
     }
+
 
 }

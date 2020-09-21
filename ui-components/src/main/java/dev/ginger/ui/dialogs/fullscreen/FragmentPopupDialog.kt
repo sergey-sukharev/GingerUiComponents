@@ -9,11 +9,17 @@ import androidx.fragment.app.Fragment
 import dev.ginger.ui.R
 import java.util.*
 
-class FragmentPopupDialog(private val builder: Builder): DialogFragment() {
+class FragmentPopupDialog(): DialogFragment() {
+
+    private var builder: Builder? = null
+
+    constructor(builder: Builder): this() {
+        this.builder = builder
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setStyle(STYLE_NORMAL, R.style.AppTheme_FullScreenDialog)
+        setStyle(STYLE_NORMAL, R.style.GingerTheme_FullScreenDialog)
 
         dialog?.apply {
             val width = ViewGroup.LayoutParams.MATCH_PARENT
@@ -33,7 +39,7 @@ class FragmentPopupDialog(private val builder: Builder): DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        builder.fragment?.let {fragment ->
+        builder?.fragment?.let {fragment ->
             childFragmentManager.addOnBackStackChangedListener {
                 if (childFragmentManager.backStackEntryCount == 0)
                     dismiss()
