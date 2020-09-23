@@ -1,15 +1,13 @@
 package dev.ginger.ui.dialogs.fullscreen
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import dev.ginger.ui.R
 import java.util.*
 
-class FragmentPopupDialog(): DialogFragment() {
+class PopupDialogFragment(): DialogFragment() {
 
     private var builder: Builder? = null
 
@@ -17,8 +15,18 @@ class FragmentPopupDialog(): DialogFragment() {
         this.builder = builder
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        builder?.fragment?.onCreateOptionsMenu(menu, inflater)
+            ?: super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return builder?.fragment?.onOptionsItemSelected(item) ?: super.onOptionsItemSelected(item)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
         setStyle(STYLE_NORMAL, R.style.GingerTheme_FullScreenDialog)
 
         dialog?.apply {
@@ -53,6 +61,6 @@ class FragmentPopupDialog(): DialogFragment() {
 
     class Builder {
         var fragment: Fragment? = null
-        fun build() = FragmentPopupDialog(this)
+        fun build() = PopupDialogFragment(this)
     }
 }
