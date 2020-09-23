@@ -1,7 +1,9 @@
 <resources>
     <style name="GingerTheme.FullScreenDialog" parent="Theme.MaterialComponents.Light.Dialog">
         <item name="android:windowIsFloating">false</item>
-        <item name="android:windowBackground">@android:color/white</item>
+        <item name="android:windowBackground">@color/fullscreen_dialog_window_background</item>
+        <item name="android:statusBarColor">@color/fullscreen_dialog_status_bar</item>
+        <item name="android:windowLightStatusBar">true</item>
     </style>
 
     <style name="GingerDialogStyle" parent="Theme.MaterialComponents.Light.Dialog">
