@@ -1,4 +1,4 @@
-package dev.ginger.ui.dialogs.popup
+package dev.ginger.ui.dialogs.radio
 
 import android.os.Bundle
 import android.view.View
@@ -6,9 +6,13 @@ import android.widget.*
 import androidx.fragment.app.DialogFragment
 import dev.ginger.ui.R
 import dev.ginger.ui.components.utils.toPx
+import dev.ginger.ui.dialogs.popup.AbstractPopupDialog
+import dev.ginger.ui.dialogs.DialogState
+import dev.ginger.ui.dialogs.popup.OnStateListener
 
 
-class RadioGroupDialog(private val builder: Builder) : AbstractPopupDialog(builder), OnStateListener {
+class RadioGroupDialog(private val builder: Builder) : AbstractPopupDialog(builder),
+    OnStateListener {
 
     private val itemsMap = mutableMapOf<Int, String>()
 

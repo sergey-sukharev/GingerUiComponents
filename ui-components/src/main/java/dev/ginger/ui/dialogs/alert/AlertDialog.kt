@@ -1,9 +1,10 @@
-package dev.ginger.ui.dialogs.popup
+package dev.ginger.ui.dialogs.alert
 
 import android.view.View
 import android.widget.*
 import dev.ginger.ui.R
 import dev.ginger.ui.components.utils.toPx
+import dev.ginger.ui.dialogs.popup.AbstractPopupDialog
 
 /**
  * Alert dialog which include base components and message view

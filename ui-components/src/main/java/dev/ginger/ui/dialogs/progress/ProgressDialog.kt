@@ -1,14 +1,13 @@
-package dev.ginger.ui.dialogs.popup
+package dev.ginger.ui.dialogs.progress
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.TextView
-import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
-import androidx.lifecycle.Lifecycle
 import dev.ginger.ui.R
+import dev.ginger.ui.dialogs.AbstractDialog
 import java.util.*
 import kotlin.NoSuchElementException
 import kotlin.concurrent.schedule

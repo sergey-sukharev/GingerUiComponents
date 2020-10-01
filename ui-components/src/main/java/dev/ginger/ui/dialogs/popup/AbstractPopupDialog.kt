@@ -10,6 +10,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.DialogFragment
 import dev.ginger.ui.R
+import dev.ginger.ui.dialogs.AbstractDialog
+import dev.ginger.ui.dialogs.DialogState
 
 abstract class AbstractPopupDialog(private val builder: Builder) : AbstractDialog(builder),
     View.OnClickListener {

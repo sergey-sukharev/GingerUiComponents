@@ -6,9 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
 import dev.ginger.ui.R
+import dev.ginger.ui.dialogs.AbstractDialog
+import dev.ginger.ui.dialogs.OnDialogItemClickListener
 
 class PopupMenuDialog(private val builder: Builder) : AbstractDialog(builder) {
-
 
     override fun addHeaderView(container: View) {
         val headerView = LayoutInflater.from(requireContext())
@@ -50,8 +51,7 @@ class PopupMenuDialog(private val builder: Builder) : AbstractDialog(builder) {
                 }
 
                 itemView.setOnClickListener {
-                    Toast.makeText(requireContext(), "Selected ${model.id}", Toast.LENGTH_SHORT)
-                        .show()
+                    builder.onClickListener?.onClicked(this, model.id)
                     dismiss()
                 }
                 itemsContainer.addView(itemView)
@@ -77,6 +77,7 @@ class PopupMenuDialog(private val builder: Builder) : AbstractDialog(builder) {
     class Builder : AbstractBuilder() {
         val items = mutableListOf<Item>()
         var titleText: String? = null
+        var onClickListener: OnDialogItemClickListener? = null
         override fun build(): PopupMenuDialog {
             return PopupMenuDialog(this)
         }
@@ -87,5 +88,6 @@ class PopupMenuDialog(private val builder: Builder) : AbstractDialog(builder) {
         val title: String,
         val icon: Drawable? = null
     )
+
 
 }

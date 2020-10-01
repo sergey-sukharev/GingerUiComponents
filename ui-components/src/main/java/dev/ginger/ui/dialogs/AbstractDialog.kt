@@ -1,4 +1,4 @@
-package dev.ginger.ui.dialogs.popup
+package dev.ginger.ui.dialogs
 
 import android.graphics.Point
 import android.os.Bundle
@@ -7,7 +7,6 @@ import android.view.Surface.ROTATION_270
 import android.view.Surface.ROTATION_90
 import androidx.fragment.app.DialogFragment
 import dev.ginger.ui.R
-import dev.ginger.ui.components.utils.toPx
 
 /**
  * An abstract class of GingerDialog
