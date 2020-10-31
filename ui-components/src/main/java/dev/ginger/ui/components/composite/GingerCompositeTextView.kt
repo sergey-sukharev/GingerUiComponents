@@ -1,6 +1,7 @@
 package dev.ginger.ui.components.composite
 
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
@@ -116,6 +117,12 @@ class GingerCompositeTextView : ConstraintLayout, View.OnClickListener {
     fun setTitleText(value: String?) {
         viewFactory.titleView?.text = value
     }
+
+    fun setStartIcon(drawable: Drawable?) {
+        startIconHolder.drawable = drawable
+    }
+
+    fun getStartIcon() = startIconHolder.drawable
 
     fun getTitleText() = viewFactory.titleView?.text.toString()
 
