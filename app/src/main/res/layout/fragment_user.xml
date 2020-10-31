@@ -9,17 +9,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <dev.ginger.ui.components.composite.GingerCompositeTextView
-            android:id="@+id/gingerCompositeTextView"
-            android:layout_width="match_parent"
+        <Button
+            android:id="@+id/show_radio_dialog"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="Radio Dialog"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:startIcon="@drawable/ic_check_24"
-            app:startIconTint="@color/colorPrimary"
-            app:subtitleText="Subtitle2"
-            app:titleText="Title1" />
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

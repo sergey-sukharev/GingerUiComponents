@@ -1,22 +1,22 @@
 package dev.ginger.app
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
-import dev.ginger.ui.components.composite.TextDetailCell
-import dev.ginger.ui.components.dialog.*
-import dev.ginger.ui.components.dialog.popup.*
+import dev.ginger.ui.dialogs.DialogState
+import dev.ginger.ui.dialogs.alert.AlertDialog
+import dev.ginger.ui.dialogs.fullscreen.PopupDialogFragment
+import dev.ginger.ui.dialogs.popup.*
+import dev.ginger.ui.dialogs.radio.RadioDialogListener
+import dev.ginger.ui.dialogs.radio.RadioGroupDialog
 import kotlinx.android.synthetic.main.fragment_user.*
 
+class UserFragment : Fragment(), OnStateListener, RadioDialogListener {
 
-class UserFragment : Fragment(), EditDialogProvider, DialogStateListener {
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -28,71 +28,51 @@ class UserFragment : Fragment(), EditDialogProvider, DialogStateListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        Log.d("user_fragment", "ViewCreated")
-        val ss = TextDetailCell(context)
-        ss.setTextAndValue("DSS", "SDS", false)
-
-        gingerCompositeTextView.setOnClickListener {
-//            val alert = AlertDialog.Builder().apply {
-//                hasCloseIcon = true
-//                titleText = "AS"
-//                messageText = "Проверьте интернет-соединение и повторите попытку"
-//                positiveButtonText = "Повторить"
-//                negativeButtonText = "Отмена"
-//                onStateListener = this@UserFragment
-//            }.build()
-//
-//            alert.isCancelable = false
-//            alert.show(childFragmentManager, "")
-
-            val alert = RadioGroupDialog.Builder().apply {
-                titleText = "Смена пола"
-                items.add(RadioGroupDialog.Item("132", "Мужской"))
-                items.add(RadioGroupDialog.Item("2423", "Женский"))
-//                positiveButtonText = "SAVE"
-                onStateListener = this@UserFragment
-            }.build()
-
-//            alert.isCancelable = false
-            alert.show(childFragmentManager, "")
-
-
+//        showEditDialog()
+        show_radio_dialog.setOnClickListener {
+//            showRadioDialog()
+            showEditDialog()
         }
+//        showMessageDialog()
+    }
 
 
-        val popup = PopupMenuDialog.Builder().apply {
-            items.add(PopupMenuDialog.Item("1", "Hello"))
-            items.add(PopupMenuDialog.Item("1", "Hello"))
-            items.add(
-                PopupMenuDialog.Item(
-                    "2", "Мужской",
-                    resources.getDrawable(R.drawable.ic_ginger, null)
-                )
-            )
-            titleText = "Выберите пол"
+    private fun showMessageDialog() {
+        val dll = AlertDialog.Builder().apply {
+            title = "Clean code"
+            message = "Мы всегда за чистый ко д. Мы всегда за чистый код.Мы всегда за чистый код.Мы всегда за чистый код.Мы всегда за чистый код.Мы всегда за чистый код.Мы всегда за чистый код.Мы всегда за чистый код.Мы всегда за чистый код."
+            enableCloseIcon = true
         }.build()
 
-        popup.show(childFragmentManager, "HH")
-
-
+        dll.isCancelable = false
+        dll.show(childFragmentManager, "S")
     }
 
-    override fun postChangedValue(state: EditDialogState) {
-        TODO("Not yet implemented")
+    private fun showEditDialog() {
+        val sas = PopupDialogFragment.Builder().apply {
+            fragment = EditTextFragment()
+        }.build()
+
+        sas.show(childFragmentManager, "SAD")
     }
 
-    override fun postSave(state: EditDialogState): Boolean {
-        TODO("Not yet implemented")
+    private fun showRadioDialog() {
+        val gld = RadioGroupDialog.Builder().apply {
+            items.add(RadioGroupDialog.Item("S", "R"))
+            items.add(RadioGroupDialog.Item("2", "A"))
+            checkedId = "S"
+        }.build()
+
+        gld.show(childFragmentManager, "ss")
     }
 
-    override fun postDismiss(state: EditDialogState): Boolean {
-        TODO("Not yet implemented")
+    override fun onChangeState(dialog: DialogFragment, state: DialogState) {
+        if (dialog.tag == "S" || state == DialogState.ON_POSITIVE_CLICK)
+            dialog.dismiss()
     }
 
-    // TODO add dialog id or dialog fragment
-    override fun onChangeState(state: DialogButtonState) {
-        println(state.name)
+    override fun onChecked(dialog: RadioGroupDialog, id: String) {
+        Toast.makeText(requireContext(), "ID $id", Toast.LENGTH_SHORT).show()
     }
 
 }
