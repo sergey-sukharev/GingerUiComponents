@@ -3,7 +3,8 @@ package dev.ginger.app
 import android.view.View
 import dev.ginger.ui.components.text.AbstractLineEditTextView
 
-class GingerEditText(view: View, state: ViewState) : AbstractLineEditTextView(view, state) {
+class GingerEditText(id: String, view: View, state: ViewState) :
+    AbstractLineEditTextView(id, view, state) {
 
     override fun getTitleViewResId(): Int? = R.id.textView
 

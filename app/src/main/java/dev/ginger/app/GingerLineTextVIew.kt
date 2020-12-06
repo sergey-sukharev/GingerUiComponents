@@ -4,8 +4,8 @@ import android.view.View
 import android.widget.TextView
 import dev.ginger.ui.components.text.AbstractLineTextView
 
-open class GingerLineTextVIew(view: View, state: ViewState):
-    AbstractLineTextView<TextView, AbstractLineTextView.ViewState>(view, state) {
+open class GingerLineTextVIew(id: String, view: View, state: ViewState):
+    AbstractLineTextView<TextView, AbstractLineTextView.ViewState>(id, view, state) {
 
     override fun getTitleViewResId(): Int? = R.id.textView
 

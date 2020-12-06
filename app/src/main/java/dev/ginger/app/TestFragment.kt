@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import dev.ginger.ui.components.text.AbstractLineEditTextView
 import dev.ginger.ui.components.text.AbstractLineTextView
+import dev.ginger.ui.components.text.OnViewClickListener
 import kotlinx.android.synthetic.main.fragment_empty.*
 import java.lang.Thread.sleep
 
@@ -44,8 +45,15 @@ open class TestFragment: Fragment() {
             this.isRequired = true
         }
 
-        val cusView = GingerLineTextVIew(viewText, state)
-        val editView = GingerEditText(viewEditText, editState)
+        val cusView = GingerLineTextVIew("A", viewText, state)
+        val editView = GingerEditText("B", viewEditText, editState)
+
+        cusView.setOnViewClickListener(object :
+            OnViewClickListener<AbstractLineTextView.ViewState> {
+            override fun onClick(viewId: String, state: AbstractLineTextView.ViewState) {
+                println()
+            }
+        })
 
         view_container.addView(viewText)
         view_container.addView(viewEditText)

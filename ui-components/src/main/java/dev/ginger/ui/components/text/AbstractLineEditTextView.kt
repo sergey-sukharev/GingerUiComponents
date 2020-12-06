@@ -1,21 +1,19 @@
 package dev.ginger.ui.components.text
 
+import android.content.Context
 import android.text.InputType
 import android.view.View
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ProgressBar
 import androidx.core.widget.addTextChangedListener
 import dev.ginger.ui.R
 
-abstract class AbstractLineEditTextView(view: View, state: ViewState):
-    AbstractLineTextView<EditText, AbstractLineEditTextView.ViewState>(view, state) {
+abstract class AbstractLineEditTextView(id: String, view: View, state: ViewState):
+    AbstractLineTextView<EditText, AbstractLineEditTextView.ViewState>(id, view, state) {
 
     private var progressBar: ProgressBar? = null
-
-    init {
-        initViews()
-        updateState(state)
-    }
 
     fun updateState(state: ViewState) {
         super.updateState(state)
@@ -35,13 +33,25 @@ abstract class AbstractLineEditTextView(view: View, state: ViewState):
 
     override fun initViews() {
         super.initViews()
-        progressBar = view.findViewById(R.id.progressBar)
-    }
 
-    override fun renderTextState(state: AbstractLineTextView.ViewState) {
+        progressBar = view.findViewById(R.id.progressBar)
         (valueTextView as EditText).addTextChangedListener {
             state.value = it?.toString()
             checkOnRequired()
+        }
+    }
+
+    override fun renderTextState(state: AbstractLineTextView.ViewState) {
+        (valueTextView as EditText).apply {
+            setImeOptions(EditorInfo.IME_ACTION_DONE)
+            setOnFocusChangeListener { v, hasFocus ->
+                if (!hasFocus) {
+                    post {
+                        val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                        imm.hideSoftInputFromWindow(this.windowToken, InputMethodManager.RESULT_UNCHANGED_SHOWN)
+                    }
+                }
+            }
         }
 
         state.value?.let {

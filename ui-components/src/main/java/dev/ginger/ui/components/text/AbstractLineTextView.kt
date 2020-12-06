@@ -7,9 +7,9 @@ import android.widget.TextView
 import androidx.core.graphics.drawable.DrawableCompat
 import dev.ginger.ui.R
 
-abstract class AbstractLineTextView<T : TextView, E: AbstractLineTextView.ViewState>(val view: View,
-                                               protected var state: E = ViewState() as E
-) {
+abstract class AbstractLineTextView<T : TextView, E: AbstractLineTextView.ViewState>(val id: String,
+                                                                                     val view: View,
+                                               protected var state: E = ViewState() as E) {
 
     protected var titleTextView: TextView? = null
 
@@ -20,6 +20,8 @@ abstract class AbstractLineTextView<T : TextView, E: AbstractLineTextView.ViewSt
     protected var iconView: ImageView? = null
 
     protected var metaIconView: ImageView? = null
+
+    protected var onClickListener: OnViewClickListener<ViewState>? = null
 
     init {
         initViews()
@@ -91,6 +93,10 @@ abstract class AbstractLineTextView<T : TextView, E: AbstractLineTextView.ViewSt
     }
 
     protected open fun renderTextState(state: ViewState) {
+        (valueTextView as TextView).setOnClickListener {
+            onClickListener?.onClick(id, state)
+        }
+
         state.value?.let {
             (valueTextView as TextView).apply {
                 text = it
@@ -132,6 +138,10 @@ abstract class AbstractLineTextView<T : TextView, E: AbstractLineTextView.ViewSt
     protected open fun getIconErrorTint(): Int = R.color.ginger_icon_error
 
     protected open fun getIconWarningTint(): Int = R.color.ginger_icon_warning
+
+    fun setOnViewClickListener(listener: OnViewClickListener<ViewState>?) {
+        this.onClickListener = listener
+    }
 
     open class ViewState {
         var title: String? = null
