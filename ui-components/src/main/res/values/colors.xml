@@ -8,4 +8,6 @@
     <color name="disabledIcon">#BFBFBF</color>
     <color name="ripple_click_efect">#919191</color>
     <color name="fullscreen_dialog_window_background">#fff</color>
+    <color name="ginger_icon_error">#E40909</color>
+    <color name="ginger_icon_warning">#FB8C00</color>
 </resources>
