@@ -17,4 +17,7 @@ open class GingerLineTextVIew(id: String, view: View, state: ViewState):
 
     override fun getIconResId(): Int? = R.id.imageView
 
+    override fun getIconWarningTint(): Int {
+        return super.getIconErrorTint()
+    }
 }

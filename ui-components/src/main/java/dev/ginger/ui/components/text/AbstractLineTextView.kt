@@ -46,6 +46,8 @@ abstract class AbstractLineTextView<T : TextView, E: AbstractLineTextView.ViewSt
 
     abstract fun getIconResId(): Int?
 
+    protected fun getHintTextTint(): Int? = R.color.ripple_click_efect
+
     fun updateState(state: ViewState) {
         this.state = state as E
         renderDividerState(state.enableDivider)
@@ -100,13 +102,14 @@ abstract class AbstractLineTextView<T : TextView, E: AbstractLineTextView.ViewSt
         state.value?.let {
             (valueTextView as TextView).apply {
                 text = it
-                setTextColor(context.getColor(R.color.colorPrimary))
+//                setTextColor(context.getColor(R.color.colorPrimary))
             }
 
         } ?: run {
             (valueTextView as TextView).apply {
                 text = state.hint
-                setTextColor(context.getColor(R.color.colorAccent))
+                getHintTextTint()?.let { setTextColor(context.getColor(it)) }
+
             }
         }
 
