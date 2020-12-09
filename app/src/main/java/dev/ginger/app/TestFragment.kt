@@ -1,15 +1,13 @@
 package dev.ginger.app
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import dev.ginger.ui.components.text.AbstractLineTextView
+import dev.ginger.ui.components.text.TwoLineViewWrapper
 import kotlinx.android.synthetic.main.fragment_empty.*
-import kotlinx.coroutines.*
 
 open class TestFragment: Fragment() {
 
@@ -40,6 +38,12 @@ open class TestFragment: Fragment() {
 
         val textViewWrapper3 = createTextViewWrapper("first", createTextView(),
             createTextViewState(null, "2586 9665 48888", "Hello world"))
+
+//        val wrapper = TwoLineViewWrapper(view, TwoLineViewWrapper.ViewState())
+//        wrapper.updateState(TwoLineViewWrapper.ViewState().apply {
+//            this.titleText = "Hello"
+//            this.subtitle = "Hello"
+//        })
 
         view_container.addView(textViewWrapper1.view)
         view_container.addView(textViewWrapper2.view)
