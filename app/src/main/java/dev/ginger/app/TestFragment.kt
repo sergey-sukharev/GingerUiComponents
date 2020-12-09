@@ -1,11 +1,14 @@
 package dev.ginger.app
 
 import android.os.Bundle
+import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import dev.ginger.app.examples.GEditText
 import dev.ginger.ui.components.text.AbstractLineTextView
+import dev.ginger.ui.components.text.EditTextViewWrapper
 import dev.ginger.ui.components.text.TwoLineViewWrapper
 import kotlinx.android.synthetic.main.fragment_empty.*
 
@@ -45,12 +48,23 @@ open class TestFragment: Fragment() {
 //            this.subtitle = "Hello"
 //        })
 
+        val gEditTextView = GEditText(createTextView2(), EditTextViewWrapper.ViewState().apply {
+            titleText = "Hello"
+            inputValue = "My cat"
+            enableDivider = false
+            hintText = "Hint is true"
+            helperText = "It's your helper text"
+            inputType = InputType.TYPE_CLASS_NUMBER
+        })
+
         view_container.addView(textViewWrapper1.view)
         view_container.addView(textViewWrapper2.view)
         view_container.addView(textViewWrapper3.view)
+        view_container.addView(gEditTextView.view)
     }
 
     fun createTextView() = LayoutInflater.from(requireContext()).inflate(R.layout.template_ginger_line_text, null)
+    fun createTextView2() = LayoutInflater.from(requireContext()).inflate(R.layout.template_g_edit_text, null)
 
     fun createTextViewWrapper(id: String, view: View, viewState: AbstractLineTextView.ViewState) =
         GingerLineTextVIew(id, view, viewState)

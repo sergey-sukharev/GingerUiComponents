@@ -7,7 +7,7 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.core.graphics.drawable.DrawableCompat
 
-abstract class BaseViewWrapper<T: BaseViewWrapper.ViewState>(val view: View, val state: T) {
+abstract class BaseViewWrapper<T : BaseViewWrapper.ViewState>(val view: View, val state: T) {
 
     protected var titleTextView: TextView? = null
     protected var dividerView: View? = null
@@ -47,13 +47,17 @@ abstract class BaseViewWrapper<T: BaseViewWrapper.ViewState>(val view: View, val
     }
 
     private fun checkIsLoadingState(state: Boolean) {
-        if (state) {
-            progressBarView?.visibility = View.VISIBLE
-            metaIconView?.visibility = View.INVISIBLE
-        } else {
-            progressBarView?.visibility = View.INVISIBLE
-            metaIconView?.visibility = View.VISIBLE
+        progressBarView?.apply {
+            if (state) visibility = View.VISIBLE
+            else visibility = View.GONE
         }
+
+        setMetaIconVisibility()
+    }
+
+    private fun setMetaIconVisibility() {
+        if (state.metaIconSrc == null) metaIconView?.visibility = View.GONE
+        else metaIconView?.visibility = View.VISIBLE
     }
 
     protected abstract fun getTitleTextViewId(): Int?

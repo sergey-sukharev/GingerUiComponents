@@ -23,6 +23,7 @@ abstract class EditTextViewWrapper(view: View, state: ViewState) :
         editTextView?.apply {
             setText(state.inputValue)
             inputType = state.inputType
+            hint = state.hintText
         }
 
         helperTextView?.apply {
@@ -34,11 +35,10 @@ abstract class EditTextViewWrapper(view: View, state: ViewState) :
 
     abstract fun getHelperTextViewId(): Int?
 
-    abstract fun getProgressBarViewId(): Int?
-
     class ViewState: BaseViewWrapper.ViewState() {
         var inputValue: String? = null
         var helperText: String? = null
+        var hintText: String? = null
         var inputType: Int = InputType.TYPE_CLASS_TEXT
     }
 }
