@@ -23,7 +23,7 @@ fun EditText.showSoftKeyboard() {
 fun EditText.hideSoftKeyboard() {
     post {
         val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.hideSoftInputFromWindow(this.windowToken, InputMethodManager.HIDE_IMPLICIT_ONLY)
+        imm.hideSoftInputFromWindow(this.windowToken, InputMethodManager.RESULT_UNCHANGED_SHOWN)
     }
 }
 

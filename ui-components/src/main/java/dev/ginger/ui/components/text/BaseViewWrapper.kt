@@ -97,7 +97,7 @@ abstract class BaseViewWrapper<T : BaseViewWrapper.ViewState>(val view: View, va
         }
     }
 
-    private fun getContext() = view.context
+    fun getContext() = view.context
 
     open class ViewState {
         var titleText: String? = null

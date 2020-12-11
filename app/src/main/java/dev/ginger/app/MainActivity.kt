@@ -3,6 +3,8 @@ package dev.ginger.app
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.InputType
+import android.view.MotionEvent
+import dev.ginger.ui.handlers.DispatchOnTouchHandler
 
 class MainActivity : AppCompatActivity() {
 
@@ -16,12 +18,11 @@ class MainActivity : AppCompatActivity() {
                 .commit()
     }
 
-    override fun onStop() {
-        super.onStop()
-    }
 
-    override fun onStart() {
-        super.onStart()
+    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
+        if (ev != null && ev.action == MotionEvent.ACTION_DOWN)
+            DispatchOnTouchHandler.registerEvent(this, ev)
+        return super.dispatchTouchEvent(ev)
     }
 
 }

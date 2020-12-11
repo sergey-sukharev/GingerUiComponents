@@ -37,7 +37,7 @@
             android:layout_height="wrap_content"
             tools:text="Title" />
 
-        <EditText
+        <dev.ginger.ui.components.text.FocusableEditText
             android:id="@+id/edit_field_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

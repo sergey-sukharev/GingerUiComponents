@@ -1,7 +1,6 @@
 package dev.ginger.app
 
 import android.os.Bundle
-import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,7 +8,6 @@ import androidx.fragment.app.Fragment
 import dev.ginger.app.examples.GEditText
 import dev.ginger.ui.components.text.AbstractLineTextView
 import dev.ginger.ui.components.text.EditTextViewWrapper
-import dev.ginger.ui.components.text.TwoLineViewWrapper
 import kotlinx.android.synthetic.main.fragment_empty.*
 
 open class TestFragment: Fragment() {
@@ -54,8 +52,9 @@ open class TestFragment: Fragment() {
             enableDivider = false
             hintText = "Hint is true"
             helperText = "It's your helper text"
-            inputType = InputType.TYPE_CLASS_NUMBER
-        })
+        }).apply {
+            removeCursor()
+        }
 
         view_container.addView(textViewWrapper1.view)
         view_container.addView(textViewWrapper2.view)
