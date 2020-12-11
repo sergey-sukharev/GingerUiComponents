@@ -20,6 +20,9 @@ class FocusableEditText : androidx.appcompat.widget.AppCompatEditText,
 
     constructor(context: Context, attributes: AttributeSet) : super(context, attributes)
 
+    private val imeKeyCodes = listOf(KeyEvent.KEYCODE_BACK, KeyEvent.KEYCODE_ENTER,
+        EditorInfo.IME_ACTION_DONE)
+
     override fun onFocusChanged(focused: Boolean, direction: Int, previouslyFocusedRect: Rect?) {
         if (focused) DispatchOnTouchHandler.subscribeOnEvent(context, this)
         else removeCursor()
@@ -28,11 +31,9 @@ class FocusableEditText : androidx.appcompat.widget.AppCompatEditText,
     }
 
     override fun dispatchKeyEventPreIme(event: KeyEvent?): Boolean {
-        event?.let { keyEvent ->
-            when(keyEvent.keyCode) {
-                KeyEvent.KEYCODE_BACK, KeyEvent.KEYCODE_ENTER -> removeCursor()
-            }
-        }
+        if (event != null)
+            removeCursorByActionCode(event.keyCode)
+
         return super.dispatchKeyEventPreIme(event)
     }
 
@@ -47,22 +48,26 @@ class FocusableEditText : androidx.appcompat.widget.AppCompatEditText,
     }
 
     fun removeCursor() {
-        this.focusable = View.NOT_FOCUSABLE
+        focusable = View.NOT_FOCUSABLE
         DispatchOnTouchHandler.unsubscribeOnEvent(context, this)
     }
 
     override fun onEditorAction(actionCode: Int) {
-        if (actionCode == EditorInfo.IME_ACTION_DONE)
-            removeCursor()
+        removeCursorByActionCode(actionCode)
         super.onEditorAction(actionCode)
     }
 
+    private fun removeCursorByActionCode(keyCode: Int) {
+        if (imeKeyCodes.contains(keyCode)) removeCursor()
+    }
+
     override fun onTouch(ev: MotionEvent) {
-        val rect = Rect()
-        getGlobalVisibleRect(rect)
-        if (!rect.contains(ev.rawX.toInt(), ev.rawX.toInt())) {
-            hideSoftKeyboard()
-            clearFocus()
+        Rect().apply {
+            getGlobalVisibleRect(this)
+            if (!contains(ev.rawX.toInt(), ev.rawY.toInt())) {
+                hideSoftKeyboard()
+                clearFocus()
+            }
         }
     }
 
