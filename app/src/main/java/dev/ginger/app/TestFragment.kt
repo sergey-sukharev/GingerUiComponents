@@ -59,6 +59,11 @@ open class TestFragment: Fragment() {
             removeCursor()
         }
 
+        gEditTextView.apply {
+            state.helperText = "SO SO"
+            updateState()
+        }
+
         view_container.addView(textViewWrapper1.view)
         view_container.addView(textViewWrapper2.view)
         view_container.addView(textViewWrapper3.view)

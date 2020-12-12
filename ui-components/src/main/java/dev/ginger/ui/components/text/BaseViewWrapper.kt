@@ -32,12 +32,27 @@ abstract class BaseViewWrapper<T : BaseViewWrapper.ViewState>(val view: View, va
         getProgressBarId()?.let { progressBarView = view.findViewById(it) }
     }
 
-    protected open fun updateState(state: T) {
+    /**
+     * Updating a new external state
+     * Use this method when need to update completely different state object
+     * Recommend to use it how to less
+     * @param state - a new state
+     */
+    open fun updateState(state: T) {
         renderTitleTextView(state)
         renderDividerView(state)
         renderIconView(state)
         renderMetaIconView(state)
         checkIsLoadingState(state.isLoading)
+    }
+
+    /**
+     * Updating a old internal state
+     * Use this method when we're update state which was to setting earlier
+     * Recommend to use this method when we're updating some fields, but not full state
+     */
+    open fun updateState() {
+        updateState(state)
     }
 
     protected fun renderIconView(state: T) {
