@@ -1,7 +1,9 @@
 package dev.ginger.ui.components.text
 
 import android.os.Build
+import android.text.Editable
 import android.text.InputType
+import android.text.TextWatcher
 import android.view.View
 import android.widget.EditText
 import android.widget.TextView
@@ -14,12 +16,11 @@ abstract class EditTextViewWrapper(view: View, state: ViewState) :
     private var editTextView: FocusableEditText? = null
     private var helperTextView: TextView? = null
 
+    private var onFocusChangeListener: View.OnFocusChangeListener? = null
 
     override fun initViews() {
         super.initViews()
-        getEditTextViewId()?.let {
-           editTextView = view.findViewById(it)
-        }
+        getEditTextViewId()?.let { editTextView = view.findViewById(it) }
         getHelperTextViewId()?.let { helperTextView = view.findViewById(it) }
     }
 
@@ -42,9 +43,24 @@ abstract class EditTextViewWrapper(view: View, state: ViewState) :
     abstract fun getHelperTextViewId(): Int?
 
     override fun onFocusChange(v: View?, hasFocus: Boolean) {
-        if (!hasFocus) {
-            (v as EditText).hideSoftKeyboard()
-        }
+        if (!hasFocus) (v as EditText).hideSoftKeyboard()
+        onFocusChangeListener?.onFocusChange(v, hasFocus)
+    }
+
+    fun setOnFocusChangeListener(listener: View.OnFocusChangeListener?) {
+        onFocusChangeListener = listener
+    }
+
+    fun removeOnFocusChangeListener(listener: View.OnFocusChangeListener?) {
+        if (onFocusChangeListener == listener) onFocusChangeListener = null
+    }
+
+    fun addTextChangeListener(watcher: TextWatcher?) {
+        editTextView?.addTextChangedListener(watcher)
+    }
+
+    fun removeTextChangeListener(watcher: TextWatcher?) {
+        editTextView?.removeTextChangedListener(watcher)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

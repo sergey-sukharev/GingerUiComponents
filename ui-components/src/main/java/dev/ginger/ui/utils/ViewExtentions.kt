@@ -19,8 +19,9 @@ fun View.setVisibleOrInvisible(state: Boolean) {
     visibility = if (state) View.VISIBLE else View.INVISIBLE
 }
 
-fun View.setVisibleOrGone(state: Boolean) {
+fun View.setVisibleOrGone(state: Boolean): Boolean {
     visibility = if (state) View.VISIBLE else View.GONE
+    return state
 }
 
 fun ImageView.setIconOrGone(drawable: Drawable?) {

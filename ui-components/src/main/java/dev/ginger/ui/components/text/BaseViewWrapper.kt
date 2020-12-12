@@ -39,11 +39,12 @@ abstract class BaseViewWrapper<T : BaseViewWrapper.ViewState>(val view: View, va
      * @param state - a new state
      */
     open fun updateState(state: T) {
-        renderTitleTextView(state)
-        renderDividerView(state)
-        renderIconView(state)
-        renderMetaIconView(state)
-        checkIsLoadingState(state.isLoading)
+        setRootViewState(state)
+        setTitleTextViewState(state)
+        setDividerViewState(state)
+        setIconViewState(state)
+        setMetaIconViewState(state)
+        setIsLoadingState(state.isLoading)
     }
 
     /**
@@ -55,30 +56,37 @@ abstract class BaseViewWrapper<T : BaseViewWrapper.ViewState>(val view: View, va
         updateState(state)
     }
 
-    protected fun renderIconView(state: T) {
-        iconView?.setIconOrGone(getDrawableByResId(state.iconSrc, state.iconTint))
-    }
-
-    protected fun renderMetaIconView(state: T) {
-        metaIconView?.setIconOrGone(getDrawableByResId(state.metaIconSrc, state.metaIconTint))
-    }
-
-    protected fun renderTitleTextView(state: T) {
-        titleTextView?.apply {
-            text = state.titleText
-            state.titleTextColor?.let { setTextColor(it.getColor(context)) }
+    protected fun setRootViewState(state: T) {
+        state.backgroundTint?.let { view.setBackgroundColor(it.getColor(getContext())) } ?: run {
+            state.backgroundTint = view.backgroundTintList?.defaultColor
         }
     }
 
-    protected fun renderDividerView(state: T) {
+    protected fun setIconViewState(state: T) {
+        iconView?.setIconOrGone(getDrawableByResId(state.iconSrc, state.iconTint))
+    }
+
+    protected fun setMetaIconViewState(state: T) {
+        metaIconView?.setIconOrGone(getDrawableByResId(state.metaIconSrc, state.metaIconTint))
+    }
+
+    protected fun setTitleTextViewState(state: T) {
+        titleTextView?.apply {
+            if (setVisibleOrGone(state.titleText != null)) {
+                text = state.titleText
+                state.titleTextColor?.let { setTextColor(it.getColor(context)) }
+            }
+        }
+    }
+
+    protected fun setDividerViewState(state: T) {
         dividerView?.apply {
             setVisibleOrInvisible(state.enableDivider)
             state.dividerTint?.let { setBackgroundColor(it.getColor(context)) }
         }
     }
 
-
-    private fun checkIsLoadingState(state: Boolean) {
+    private fun setIsLoadingState(state: Boolean) {
         progressBarView?.apply { setVisibleOrGone(state) }
         setMetaIconVisibility()
     }
@@ -128,6 +136,7 @@ abstract class BaseViewWrapper<T : BaseViewWrapper.ViewState>(val view: View, va
         var metaIconSrc: Int? = null
         var metaIconTint: Int? = null
         var isLoading: Boolean = false
+        var backgroundTint: Int? = null
     }
 
 }

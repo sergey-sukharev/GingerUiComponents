@@ -7,8 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import dev.ginger.app.examples.GEditText
+import dev.ginger.app.examples.SimpleTextViewWrapper
 import dev.ginger.ui.components.text.AbstractLineTextView
 import dev.ginger.ui.components.text.EditTextViewWrapper
+import dev.ginger.ui.components.text.TwoLineViewWrapper
 import kotlinx.android.synthetic.main.fragment_empty.*
 
 open class TestFragment: Fragment() {
@@ -59,8 +61,17 @@ open class TestFragment: Fragment() {
             removeCursor()
         }
 
+        val nickNameView = SimpleTextViewWrapper(createTextView())
+
         gEditTextView.apply {
             state.helperText = "SO SO"
+            state.enableDivider = true
+            updateState()
+        }
+
+        nickNameView.apply {
+            state.subtitleText = "Supreme"
+//            state.subtitleTextColor = Color.RED
             updateState()
         }
 
@@ -68,6 +79,7 @@ open class TestFragment: Fragment() {
         view_container.addView(textViewWrapper2.view)
         view_container.addView(textViewWrapper3.view)
         view_container.addView(gEditTextView.view)
+        view_container.addView(nickNameView.view)
     }
 
     fun createTextView() = LayoutInflater.from(requireContext()).inflate(R.layout.template_ginger_line_text, null)

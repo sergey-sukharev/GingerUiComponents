@@ -1,7 +1,10 @@
 package dev.ginger.ui.components.text
 
+import android.content.res.ColorStateList
+import android.util.TypedValue
 import android.view.View
 import android.widget.TextView
+import dev.ginger.ui.utils.getColor
 
 /**
  * Наследники: TExtView, CheckBox, Switcher, Spinner
@@ -12,7 +15,7 @@ import android.widget.TextView
  * @param view
  * @param state
  */
-abstract class TwoLineViewWrapper(view: View, state: ViewState):
+abstract class TwoLineViewWrapper(view: View, state: ViewState = ViewState()):
     BaseViewWrapper<TwoLineViewWrapper.ViewState>(view, state){
 
     private var subtitleView: TextView? = null
@@ -24,8 +27,19 @@ abstract class TwoLineViewWrapper(view: View, state: ViewState):
 
     override fun updateState(state: ViewState) {
         super.updateState(state)
+        setSubtitleViewState(state)
+    }
+
+    protected fun setSubtitleViewState(state: ViewState) {
         subtitleView?.apply {
             text = state.subtitleText
+            state.subtitleTextColor?.let { setTextColor(it.getColor(context)) } ?: run {
+                state.subtitleTextColor = currentTextColor
+            }
+
+            state.subtitleTextSize?.let { setTextSize(TypedValue.COMPLEX_UNIT_PX, it) } ?: run {
+                state.subtitleTextSize = textSize
+            }
         }
     }
 
@@ -33,5 +47,8 @@ abstract class TwoLineViewWrapper(view: View, state: ViewState):
 
     open class ViewState: BaseViewWrapper.ViewState() {
         var subtitleText: String? = null
+        var subtitleTextColor: Int? = null
+        // Size in PX.
+        var subtitleTextSize: Float? = null
     }
 }
