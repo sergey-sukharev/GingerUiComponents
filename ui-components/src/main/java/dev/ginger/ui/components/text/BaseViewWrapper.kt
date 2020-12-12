@@ -52,25 +52,25 @@ abstract class BaseViewWrapper<T : BaseViewWrapper.ViewState>(val view: View, va
      * Use this method when we're update state which was to setting earlier
      * Recommend to use this method when we're updating some fields, but not full state
      */
-    open fun updateState() {
+    fun notifyStateChanged() {
         updateState(state)
     }
 
-    protected fun setRootViewState(state: T) {
+    protected open fun setRootViewState(state: T) {
         state.backgroundTint?.let { view.setBackgroundColor(it.getColor(getContext())) } ?: run {
             state.backgroundTint = view.backgroundTintList?.defaultColor
         }
     }
 
-    protected fun setIconViewState(state: T) {
+    protected open fun setIconViewState(state: T) {
         iconView?.setIconOrGone(getDrawableByResId(state.iconSrc, state.iconTint))
     }
 
-    protected fun setMetaIconViewState(state: T) {
+    protected open fun setMetaIconViewState(state: T) {
         metaIconView?.setIconOrGone(getDrawableByResId(state.metaIconSrc, state.metaIconTint))
     }
 
-    protected fun setTitleTextViewState(state: T) {
+    protected open fun setTitleTextViewState(state: T) {
         titleTextView?.apply {
             if (setVisibleOrGone(state.titleText != null)) {
                 text = state.titleText
@@ -79,7 +79,7 @@ abstract class BaseViewWrapper<T : BaseViewWrapper.ViewState>(val view: View, va
         }
     }
 
-    protected fun setDividerViewState(state: T) {
+    protected open fun setDividerViewState(state: T) {
         dividerView?.apply {
             setVisibleOrInvisible(state.enableDivider)
             state.dividerTint?.let { setBackgroundColor(it.getColor(context)) }

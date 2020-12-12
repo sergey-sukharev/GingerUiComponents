@@ -1,6 +1,5 @@
 package dev.ginger.ui.components.text
 
-import android.content.res.ColorStateList
 import android.util.TypedValue
 import android.view.View
 import android.widget.TextView
@@ -30,7 +29,7 @@ abstract class TwoLineViewWrapper(view: View, state: ViewState = ViewState()):
         setSubtitleViewState(state)
     }
 
-    protected fun setSubtitleViewState(state: ViewState) {
+    protected open fun setSubtitleViewState(state: ViewState) {
         subtitleView?.apply {
             text = state.subtitleText
             state.subtitleTextColor?.let { setTextColor(it.getColor(context)) } ?: run {
