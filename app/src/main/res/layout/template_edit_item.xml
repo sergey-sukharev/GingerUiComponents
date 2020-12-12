@@ -7,13 +7,13 @@
     android:layout_height="wrap_content">
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/icon_meta"
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_marginEnd="8dp"
-        app:layout_constraintBottom_toBottomOf="@+id/textView2"
+        app:layout_constraintBottom_toBottomOf="@+id/subtitle"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textView2"
+        app:layout_constraintTop_toTopOf="@+id/subtitle"
         app:srcCompat="@drawable/ic_ginger"
         tools:visibility="gone" />
 
@@ -22,13 +22,13 @@
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_marginEnd="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/view"
+        app:layout_constraintBottom_toTopOf="@+id/divider"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:layout_constraintTop_toBottomOf="@+id/title"
         app:srcCompat="@drawable/ic_ginger" />
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/icon"
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_marginStart="16dp"
@@ -38,7 +38,7 @@
         tools:srcCompat="@tools:sample/avatars" />
 
     <View
-        android:id="@+id/view"
+        android:id="@+id/divider"
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
         android:background="@color/colorPrimary"
@@ -47,26 +47,26 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         android:text="TextView"
-        app:layout_constraintEnd_toStartOf="@+id/imageView2"
-        app:layout_constraintStart_toStartOf="@+id/textView2"
+        app:layout_constraintEnd_toStartOf="@+id/icon_meta"
+        app:layout_constraintStart_toStartOf="@+id/subtitle"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/textView2"
+        android:id="@+id/subtitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginBottom="16dp"
         android:text="TextViews"
-        app:layout_constraintBottom_toTopOf="@+id/view"
+        app:layout_constraintBottom_toTopOf="@+id/divider"
         app:layout_constraintEnd_toStartOf="@+id/progressBar"
-        app:layout_constraintStart_toEndOf="@+id/imageView"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:layout_constraintStart_toEndOf="@+id/icon"
+        app:layout_constraintTop_toBottomOf="@+id/title"
         app:layout_constraintVertical_bias="0.0" />
 </androidx.constraintlayout.widget.ConstraintLayout>

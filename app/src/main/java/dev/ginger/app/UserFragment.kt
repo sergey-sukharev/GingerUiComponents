@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
+import dev.ginger.app.presentation.EditTextFragment
 import dev.ginger.ui.dialogs.DialogState
 import dev.ginger.ui.dialogs.alert.AlertDialog
 import dev.ginger.ui.dialogs.fullscreen.PopupDialogFragment

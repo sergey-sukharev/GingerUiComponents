@@ -1,4 +1,4 @@
-package dev.ginger.app
+package dev.ginger.app.presentation
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
+import dev.ginger.app.R
 import dev.ginger.ui.dialogs.DialogState
 import dev.ginger.ui.dialogs.popup.OnStateListener
 import dev.ginger.ui.dialogs.progress.ProgressDialog

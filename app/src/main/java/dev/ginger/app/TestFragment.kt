@@ -6,11 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import dev.ginger.app.examples.GEditText
-import dev.ginger.app.examples.SimpleTextViewWrapper
-import dev.ginger.ui.components.text.AbstractLineTextView
+import dev.ginger.app.examples.Example1EditTextWrapper
+import dev.ginger.app.examples.Example1TextViewWrapper
 import dev.ginger.ui.components.text.EditTextViewWrapper
-import dev.ginger.ui.components.text.TwoLineViewWrapper
 import kotlinx.android.synthetic.main.fragment_empty.*
 
 open class TestFragment: Fragment() {
@@ -30,18 +28,6 @@ open class TestFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val viewEditText1 = LayoutInflater.from(requireContext()).inflate(R.layout.template_edit_item, null)
-//        val viewEditText3 = LayoutInflater.from(requireContext()).inflate(R.layout.template_edit_item, null)
-
-        val textViewWrapper1 = createTextViewWrapper("first", createTextView(),
-            createTextViewState("Name", null, "Hello world"))
-
-        val textViewWrapper2 = createTextViewWrapper("first", createTextView(),
-            createTextViewState("Age", "MY", "Input your age").apply {
-                isRequired = true
-            })
-
-        val textViewWrapper3 = createTextViewWrapper("first", createTextView(),
-            createTextViewState(null, "2586 9665 48888", "Hello world"))
 
 //        val wrapper = TwoLineViewWrapper(view, TwoLineViewWrapper.ViewState())
 //        wrapper.updateState(TwoLineViewWrapper.ViewState().apply {
@@ -49,7 +35,7 @@ open class TestFragment: Fragment() {
 //            this.subtitle = "Hello"
 //        })
 
-        val gEditTextView = GEditText(createTextView2(), EditTextViewWrapper.ViewState().apply {
+        val gEditTextView = Example1EditTextWrapper(createTextView2(), EditTextViewWrapper.ViewState().apply {
             titleText = "Hello"
             inputValue = "My cat"
             enableDivider = false
@@ -61,7 +47,7 @@ open class TestFragment: Fragment() {
             removeCursor()
         }
 
-        val nickNameView = SimpleTextViewWrapper(createTextView())
+        val nickNameView = Example1TextViewWrapper(createTextView())
 
         gEditTextView.apply {
             state.helperText = "SO SO"
@@ -75,9 +61,6 @@ open class TestFragment: Fragment() {
             updateState()
         }
 
-        view_container.addView(textViewWrapper1.view)
-        view_container.addView(textViewWrapper2.view)
-        view_container.addView(textViewWrapper3.view)
         view_container.addView(gEditTextView.view)
         view_container.addView(nickNameView.view)
     }
@@ -85,14 +68,6 @@ open class TestFragment: Fragment() {
     fun createTextView() = LayoutInflater.from(requireContext()).inflate(R.layout.template_ginger_line_text, null)
     fun createTextView2() = LayoutInflater.from(requireContext()).inflate(R.layout.template_g_edit_text, null)
 
-    fun createTextViewWrapper(id: String, view: View, viewState: AbstractLineTextView.ViewState) =
-        GingerLineTextVIew(id, view, viewState)
-
-    fun createTextViewState(title: String?, value: String?, hint: String?) = AbstractLineTextView.ViewState().apply {
-        this.title = title
-        this.value = value
-        this.hint = hint
-    }
 
 
 }
