@@ -6,6 +6,10 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.core.graphics.drawable.DrawableCompat
+import dev.ginger.ui.utils.getColor
+import dev.ginger.ui.utils.setIconOrGone
+import dev.ginger.ui.utils.setVisibleOrGone
+import dev.ginger.ui.utils.setVisibleOrInvisible
 
 abstract class BaseViewWrapper<T : BaseViewWrapper.ViewState>(val view: View, val state: T) {
 
@@ -29,29 +33,38 @@ abstract class BaseViewWrapper<T : BaseViewWrapper.ViewState>(val view: View, va
     }
 
     protected open fun updateState(state: T) {
-        titleTextView?.setText(state.titleText)
-        dividerView?.apply {
-            if (state.enableDivider) visibility = View.VISIBLE
-            else visibility = View.INVISIBLE
-        }
-
-        iconView?.apply {
-            renderIconState(this, getDrawableByResId(state.iconSrc, state.iconTint))
-        }
-
-        metaIconView?.apply {
-            renderIconState(this, getDrawableByResId(state.metaIconSrc, state.metaIconTint))
-        }
-
+        renderTitleTextView(state)
+        renderDividerView(state)
+        renderIconView(state)
+        renderMetaIconView(state)
         checkIsLoadingState(state.isLoading)
     }
 
-    private fun checkIsLoadingState(state: Boolean) {
-        progressBarView?.apply {
-            if (state) visibility = View.VISIBLE
-            else visibility = View.GONE
-        }
+    protected fun renderIconView(state: T) {
+        iconView?.setIconOrGone(getDrawableByResId(state.iconSrc, state.iconTint))
+    }
 
+    protected fun renderMetaIconView(state: T) {
+        metaIconView?.setIconOrGone(getDrawableByResId(state.metaIconSrc, state.metaIconTint))
+    }
+
+    protected fun renderTitleTextView(state: T) {
+        titleTextView?.apply {
+            text = state.titleText
+            state.titleTextColor?.let { setTextColor(it.getColor(context)) }
+        }
+    }
+
+    protected fun renderDividerView(state: T) {
+        dividerView?.apply {
+            setVisibleOrInvisible(state.enableDivider)
+            state.dividerTint?.let { setBackgroundColor(it.getColor(context)) }
+        }
+    }
+
+
+    private fun checkIsLoadingState(state: Boolean) {
+        progressBarView?.apply { setVisibleOrGone(state) }
         setMetaIconVisibility()
     }
 
@@ -70,21 +83,12 @@ abstract class BaseViewWrapper<T : BaseViewWrapper.ViewState>(val view: View, va
 
     protected abstract fun getProgressBarId(): Int?
 
-    private fun renderIconState(imageView: ImageView?, iconDrawable: Drawable?) {
-        iconDrawable?.let { drawable ->
-            imageView?.visibility = View.VISIBLE
-            imageView?.setImageDrawable(drawable)
-        } ?: run {
-            imageView?.visibility = View.GONE
-        }
-    }
-
     private fun setDrawableTint(drawable: Drawable, tint: Int?): Drawable {
-        tint?.let {
-            DrawableCompat.setTint(drawable, getContext().getColor(it))
+        return with(tint) {
+            if (this != null)
+                DrawableCompat.setTint(drawable, getContext().getColor(this))
+            drawable
         }
-
-        return drawable
     }
 
     private fun getDrawableByResId(resId: Int?, tintId: Int?): Drawable? {
@@ -97,11 +101,13 @@ abstract class BaseViewWrapper<T : BaseViewWrapper.ViewState>(val view: View, va
         }
     }
 
-    fun getContext() = view.context
+    protected fun getContext() = view.context
 
     open class ViewState {
         var titleText: String? = null
+        var titleTextColor: Int? = null
         var enableDivider: Boolean = true
+        var dividerTint: Int? = null
         var iconSrc: Int? = null
         var iconTint: Int? = null
         var metaIconSrc: Int? = null

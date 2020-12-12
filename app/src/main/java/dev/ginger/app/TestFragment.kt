@@ -1,5 +1,6 @@
 package dev.ginger.app
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -52,6 +53,8 @@ open class TestFragment: Fragment() {
             enableDivider = false
             hintText = "Hint is true"
             helperText = "It's your helper text"
+            titleTextColor = R.color.colorPrimaryDark
+            dividerTint = Color.RED
         }).apply {
             removeCursor()
         }
